@@ -1,58 +1,77 @@
 # libraryApp
-# client
+## client
 
-## vue +nuxt
-- SSR(서버사이드렌더링)과 SEO(검색엔진최적화) 를 위해 nuxt 프레임워크를 사용하였습니다.
+### vue +nuxt
+- ssr(서버사이드렌더링)과 seo(검색엔진최적화) 를 위해 nuxt 프레임워크를 사용하였습니다.
 - vue 는 안정화버전인 2.x 버전을 사용하였습니다.
 - Visual Studio(vscode)를 이용해 작업하였습니다.
-## 1. 버전
+### 1. 버전
+
+# 1. 1
+## 1. 1
+### 1. 1
+#### 1. 1
+#### 1. 1
+##### 1. 1
+###### 1. 1
+### <div id="register" style="color:blue;"><b>1. 회원가입/로그인 구현</b></div>
+
+<h1>1. 1</h1>
+<h2>1. 1</h2>
+<h3>1. 1</h3>
+<h4>1. 1</h4>
+<h5>1. 1</h5>
+<h6>1. 1</h6>
+
+<p>p 태그</p>
+<b>두꺼운것</b>
+<p><b>1.</b> test</p>
 
 |node|Nuxt|vue|
 |---|:---|:---:|
 |v12.13.0|v2.15.4|v2.x|
-<br>
+
 - 사용한 라이브러리
 
-||<a href="https://axios.nuxtjs.org/">nuxtjs/axios</a>|<a href="https://vue-chartjs.org/">chart.js / vue-chartjs</a>|<a href="https://bootstrap-vue.org/docs">bootstrap-vue</a>|<a href="https://github.com/nuxt-community/moment-module">@nuxtjs/moment</a>|<a href="https://www.npmjs.com/package/intersection-observer">intersection-observer</a>|<a href="https://www.npmjs.com/package/is-iexplorer">is-iexplorer</a>|<a href="https://pm2.keymetrics.io/docs/usage/quick-start/">pm2</a>|<a href="https://docs.cypress.io/guides/overview/why-cypress#In-a-nutshell">cypress</a>|
-|---|---|:---|:---|:---|:---|:---|:---|:---|
-|버전|v5.13.1|v2.9.4|v2.21.2|v1.6.1|v0.12.0|v1.0.0|v5.1.0|v8.0.0|
-|이유|HTTP 클라이언트 라이브러리로 서버와의 통신을 위해 사용|데이터를 이용해 chart 사용|페이지네이션과 달력 사용|날짜 포맷 변경|IE 에서 `intersection-observer`를 사용할 수 있도록 해주는 라이브러리|IE 브라우저인지 확인|node.js 에서 실행한 프로세스를 관리해주는 프로세스 매니져로 |E2E 테스트(종단간 테스트)|
+||axios|chart.js|vue2-datepicker|@nuxtjs/moment|intersection-observer|
+|---|---|:---|:---|:---|:---|
+|버전|v5.13.1|v2.9.4|3.9.0|1.6.1|0.12.0|
+|이유|서버에 api 호출|데이터를 이용해 chart 사용|달력 사용|날짜 포맷 변경|IE 에서 `intersection-observer`를 사용할 수 있도록 해주는 라이브러리|
 
 
 
-## 2. 구현 목표
+### 2. 구현 목표
 
 1. <a href="#register">회원가입/로그인 구현</a>
-   - 이메일/비밀번호 구현(이메일,비밀번호,닉네임)
+   - 이메일/비밀번호 구현(이메일,이름,비밀번호,닉네임)
    - 소셜로그인(카카오,구글 로그인) 구현
 2. <a href="#user_info">사용자 정보 수정</a>
-   - 사용자의 비밀번호,닉네임 수정 구현
-   - 프로파일 이미지 추가 및 수정 구현
+   - 사용자의 비밀번호,닉네임,프로파일 이미지 수정 가능하도록 구현
+   - 프로파일 사진 추가 및 수정 구현
 3. <a href="#book_search">원하는 책 검색 및 추가</a>
-    - 카카오 검색 api로 원하는 책을 검색하여 추가할 수 있도록 구현
+   - 책 검색으로는 카카오 책 검색 api 사용
+    - 위의 카카오 검색 api로 원하는 책 검색하여 생성할 수 있도록 구현
 4. <a href="#book_create">직접 책 추가 및 추가한 책 수정 및 삭제</a>
-  - 직접 작성하여 책을 추가할 수 있도록 구현
   - 내가 추가한 책들 중에서 원하지 않는 책 수정 및 삭제 기능 구현
 5. <a href="#books">내가 추가한 책들 보여주기</a>
 5. <a href="#book">내가 추가한 책 상세 보기</a>
 6. <a href="#bookmark">내 책 북마크 추가 및 삭제</a>
 
-7. <a href="#heart">다른 사용자의 책 좋아요 생성 및 삭제</a>
-8. <a href="#tag">내가 추가한 책 태그 추가 및 삭제</a>
-9. <a href="#tags">태그별로 책 모아보기</a>
-10. <a href="#other_books">다른 사용자가 추가한 책 보여주기</a>
-11. <a href="#comment">댓글 추가 및 삭제</a>
-    - 다른 사용자의 책과 내가 추가한 책에 댓글 쓰기 기능 구현
+8. <a href="#heart">다른 유저의 책 좋아요 생성 및 삭제</a>
+9. <a href="#tag">내가 추가한 책 태그 추가 및 삭제</a>
+10. <a href="#tags">태그별로 책 모아보기</a>
+11. <a href="#other_books">다른 유저가 추가한 책 보기</a>
+12. <a href="#comment">다른 사용자 정보의 책에 댓글 쓰기 구현 및 내가 추가한 책에서도 댓글 쓰기 구현</a>
     - 내가 추가한 댓글만 삭제 가능하도록 구현 
-12. <a href="#star">책에 별점 주기 가능</a>
-13. <a href="#other_search">다른 사용자의 책 검색 구현</a>
+13. <a href="#star">책에 별점 주기 가능</a>
+14. <a href="#other_search">다른 사용자의 책 검색 구현</a>
     - 책 제목과 책의 저자를 선택하여 검색할 수 있도록 구현
-14. <a href="#sum">통계</a>
+15. <a href="#sum">통계</a>
 
 
-## 3. 구현 세부 내용
+### 3. 구현 세부 내용
 
-### 3-1 라우터 구조
+#### 3-1 라우터 구조
 
 ```
 / ---- atuh ---- register
@@ -76,18 +95,17 @@
     |    |      |-----_page
     |    |
     |    |----search
-    |    |----search
     |           |-----_page
     |
     |--hastags/_tagname
 ```
-### 3-2. css
+#### 3-2. css
 |구현 방법|구현 내용|
 |---|---|
 |CSS|static/css/common.css 만들어 공통 요소로 초기화|
 |CSS|static/css/style.css 만들어 css 요소 정리|
 
-### 3-3. `vuex` `store` 사용
+#### 3-3. `vuex` `store` 정리
  
  1. store
  2. getter
@@ -96,7 +114,7 @@
 
  #### 3-4. 구현 공통 요소 
 1. `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
- - <a href="https://nuxtjs.org/docs/2.x/directory-structure/components">`nuxt` 컴포넌트 디렉토리 공식 문서 바로 가기</a>
+ - <a href="https://nuxtjs.org/docs/2.x/directory-structure/components">`nuxt` 공식 문서 바로 가기</a>
 ```js
 // nuxt.config.js
 export default {
@@ -104,279 +122,25 @@ export default {
  components: true
 }
 ```
+
+### 4. 구현 세부 내용 정리
 <br>
 
-2. axios
-
-
-- `axios Interceptors`를 이용해 요청을 보내기 전에 내용을 처리할 수 있도록 하였습니다.
-```js
-// ~/plugins/axios.js
-import ischk from 'is-iexplorer'
-
-export default function ({ $axios, error, redirect }) {
-  $axios.onRequest((config) => {
-  // IE 에서 get 메서드 호출시 캐시문제로 재호출이 되지 않는 문제 발생으로 브라우저가 IE일경우, 요청헤더에 아래 내용 추가
-    if (ischk) {
-      config.headers['Cache-Control'] = 'no-cache'
-      config.headers.Pragma = 'no-cache'
-    }
-    return config
-  })
-}
-```
-|IE 캐시 이슈 |
-|---|
-|브라우져가 캐시하는 대상은 GET 메소드에 한정되는데 IE일 경우 GET 메소드 호출시, 캐시를 사용하여 메서드가 재호출되지 않는 문제가 발생했습니다.|
-
-|IE 캐시 이슈 해결|
-|---|
-|IE일 경우, 요청 헤더에 `Cache-Control: no-cache`를 담아 서버로 전송하면 브라우져는 캐시를 사용하지 않고 서버로 요청합니다.|
-
-<br>
-
-- 데이터 요청시, 오류가 발생할 때 처리할 수 있도록 하였습니다.
-
-```js
-// ~/plugins/axios.js
-export default function ({ $axios, error, redirect }) {
-  ...
-  // 오류 처리
-  $axios.onError((err) => {
-    const code = parseInt(err.response && err.response.status)
-    if (code === 401) {
-      if (err.response.data.auth) {
-        // 인증이 필요한 상태이고,로그인이 되어 있지 않을 때 로그인 페이지로 이동
-        redirect('auth/login')
-      } else if (err.response.data.authed) {
-        // 인증이 필요한 상태이고,로그인이 이미 되어 있으면 리로드하여 새로고침 실행
-        window.location.reload()
-      }
-      return
-    }
-    if (code === 404 || code === 400 || code === 500) {
-      // 해당 에러가 발생할 때, 에러페이지를 보여주도록 구현
-      return error({
-        statusCode: err.response.status,
-        msg: err.response.data.msg
-      })
-    }
-  })
-}
-```
-<br>
-
-- `nuxt`에서 제공하는 `layout/error.vue`를 구성하여, 오류가 발생할 때, 해당 페이지를 보여주도록 하였습니다.
-<br>
-<a href="https://nuxtjs.org/docs/2.x/directory-structure/layouts#error-page">`nuxt` error page 공식 문서 바로 가기</a>
-
-```html
-<!-- layouts/error.vue -->
-<template>
-  <div class="err_container">
-    <div class="txt">
-      <h3 v-if="error.msg">
-        {{ error.msg }}
-      </h3>
-      <h2 v-else>
-        오류가 발생하여 다시 시도해주세요.
-      </h2>
-      <p>{{ error.statusCode }}</p>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  props: ['error']
-}
-</script>
-
-```
-<br>
-
-
-3. 공통 컴포넌트
-
-<div id="bus">3-1. 알림창</div>
- - `eventbus` 를 이용하여 구현하였습니다.
-
-```html
-<!-- ~/layouts/default.vue -->
-<template>
-  ...
-    <CommonAlertMsg :alert-state="alertState" :data="data" />
-  ...
-</template>
-
-```
-```js
-//  ~/layouts/default.vue
-import bus from '~/utils/bus'
-...
- data () {
-    return {
-      alertState: false,
-      data: ''
-    }
-  },
-    created () {
-    bus.$on('on:alert', (data) => {
-      this.data = data
-      this.onalert()
-    })
-    bus.$on('off:alert', this.offalert)
-  },
-  methods:{
-      onalert () {
-      this.alertState = true
-    },
-    offalert () {
-      this.alertState = false
-    }
-  }
-```
-<br>
-
-- `common-alert-msg` 컴포넌트
-
-`transition`으로 애니메이션 효과를 주었습니다.
-(<a href="https://vuejs.org/v2/api/#transition">vue transitioin 문서 바로 가기</a>)
-
-```html
-<!-- ~/components/common/alertMsg.vue -->
-<!-- transition으로 애니메이션 효과 -->
-<transition name="upSlide">
-    <div v-if="alertState" class="alertmsg">
-      {{ data }}
-    </div>
-  </transition>
-```
-
-<br>
-
-props
-
-```js
-//  ~/components/common/alertMsg.vue
-  props: {
-    alertState: {
-      type: Boolean,
-      required: true
-    },
-    data: {
-      type: String,
-      required: true
-    }
-  }
-```
-- `props`
-
-|alertState|data|
-|---|---|
-|알람메세지 여부를 `Boolean`으로 받도록 구현했습니다.|`데이터 추가`,`데이터 삭제` 등에 상관없이 알람메세지를 공통으로 적용해주기 위해 알림메세지 내용을 `data` `props`로 받도록 구현했습니다.|
-
-<br>
-
-<div id="len-alert">3-2. 입력 길이 알림창</div>
-
-```html
-<!-- ~/components/common/LenConfirm.vue -->
-<template>
-  <div class="alert_len">
-    {{ len }}자 이상 작성하실 수 없습니다.
-  </div>
-</template>
-
-```
-
-<br>
-
-props
-
-```js
-// ~/components/common/LenConfirm.vue
- props: {
-    len: {
-      type: String,
-      required: true
-    }
-  }
-```
-- `props`
-
-|len|
-|---|
-|글자 길이를 `props`로 받도록 구현했습니다.|
-
-<br>
-<div id="alert">3-3. 삭제/수정 확인 알림창</div>
-
-```html
-<!-- ~/components/form/Alert.vue -->
-<template>
-  <CommonModal class="alert_main">
-    <div slot="header">
-      <b>{{ data }}</b> 을(를) {{ confirm }}하시겠어요??
-    </div>
-    <div slot="body" class="body">
-      <button class="primary-btn" @click="$emit('onagree')">
-        네
-      </button>
-      <button class="primary-btn red" @click="$emit('ondisagree')">
-        아니오
-      </button>
-    </div>
-    <div slot="footer"></div>
-  </CommonModal>
-</template>
-
-```
-
-<br>
-
-props
-
-```js
-//  ~/components/form/Alert.vue 
-  props: {
-    data: {
-      type: String,
-      required: true
-    },
-    confirm: {
-      type: String,
-      required: true
-    }
-  }
-```
-- `props`
-
-|data|confirm|
-|---|---|
-|삭제/수정할 데이터를 `props`로 받도록 구현했습니다.|삭제/수정 여부를 `props`로 받도록 구현했습니다.|
-
-<br>
-
-## 4. 구현 세부 내용 정리
-<br>
-
-### <div id="register"><b>1. 회원가입/로그인 구현</b></div>
+### <div id="register" style="color:blue;"><b>1. 회원가입/로그인 구현</b></div>
 
 |컴포넌트|라우터|
 |---|---|
 |components/form/Register.vue|auth/register|
 |components/form/Login.vue|auth/login|
 
-<br>
 
-#### <div>1-1. 회원가입</div>
+#### <div style="color:red;">1-1. 회원가입</div>
 
 |컴포넌트|라우터|
 |---|---|
 |components/form/Register.vue|auth/register|
 
-1. <b>이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다.</b>
+#### 1. 이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다.
 ```html
 <!-- ~/components/form/Register.vue -->
 <template>
@@ -384,52 +148,19 @@ props
     <div class="formbx">
       <form @submit.prevent="UserRegister">
         <h2>회원가입</h2>
-        <!-- 이메일 -->
         <div :class="{'invalid':!email}">
           <label for="email">email</label>
+          <!-- v-model를 이용해 바운딩 -->
           <input id="email" ref="emailinput" v-model="email" type="text" placeholder="이메일">
         </div>
-        <!-- 이메일이 존재하고, 이메일 형식이 아니라면 아래 메세지를 보여줍니다. -->
         <div v-if="!isvalidEmail && email" class="err">
           이메일 형식으로 입력해주세요.
         </div>
-        <!-- 닉네임 -->
         <div :class="{'invalid':!username}">
           <label for="username">username</label>
           <input id="username" v-model="username" type="text" placeholder="닉네임">
         </div>
-        <!-- 비밀번호 -->
-        <div :class="{'invalid':!password}">
-          <label for="password">password</label>
-          <input id="password" v-model="password" type="password" placeholder="비밀번호">
-        </div>
-        <div v-if="!isvalidLength && password" class="err">
-          비밀번호는 8자리 이상이어야 합니다.
-        </div>
-        <!-- 비밀번호 확인 -->
-        <div :class="{'invalid':!confirm_password}">
-          <label for="comfirm_password">comfirm_password</label>
-          <input id="comfirm_password" v-model="confirm_password" type="password" placeholder="비밀번호 확인">
-          <div v-if="!isconfirmPassword && confirm_password" class="err">
-            비밀번호가 일치하지 않습니다
-          </div>
-        </div>
-        <!-- 에러 메세지 -->
-        <!-- 
-        회원가입 시 에러가 발생했을 때(이메일이 이미 등록되어 있는 경우 등의 오류가 발생했을 때)
-        이를 사용자가 확인할 수 있도록 구현했습니다.-->
-          <div v-if="errmsg" class="errmsg" :class="{'visible':email}">
-            {{ errmsg }}
-          </div>
-          <!-- 입력값에 따른 에러 메세지를 보여줍니다. -->
-          <div v-if="!isuserInfoLength " class="errmsg" :class="{'visible':!isuserInfoLength }">
-            {{ inputErrMsg }}
-          </div>
-          <!-- disabled를 바운딩시켜, 유효성 검사를 모두 다 통과한다면 버튼을 클릭할 수 있도록 합니다.
-          유효성 검사를 모두 다 통과한다면 disabled속성을 사라져 버튼을 클릭할 수 있습니다. -->
-        <button class="primary-btn" type="submit" :disabled="!disabledBtn">
-            회원가입
-          </button>
+        ....
         </div>
       </form>
     </div>
@@ -440,23 +171,20 @@ props
 export default{
   data () {
     return {
-      user: {
-        email: '',
-        username: ''
-      },
+      email: '',
+      username: '',
       password: '',
       confirm_password: '',
-      errmsg: ''
+      ...
     }
-  },
+}
 ```
 - `v-model`를 이용해 데이터를 양방향 바운딩해주었습니다.<br>
+(`v-model`를 이용해 `email`,`username`,`password`,` confirm_password`를 바운딩 하였습니다.)
+<br><br>
 
-<br>
-
-2. <b>유효성 검사</b>
-
-- 별도의 유효성 검사 함수를 만들어 활용하였습니다.
+#### 2. 유효성 검사는 이메일은 이메일 형식으로,비밀번호는 최소 8자리 이상,비밀번호 확인으로 유효성 검사를 구현하였습니다.
+ - ~/util/validate.js 별도의 유효성 검사 파일을 만들어 이메일과 입력값의 길이가 8 이상인 경우의 유효성 검사 함수를 만들었습니다.
 
 ```js
 // ~/utils/validate.js
@@ -468,76 +196,41 @@ const validEmail = (mail) => {
   }
   return (false)
 }
-// 압력값의 길이 범위를 확인하는 감수(몇자 이상 이하 인지 확인)
-const validLength = (value, num) => {
-  const valueData = value.trim().length
-  if (num.len2 && valueData < num.len2) {
-    if (!num.len1) { return true }
-    if (valueData > num.len1) {
-      return true
-    } else { return false }
-  } else { return false }
-}
-// 입력값 데이터(객체) 전부의 길이를 확인하는 함수
-const inputLen = (value, data, len) => {
-  return data.every(key => value[key].length < len)
+// 압력값의 길이가 8 이상인지 확인하는 감수
+const validLength = (value) => {
+  if (value && value.length >= 8) {
+    return true
+  } else {
+    return false
+  }
 }
 
-export { validLength, validEmail, inputLen }
-
+export { validLength, validEmail }
 ```
-
-<br>
-
--  `computed`를 통해 유효성 검사를 통과하지 못 했을 경우, 에러 메세지를 보여줍니다.
-
-1. 비밀번호 길이 검사
-2. 이메일 유효성 검사
-3. `data`의 `password` 의 값과 `data`의 `confirm_password` 의 값이 일치하는지 검사
-4. 이메일과 닉네임의 길이 검사
-
-
 ```js
 // ~/components/form/Register.vue
+
 import { validLength, validEmail } from '~/utils/validate'
-export default {
+
  computed: {
-  //  1. 비밀번호 길이 검사
     isvalidLength () {
-      return validLength(this.password, { len1: 8, len2: 30 })
+      return validLength(this.password)
     },
-    // 2. 이메일 유효성 검사
     isvalidEmail () {
-      return validEmail(this.user.email)
+      return validEmail(this.email)
     },
-    // 3. `data`의 `password` 의 값과 `data`의 `confirm_password` 의 값이 일치하는지 검사
     isconfirmPassword () {
       return this.password === this.confirm_password
     },
-    // 4. 이메일과 닉네임의 길이 검사
-    isuserInfoLength () {
-      return Object.keys(this.user).every((key) => {
-        return validLength(this.user[key], { len2: 20 })
-      })
-    },
-    // 입력데이터에 따른 에러 메세지
-    inputErrMsg () {
-      if (!this.user.email && !this.user.username) { return }
-      return !this.isuserInfoLength ? '입력값은 20자리 이하로 입력해주세요.' : ''
-    },
-    // 유효성 검사 확인하여 로그인 버튼 활성화 여부
-    disabledBtn () {
-      return this.isvalidLength && this.isvalidEmail && this.isconfirmPassword && this.isuserInfoLength
+    totalConfirm () {
+      return this.isvalidLength && this.isvalidEmail && this.isconfirmPassword && this.username
     }
   }
-}
 ```
-
-- `computed`
-
-| isvalidLength|
+### computed
+|isvalidLength|
 |---|
-|`data`의 `password`의 길이가 8자 이상인지 30자 이하인지 확인합니다.|
+|`data`의 `password`의 길이가 8이상인지 확인합니다.|
 
 |isvalidEmail|
 |---|
@@ -547,36 +240,65 @@ export default {
 |---|
 |`data`의 `password`와 `data`의 `confirm_password`가 완전히 일치하는지 확인합니다.|
 
-|isuserInfoLength|
-|---|
-|`data`의 `user` 객체 데이터의 길이가 20자 이하인지 확인합니다.|
-
-|inputErrMsg|
-|---|
-|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
-
-|disabledBtn|
+|totalConfirm|
 |---|
 |위의 유효성 검사를 모두 통과하는지 확인합니다.|
-|`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
+<br><br>
 
-<br>
+#### 3. `computed`를 통해 유효성 검사를 통과하지 못 했을 경우, 에러 메세지를 보여줍니다.
 
-3. <b>필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
+#### 4. 필수 입력값이 없다면, 입력폼의 앞에 `*`표시를 해주어 사용자에게 확인시켜줍니다.
+
+#### 5. `computed` `totalConfirm`를 이용해, 유효성 검사를 모두 통과했을 경우에만 버튼을 클릭할 수 있도록 구현하였습니다.
 
 ```html
-<!-- ~/components/form/Register.vue -->
 <template>
-  ...
-  <div class="formbx">
-   <!-- 이메일 -->
-        <div :class="{'invalid':!user.email}">
-          ....
+  <div class="user signupbox">
+    <div class="formbx">
+      <form @submit.prevent="UserRegister">
+        <h2>회원가입</h2>
+        <div :class="{'invalid':!email}">
+          <label for="email">email</label>
+          <input id="email" ref="emailinput" v-model="email" type="text" placeholder="이메일">
         </div>
+        <!-- 이메일이 존재하고, 이메일 형식이 아니라면 아래 메세지를 보여줍니다. -->
+        <div v-if="!isvalidEmail && email" class="err">
+          이메일 형식으로 입력해주세요.
+        </div>
+        <!-- 클래스를 바운딩해 username이 없다면 클래스명에 invalid를 추가합니다. -->
+        <div :class="{'invalid':!username}">
+          <label for="username">username</label>
+          <input id="username" v-model="username" type="text" placeholder="닉네임">
+        </div>
+            <!-- 클래스를 바운딩해 password가 없다면 클래스명에 invalid를 추가합니다. -->
+        <div :class="{'invalid':!password}">
+          <label for="password">password</label>
+          <input id="password" v-model="password" type="password" placeholder="비밀번호">
+        </div>
+          <!-- 비밀번호가 존재하고, 비밀번호의 길이가 8 이상이 아니라면 아래 메세지를 보여줍니다. -->
+        <div v-if="!isvalidLength && password" class="err">
+          비밀번호는 8자리 이상이어야 합니다.
+        </div>
+        ...
+        <!-- 
+        회원가입 시 에러가 발생했을 때(이메일이 이미 등록되어 있는 경우 등의 오류가 발생했을 때)
+        이를 사용자가 확인할 수 있도록 구현했습니다.-->
+          <div v-if="errmsg" class="errmsg" :class="{'visible':email}">
+            {{ errmsg }}
+          </div>
+          <!-- disabled를 바운딩시켜, 유효성 검사를 모두 다 통과한다면 버튼을 클릭할 수 있도록 합니다.
+          유효성 검사를 모두 다 통과한다면 disabled속성을 사라져 버튼을 클릭할 수 있습니다. -->
+          <button class="primary-btn" type="submit" :disabled="!totalConfirm">
+            회원가입
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-  ...
 </template>
 ```
+
+#### <div id="invalid">`클래스명` invalid 추가</div>
 ```css
 /* 클래스명에 invalid가 있다면 *표시를 보여줍니다. */
 .invalid::after {
@@ -587,21 +309,26 @@ export default {
     color: crimson;
 }
 ```
+- 해당 클래스명은 다른 필수 입력폼에 *표시될 수 있도록 공통적으로 사용하였습니다.
+<br><br>
 
-
-4. <b>편의성을 위해 해당 페이지에 진입시, 이메일 입력폼에 포커스 될 수 있도록 구현하였습니다.</b>
+#### 5. 편의성을 위해 회원가입페이지나 로그인 페이지에 진입시, 이메일 입력폼에 포커스 될 수 있도록 구현하였습니다.
 ```html
 <template>
-   ...
-  <div class="formbx">
-   <!-- 이메일 -->
-        <div :class="{'invalid':!user.email}">
-          ....
-             <!-- ref를 사용해 태그를 참조합니다. -->
-            <input id="email" ref="emailinput" v-model="email" type="text" placeholder="이메일">
+  <div class="user signupbox">
+    <div class="formbx">
+      <form @submit.prevent="UserRegister">
+        <h2>회원가입</h2>
+        <div :class="{'invalid':!email}">
+          <label for="email">email</label>
+          <!-- ref를 사용해 태그를 참조합니다. -->
+          <input id="email" ref="emailinput" v-model="email" type="text" placeholder="이메일">
         </div>
+        ....
+      </form>
+    </div>
   </div>
-  ...
+</template>
 ```
 ```js
 // ~/components/form/Register.vue
@@ -618,23 +345,22 @@ export default {
 - `mounted ` 라이프사이클 훅 함수를 이용해 해당 컴포넌트에 진입시 이메일 input 입력폼에 포커스되도록 구현하였습니다.
 <br><br>
 
-5. <b>회원가입 API 호출</b>
+#### 6. api 호출
 
-5-1. store
-
+#### 6-1. store
 |actions|
 |---|
 |register|
 
 ```js
 //store/user.js actions
-   async register ({ commit }, userData) {
-    const res = await this.$axios.post('user/register', userData)
+    async register ({ commit }, userinfo) {
+    const res = await this.$axios.post('user/register', userinfo)
     commit('setUser', res.data)
-  },
+  }
 ```
-- `axios`를 이용해 회원가입 `API`를 호출합니다.
-- `API`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다. 
+- `axios`를 이용해 api를 호출합니다.
+- `api`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다. 
 
 |회원가입시에도 사용자의 정보를 저장한 이유|
 |---|
@@ -678,18 +404,17 @@ export default {
     // 아이디
     id:7
     // 카카오로그인인지,구글로그인인지 구분하는 속성
-    // 카카오로 로그인할시, 해당 속성은 null 이 아닌 kakao로 저장된다
-    // 구글로 로그인할시, 해당 속성은 null 이 아닌 google로 저장된다
+    // 카카오로 로그인할시, 해당 속성은 null 이 아닌 kakao로 저장된다.
     provider:null
     // 썸네일 이미지로, 없다면 빈 문자열이 출력된다.
     thumbnail:"https://am-clone.s3.ap-northeast-2.amazonaws.com/1623252830675"
-    // 사용자이름(닉네임)
+    // 사용자이름
     username:"1234"
   }
 ```
-<br>
+<br><br>
 
-5-2. 회원가입 버튼 클릭
+#### 6-2. 회원가입 api를 호출합니다.
 - `store`의 `actioins` 함수 `register`를 호출합니다. 
 ```js
 // <!--components/form/Register.vue -->
@@ -715,8 +440,9 @@ export default {
         this.inputfocus()
       }
     },
-   resetInput () {
-      Object.keys(this.user).forEach((key) => { this.user[key] = '' })
+    resetInput () {
+      this.email = ''
+      this.username = ''
       this.password = ''
       this.confirm_password = ''
     },
@@ -729,109 +455,13 @@ export default {
 
 <br><br>
 
-#### <div>1-2. 로그인</div>
-
+ #### <div style="color:red;">1-2. 로그인</div>
  1. 로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.
- - 서버에서 passport를 사용하여 구현하였는데 해당내용은 아래의 서버 구현 내용에서 정리하였습니다.<br>
+ - 서버에서 passport를 사용하여 구현하였는데 해당내용은 아래의 서버 구현 내용에서 정리하겠습니다.<br>
  (<a href="https://www.passportjs.org/packages/passport-kakao/">`passport`카카오 로그인 참고 문서 바로 가기</a>)<br>
  (<a href="https://www.passportjs.org/packages/passport-google-oauth20/">`passport`구글 로그인 참고 문서 바로 가기</a>)<br>
 
- 2. <b>로그인 API 호출</b>
-
-2-1. store
-
-|actions|
-|---|
-|register|
-
-```js
-//store/user.js actions
-   async login ({ commit }, userData) {
-    const res = await this.$axios.post('user/login', userData)
-    commit('setUser', res.data)
-  },
-```
-- `axios`를 이용해 로그인 `API`를 호출합니다.
-- `API`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다. 
-
-
-|mutations|
-|---|
-|setUser|
-```js
-//store/user.js mutations
- setUser (state, user) {
-    state.user = user
-  }
-```
-- `state`의 `user`객체에 사용자의 정보를 저장합니다.
-
-|getters|
-|---|
-|getUser|
-```js
-//store/user.js getters
-  getUser (state) {
-    return state.user
-```
-- `state`의 `user` 객체를 가져옵니다.
-
-|state|
-|---|
-|user|
-
-```js
-//store/user.js state
- user: {}
-```
- - <div id="state_user">성공적으로 로그인 시, 아래 사용자 정보를 저장합니다.</div>
-```js
-// user 객체에 저장되는 사용자의 정보 예시
-  user:{
-    // 이메일
-    email:"q@q.com" 
-    // 아이디
-    id:7
-    // 카카오로그인인지,구글로그인인지 구분하는 속성
-    // 카카오로 로그인할시, 해당 속성은 null 이 아닌 kakao로 저장된다
-    // 구글로 로그인할시, 해당 속성은 null 이 아닌 google로 저장된다
-    provider:null
-    // 썸네일 이미지로, 없다면 빈 문자열이 출력된다.
-    thumbnail:"https://am-clone.s3.ap-northeast-2.amazonaws.com/1623252830675"
-    // 사용자이름(닉네임)
-    username:"1234"
-  }
-```
-<br>
-
-2-2. 로그인 버튼 클릭
-- `store`의 `actioins` 함수 `register`를 호출합니다. 
-```js
-// <!--components/form/Login.vue -->
-
-  methods: {
-    ...mapActions('user', ['login']),
-    async UserLogin () {
-      try {
-        const userinfo = {
-          email: this.email,
-          password: this.password
-        }
-        await this.login(userinfo)
-        // 성공적으로 로그인되면 메인페이지로 이동
-        this.$router.push('/')
-      } catch (error) {
-        // 에러 발생시 에러메세지 출력될 수 있도록 구현
-        console.log(error)
-        this.errmsg = error.response.data.msg
-      }
-    }
-  }
-```
-
-
-<b>* 사용자 정보 저장시 문제점</b>
-
+ ### *사용자 정보 저장시 문제점
  |문제점|
  |---|
  |`store`의 `state`에 저장된 사용자의 정보로 로그인 유무를 확인하는데, 새로고침시, `state`에 저장된 `user`의 정보는 유지 되지 않는 문제가 발생합니다.|
@@ -850,8 +480,7 @@ export const actions = {
 ```
 <br><br>
 
-### <div id="user_info"><b>2. 사용자 정보 수정</b></div>
-
+### <div id="user_info" style="color:blue;"><b>2. 사용자 정보 수정</b></div>
 |라우터|
 |---|
 |user/info|
@@ -860,12 +489,10 @@ export const actions = {
   - 프로필 정보 수정
   - 비밀번호 수정
 
-<br>
+#### <div style="color:red;">1-1.  프로필 정보 수정</div>
 
-#### <div>1-1. 프로필 정보 수정</div>
-
-1. 닉네임(이름),프로필 이미지를 수정할 수 있도록 구현했습니다.
-2. 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
+#### 1. 이름,프로필 이미지를 수정할 수 있도록 구현했습니다.
+#### 2. 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
 ```html
 <!-- ~/page/user/info.vue -->
 <template>
@@ -873,62 +500,41 @@ export const actions = {
     <!-- profile -->
     <h2>프로필 정보 수정</h2>
     <form class="form_content" @submit.prevent="onChangeProfile">
-      <!-- 이메일 -->
       <div>
         <label for="email">이메일</label>
         <!-- getter를 이용해 사용자의 정보를 가져와서 value 를 바운딩시켜 사용자의 이메일을 보여줍니다. -->
         <p><input id="email" class="readonly" readonly :value="getUser.email" type="text"></p>
       </div>
-      <!-- 닉네임 -->
-      <div>
-          <label for="username">닉네임</label>
-          <p><input id="username" v-model="username" type="text"></p>
-        </div>
         ....
-       <button class="round-btn" type="submit" :disabled="isusernamevalid">
-          프로필 정보 수정
-        </button>
+      <button class="round-btn" type="submit" :disabled="!isconfirmPassword && password">
+        프로필 정보 수정
+      </button>
     </form>
   </div>
 </template>
 ```
 ```js
-   data () {
-    return {
-      email: '',
-      username: '',
-      isChangePassword: false,
-      password: '',
-      confirm_password: '',
-      selectedFile: ''
-    }
-  },
  computed: {
   //  getter를 이용해 store의 state 의 user 정보를 가져옵니다.
     ...mapGetters('user', ['getUser']),
- },
-  created () {
-  // 기존 사용자의 닉네임을 보여줍니다.
-  this.username = this.getUser.username
-}
+ }
 ```
-<br>
+<br><br>
 
-3. 사용자의 프로필(썸네일) 이미지를 업로드할수 있도록 구현하였습니다.(이미지 추가 API 호출)
+#### 3. 사용자의 프로필(썸네일) 이미지를 업 로드할수 있도록 구현하였습니다.(api 호출)
 
-3-1. store
-
+#### 3-1 store
 |<div id="uploadImg">actions</div>|
 |---|
 |uploadImg|
 
 ```js
 //store/book.js actions
-  async uploadImg ({ commit }, payload) {
+  async uploadImg ({ commit }, userinfo) {
     try {
       let res
       // 사용자의 프로필(썸네일) 이미지를 저장하는 api 호출
-      if (payload && payload.user) {
+      if (userinfo && userinfo.user) {
         res = await this.$axios.post('user/thumbnail', userinfo)
       } else {
         // 책의 썸네일 이미지를 저장하는 api 호출
@@ -940,8 +546,8 @@ export const actions = {
     }
   },
 ```
-- `axios`를 이용해 이미지 추가 API 를 호출합니다.
--  사용자의 프로필(썸네일) 이미지 뿐만 아니라, 책의 썸네일 이미지를 업로드할때 사용하기 때문에, `payload.user`가 `true`인 경우에는 사용자 정보 썸네일 이미지를, 그렇지 않다면 책의 썸네일 이미지를 업로드하는 API 함수를 호출 할수 있도록 구현하였습니다.
+- `axios`를 이용해 api를 호출합니다.
+-  사용자의 프로필(썸네일) 이미지 뿐만 아니라, 책의 썸네일 이미지를 업로드할때 사용하기 때문에, `{user:true}` 인 경우에는 사용자 정보 썸네일 이미지를, 그렇지 않다면 책의 썸네일 이미지를 업로드하는 api 함수를 호출 할수 있도록 구현하였습니다.
 - `commit`를 이용해 `mutatonis`을 호출합니다.
 
 
@@ -977,14 +583,12 @@ export const actions = {
  - 성공적으로 이미지 업로드 시, 아래 이밎 정보를 저장합니다.
 ```js
 // imagePath에 저장되는 사용자의 정보 예시
-// 아마존 버킷(s3)에 저장된 이미지의 주소를 저장합니다.
+// 아마존 버킷에 저장된 이미지의 주소를 저장합니다.
  imagePath:"https://am-clone.s3.ap-northeast-2.amazonaws.com/1623598375400"
 ```
 <br><br>
 
-
-<div id="image_add">3-2. 이미지 수정 버튼 클릭</div>
-
+#### 3-2 <div id="image_add">이미지 선택</div>
 - `store`의 `actioins` 함수 `uploadImg`를 호출합니다. 
 - 참고로 사용자의 프로필(썸네일) 이미지 말고도 책의 썸네일 이미지를 추가하거나 수정할 때도 공통적으로 사용하였습니다.<br>
 (<a href="#book_image_add">책의 이미지 추가 바로가기</a>)<br>
@@ -996,7 +600,7 @@ export const actions = {
   <div class="file_container add">
     <div class="txt">
       <label for="fileinput"><span class="round-btn yellow"><i class="far fa-file-image"></i>프로필 이미지 수정</span></label>
-      <!-- input type=file로 설정하여 파일창으로 파일을 선택할 시, onChangeImage 함수가 호출됩니다.-->
+      <!-- input type=file로 설정하여 파일창으로 파일을 선택할 시  onChangeImage 함수가 호출됩니다.-->
       <input id="fileinput" ref="file" style="display:none" type="file" @change="onChangeImage">
     </div>
     ....
@@ -1027,15 +631,14 @@ export const actions = {
    }
 ```
 
-- methods
-
+### methods
 |onChangeImage|
 |---|
 | FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.)|
-|`{user:true}`속성으로, 책의 썸네일 이미지가 아닌 사용자의 프로필(썸네일) 이미지를 업로드하는 API를 호출합니다. (<a href="#uploadImg">`actions` 함수 `uploadImg` 바로가기</a>)|
+|`{user:true}`속성으로, 책의 썸네일 이미지가 아닌 사용자의 프로필(썸네일) 이미지를 업로드하는 api를 호출합니다. (<a href="#uploadImg">`actions` 함수 `uploadImg` 바로가기</a>)|
 <br><br>
 
-4. 사용자가 변경할 프로필(썸네일) 이미지를 저장하기전에 미리 보여줍니다. <br>
+#### 4. 사용자가 변경할 프로필(썸네일) 이미지를 저장하기전에 미리 보여줍니다.
 (<b>프로필 정보 수정 버튼을 눌러야 완전히 사용자의 프로필이 저장됩니다.</b>)
 ```html
 <template>
@@ -1045,37 +648,37 @@ export const actions = {
     <div class="images">
       <!---사용자의 프로필(썸네일)이미지가 있고 state의 ImagePath에 값이 없다면, 사용자의 프로필(썸네일) 이미지를 보여줍니다. -->
       <img v-if="getImagePath.length === 0 &&getUser.thumbnail" :src="getUser.thumbnail" alt="userprofile">
-      <!-- state의 ImagePath에 값이 있다면  ImagePath에 저장된 이미지 주소를 src에 바인딩하여 보여줍니다. -->
+      <!--  state의 ImagePath에 값이 있다면  ImagePath에 저장된 이미지 주소를 src에 바인딩하여 보여줍니다. -->
       <img v-if="getImagePath.length>0" :src="`${getImagePath}`" alt="">
     </div>
   </div>
   ...
 </template>
 ```
-<br>
 
-<b>* 이미지를 업로드 할 때 문제점</b>
-
+ ### *이미지를 업로드 할 때 문제점
  |문제점|
  |---|
- |`onChangeImage`함수로 이미지를 업로드하는 API 함수를 호출하여 이미지의 주소를 가져와 `state`의 `imagePath`에 저장하도록 구현하였습니다. 다른 라우터로 이동시에도 `imagePath`에 값이 그대로 저장되어 있기 때문에, 프로필 정보 수정하기 위해 해당 라우터로 진입시,`imagePath`의 이미지가 그대로 보여지게 됩니다.  |
+ |`onChangeImage`함수로 이미지를 업로드하는 api 함수를 호출하여 이미지의 주소를 가져와 `state`의 `imagePath`에 저장하도록 구현하였습니다. 다른 라우터로 이동시에도 `imagePath`에 값이 그대로 저장되어 있기 때문에, 프로필 정보 수정하기 위해 해당 라우터로 진입시,`imagePath`의 이미지가 그대로 보여지게 됩니다.  |
 
 |해결|
  |---|
- |`created`훅을 이용해 인스턴스가 생성된 후 `state`의 `imagePath`값을 초기화시켜줍니다.|
-``
+ |라우터 이동시에는 `imagePath`의 값을 초기화하여 보여지지 않게 합니다.|
+
  ```js
-//  ~components/user/info.vue
-   created () {
-    //  이미지 데이터 초기화
-    if (this.getImagePath.length !== 0) {
-      return this.resetImgagePath()
+//  ~layout/default.vue
+  watch: {
+     ...mapMutations('books', ['resetImgagePath']),
+    $route () {
+      ...
+       // 라우터가 변경되면 썸네일 이미지가 저장하지 않은 경우에는 초기화할 수 있도록 하기
+      if (this.Thumbnail.length !== 0) {
+        return this.resetImgagePath()
+      }
     }
-  },
-   methods: {
-    ...mapMutations('books', ['resetImgagePath'])
-   } 
+  }
  ```
+ - `watch`를 이용하여 `route`를 지켜보고, 변경시에는 이미지를 초기화하는 `mutations`함수를 호출하여 `state`의 `imagePath`를 초기화시켜줍니다.
  ```js
 //  ~/store/book.js mutations
    removeThumbnail (state) {
@@ -1084,10 +687,9 @@ export const actions = {
  ```
  <br><br>
 
+#### <div style="color:red;">1-2. 비밀번호 수정</div>
 
-#### <div>1-2. 비밀번호 수정</div>
-
-1.카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
+#### 1.카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
 (<a href="#state_user">`store`의 `state` `user`정보</a>)
 ```js
 // 로그인시 저장된 user 정보 중 provider 속성+
@@ -1120,7 +722,7 @@ export const actions = {
  - 유효성 검사는 위의 <a href="register">`회원가입/로그인 구현`</a> 시 구현했던 방법과 같습니다.
  <br><br>
 
-### <div id="book_search" >3. 원하는 책 검색 및 추가</div>
+### <div id="book_search" style="color:blue;"><b>3. 원하는 책 검색 및 추가</b></div>
 
 
 |컴포넌트|라우터|
@@ -1128,10 +730,11 @@ export const actions = {
 |components/form/Search.vue|books/search|
 |components/book/CardDetail.vue|books/search|
 
-1. 카카오 책검색 API를 이용하여 검색한 데이터를 가져옵니다.
+#### 1. 카카오 api 중 검색기능을 사용했습니다.<br>
+그 중 책검색 api를 이용했습니다.
 ([카카오 개발자 센터](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide) 참고)
 
-- 해당 API는 `title(제목)`, `isbn(ISBN)`, `publisher(출판사)`, `person(인명)`로 검색 필드를 제공해주기 때문에 옵션에 따라, 검색 필드를 제한할 수 있도록 구현했습니다.
+- 해당 api는 title(제목), isbn (ISBN), publisher(출판사), person(인명)로 검색 필드를 제공해주기 때문에 옵션에 따라, 검색 필드를 제한할 수 있도록 구현했습니다.
 ```html
 <!-- ~pages/search/index.vue -->
 <template>
@@ -1147,13 +750,9 @@ data(){
    ...
 }
 ```
-<br>
-
-- `form-search`컴포넌트
 ```js
 // ~/components/form/search.vue
   props: {
-    // 검색 카테고리
     options: {
       type: Array,
       required: true
@@ -1165,11 +764,10 @@ data(){
     }
   },
 ```
-<br>
+- `v-model`로 바운딩시켜준 `data`의 `search`의 `value`를  props로 내려주고 `form-search.vue`에서 `value`로 props를 받았습니다.
 
-2. `select` 태그는 브라우저마다 다르게 보이기 때문에 통일되게 보일 수 있도록 `select` 태그를 사용하지않고, `ul`태그를 이용해 커스텀하여 구현했습니다.
+#### 2. `select` 태그는 브라우저마다 다르게 보이기 때문에 통일되게 보일 수 있도록 `select` 태그를 사용하지않고 ul태그를 이용해 구현했습니다.
 ```html
-<!-- ~/components/form/search.vue -->
 <template>
   <form class="search_form" @submit.prevent="$emit('searchBook')">
     <!-- 해당 태그에 마우스를 올리면 selected 를 true로 하여 옵션이 보이고, 마우스를 올리지 않으면 selected 를 false로 하여 옵션을 보이지 않게 합니다. -->
@@ -1178,14 +776,14 @@ data(){
         <!-- props로 받은  options: ['통합', '제목', '저자', '출판사', 'isbn'] 중 선택한 한개의 요소를 보여줍니다. -->
         <p>{{ selectedOption }}<i class="fas fa-chevron-down"></i></p>
       </div>
-      <!-- options 메뉴 -->
+      <!--  -->
       <ul v-if="selected" class="custom_select">
         <li v-for="(option,index) in options" :key="index" @click="changeSelect(option)">
           {{ option }}
         </li>
       </ul>
     </div>
-    <!-- input 입력폼의 값이 변할 때마다 이벤트를 상위 컴포넌트에 보내주어 value값을 변경해줍니다. -->
+    <!-- input으로 입력폼의 값이 변할 때마다 이벤트를 상위 컴포넌트에 보내주어 value값을 변경해줍니다. -->
     <input ref="searchInput" :value="value" type="text" placeholder="검색" 
     @input="$emit('input',$event.target.value)">
     <button type="submit">
@@ -1194,46 +792,37 @@ data(){
   </form>
 </template>
 ```
-<br>
 
-3. 옵션에 따라 카카오 검색 API 호출
-
-3-1. store
+#### 3. 옵션에 따라 카카오 검색 api를 호출합니다.
+#### 3-1 store
 |<div>actions</div>|
 |---|
 |SearchBooks|
 
 ```js
 //store/book.js actions
-   async SearchBooks ({ commit }, bookData) {
-     const { size, query, reset, page } = bookData
+   async SearchBooks ({ commit }, bookinfo) {
     try {
-      if (rootState.inintLoading) { return }
-      // 맨 처음에 데이터를 불러올 때 로딩 스피너를 보여줍니다.
-      if (reset) { commit('changeLoading', true, { root: true }) }
+      const { size, query, reset, page } = bookinfo
       const api = `/books/search/kakao?query=${query}&size=${size}&page=${page}`
       let res
-      // target의 내용에 따라 검색하는 API를 호출합니다.
-      // target이 "제목"이라면, 제목에서 검색한 API를 호출합니다.
-      // target이 "출판사"이라면, 출판사에서 검색한 API를 호출합니다.
-      if (bookData.target) {
-        res = await this.$axios.get(`${api}&target=${bookData.target}`)
+      // target의 내용에 따라 검색하는 api를 호출합니다.
+      // target이 "제목"이라면, 제목에서 검색한 api를 호출합니다.
+      // target이 "출판사"이라면, 출판사에서 검색한 api를 호출합니다.
+      if (bookinfo.target) {
+        res = await this.$axios.get(`${api}&target=${bookinfo.target}`)
       } else {
-        // 통합검색(target과 상관없이 "제목","출판사","저자" 등 과 관련없이 모든 요소에서 검색한 API를 호출합니다.)
+        // 통합검색(target과 상관없이 "제목","출판사","저자" 등 과 관련없이 모든 요소에서 검색한 api를 호출합니다.)
         res = await this.$axios.get(api)
       }
       commit('addBook', { data: res.data, reset })
     } catch (error) {
       console.error(error)
-    } finally {
-     // 로딩 스피너 종료
-      if (reset) {
-        setTimeout(() => commit('changeLoading', false, { root: true }), 400)
-      }
+    }
   }
 ```
-- `axios`를 이용해 책 검색 API를 호출합니다.
-- <b>통합검색/옵션에 따른 검색</b> 두가지 방법으로 구현하기 위해, 호출하는 API를 구분하였습니다.
+- `axios`를 이용해 api를 호출합니다.
+- 통합검색/옵션에 따른 검색 두가지 방법으로 구현하기 위해, 호출하는 api를 구분하였습니다.
 - `commit`를 이용해 `mutatonis`을 호출합니다.
 
 
@@ -1242,63 +831,62 @@ data(){
 |addBook|
 ```js
 //store/book.js  mutations
- addBook (state, bookData) {
-    const { data, reset } = bookData
-    // 초기화
+   addBook (state, bookinfo) {
+    const { data, reset } = bookinfo
     if (reset) {
-      state.books = []
+      state.searchbooks = []
       state.meta = {}
     }
     data.documents.forEach((book) => {
-      state.books.push(book)
+      state.searchbooks.push(book)
+    })
+    state.searchbooks.forEach((book, index) => {
+      book.id = index
     })
     state.meta = data.meta
   }
 ```
-- 카카오 검색 API 호출시, `documents`와 `meta` 로 값을 받아옵니다.
-- 책에 관련된 정보는 `state` 의 `books` 배열에 저장하고, 검색된 문서 수,마지막페이지인지 여부의 정보는 `state`의 `meta`에 저장하였습니다.
-- API 호출시 한번에 `20`개씩 데이터를 불러오고, `더보기 버튼`을 누를 시, 다음 데이터 `20`개를 가져오도록 구현하였습니다.
-
-<br>
-
-<b>* 책 검색 시, 불러온 책 데이터를 보여줄 때 문제점</b>
-
-|문제점|
+- 카카오 api 호출시, documents와 meta 로 값을 받아옵니다.
+- 책에 관련된 정보는 state 의 searchbooks에 저장하고, 검색된 문서 수,마지막페이지인지 여부의 정보는 state의 meta에 저장하였습니다.
+- api 호출시 한번에 `20`개씩 데이터를 불러오고, `더보기 버튼`을 누를 시, 다음 데이터 `20`개를 가져오도록 구현하였습니다.
+<br><br>
+|`{reset:true}`객체를 이용해 초기화 여부를 확인하는 이유|
 |---|
-|검색되는 정보를 `state`의 `books`배열에 저장하다보니, 옵션에 따라 검색정보를 다르게 검색했을 때, 기존 배열에 누적되는 문제가 발생했습니다.
+|문제점|
+|검색되는 정보를 `state`의 `searchbooks`배열에 저장하다보니, 옵션에 따라 검색정보를 다르게 검색했을 때, 기존 배열에 누적되는 문제가 발생했습니다.
 예시)옵션을 "통합"으로 설정하여 검색한 후,"제목"이나 "출판사" 등과 같은 다른 옵션으로 다시 재검색시, 기존에 존재하는 책의 정보가 없어지지않고 누적이 됩니다.|
 
 |해결|
 |---|
-|`{reset:true}` 별도의 객체 속성을 주어, 해당 속성이 `true`일 경우에만 `books` 배열을 초기화하고, 그러지 않다면 기존 배열에 계속 누적시킵니다.
+|`{reset:true}` 별도의 객체를 주어, `{reset:true}`일 경우, `searchbooks` 배열을 초기화하고 그러지 않다면 기존 배열에 계속 누적시킵니다.
 예시)옵션을 "통합"으로 설정하여 검색한 후,"제목"이나 "출판사" 등과 같은 다른 옵션으로 다시 재검색시, 기존에 존재하는 책의 정보를 초기화시켜줍니다.|
 
 |getters|
 |---|
-| getBooks |
+|getsearchbooks|
 ```js
 //store/book.js  getters
-  getBooks (state) {
-    return state.books
-  }
+  getsearchbooks (state) {
+    return state.searchbooks
+  },
 ```
-- `state`의 ` books`배열을 가져옵니다.
+- `state`의 ` searchbooks`배열을 가져옵니다.
 
 |state|
 |---|
-|books|
+| searchbooks|
 ```js
 //store/book.js state
- books: [],
+searchbooks: [],
  meta: {},
 ```
- - <div >성공적으로 API 호출 시, 아래 데이터 정보를 저장합니다.</div>
+ - <div >성공적으로 api 호출 시, 아래 데이터 정보를 저장합니다.</div>
   <a href="https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide">카카오 개발자 센터 책 검색 참고</a>
 ```js
-    books: [{
+ searchbooks: [{
      authors: Array[1]
-     contents: "단짝 친구와 갈등을 겪는 아이의 심리를 섬세하게 ... ",
-     datetime: "2018-06-01T00:00:00.000+09:00"
+     contents: datetime: "2018-06-01T00:00:00.000+09:00"
+     id: 0
      isbn: "1158360940 9791158360948"
      price: 12000
      publisher: "책읽는곰"
@@ -1321,22 +909,21 @@ data(){
 
 <br><br>
 
-3-2. 책 검색 버튼 클릭
+#### 3-2 입력폼에 검색을 원하는 입력값을 작성하여 검색 api를 호출합니다.
+(api 한번 호출될 때 `20`개의 데이터를 불러오고, `더보기 버튼`을 클릭할 때 다음 데이터 `20`개를 불러오도록 구현하였습니다.)
 - `store`의 `actioins` 함수 `SearchBooks`를 호출합니다. 
 ```js
-// ~/pages/books/search/index.vue
+// ~/page/search/index.vue
 methods:{
       data(){
           reset: false,
-          ...
       },
       // 입력폼에 원하는 입력값을 작성하여 엔터를 클릭할시 onSearchBook함수를 호출합니다.
       onSearchBook () {
-      // 기존 데이터 초기화
+        // 더보기 버튼으로 구현하여 데이터를 가져오기 때문에, 입력폼에 엔터를 누른다면 초기화시켜줍니다.
       this.resetBook(true)
       this.currentpage = 1
       this.currentCount = 0
-      // 검색한 책 데이터 불러오기
       this.onFetchbook()
     },
       onFetchbook () {
@@ -1345,7 +932,7 @@ methods:{
         this.errmsg = true
         return
       }
-      let bookinfo = { size: this.size, query: encodeURIComponent(this.search), page: this.currentpage, reset: this.reset }
+      let bookinfo = { size: this.size, query: this.search, page: this.currentpage, reset: this.reset }
       // 옵션에따라 target을 변경합니다.
       switch (this.option) {
         case '통합':
@@ -1366,6 +953,7 @@ methods:{
         default:
           break
       }
+      this.loading = true
       this.SearchBooks(bookinfo)
         .then(() => {
           this.errmsg = false
@@ -1374,6 +962,7 @@ methods:{
           // 마지막 페이지인지 여부인지 확인하는 데이터를 저장시킵니다.
           this.isend = this.meta.is_end
           this.showbutton()
+          this.loading = false
         })
     },
      resetBook (boolean) {
@@ -1386,26 +975,27 @@ methods:{
 }
 
 ```
-<br>
-
-3-3. 책 검색 후, 더보기 버튼 클릭
-- 더보기 버튼을 클릭할 시, 다음 데이터 `20`개를 불러오도록 구현하였습니다.
+#### 3-3. 더보기 버튼을 클릭할 시, 다음 데이터 `20`개를 불러오도록 구현하였습니다.
 ```html
-<!-- ~/pages/books/search/index.vue -->
+<!-- ~/page/search/index.vue -->
 <template>
   ...
-   <!-- 더보기 버튼 -->
-      <div v-if="showbtn" ref="btn" class="more">
-        <button class="round-btn fill more-btn" @click=" addFetchBook">
-           <!-- 현재페이지수/총페이지수(중복제거한 총 페이지 수) -->
-          {{ currentCount }} / {{ meta.pageable_count }}
-        </button>
-      </div>
+  <!-- 더보기 버튼 -->
+  <div v-if="showbtn" ref="btn" class="btn">
+    <div v-if="loading" class="loading-spin">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <div v-else>
+      <button class="round-btn fill more-btn" @click=" addFetchBook">
+        {{ currentCount }} / {{ meta.pageable_count }}
+        <!-- 현재페이지수/총페이지수(중복제거한 총 페이지 수) -->
+      </button>
+    </div>
+  </div>
   ...
 </template>
 ```
 ```js
-//  ~/pages/books/search/index.vue 
 methods:{
   ...
   // 더보기 버튼을 누르면 해당 함수를 호출합니다.
@@ -1418,32 +1008,37 @@ methods:{
     },
 }
 ```
-- `methods`
-
+#### methods
 |addFetchBook|
 |---|
-|더 불러올 데이터가 있다면, 현재페이지를 증가시켜주고, 책 검색 API를 호출합니다.( 초기화할 필요 없으므로 `resetBook`에 `false`를 전달해줍니다.)|
+|더 불러올 데이터가 있다면, 현재페이지를 증가시켜주고, api를 호출합니다.(더보기 버튼이므로 초기화할 필요 없으므로 `resetBook`에 `false`를 전달해줍니다.)|
 <br><br>
 
-
-<b>* 책 검색 시, 불러온 책 데이터를 보여줄 때 문제점</b>
+ ### *검색 할 때 문제점
  |문제점|
  |---|
- |라우터 이동시 데이터를 초기화시켜주지 않으면, 다시 검색하기 위해 해당 라우터에 이동했을 때, 전의 데이터가 그대로 남아 보여지게 됩니다.  |
+ |`SearchBooks`함수로 `state`의 `searchbooks` 배열에 데이터를 저장하도록 구현했습니다.
+ 라우터 이동시, 초기화시켜주지 않으면 다시 검색하기 위해 해당 라우터에 이동했을 때, 전에 검색했던 데이터가 그대로 남아 보여지게 됩니다.  |
 
 |해결|
  |---|
- |`created`훅을 이용해 인스턴스가 생성된 후 `state`의 `books`값을 초기화시켜줍니다.|
+ |라우터 이동시에는 `searchbooks`배열을 초기화하여 보여지지 않게 합니다.|
 
  ```js
-  created () {
-    // 책 데이터 초기화
-    if (this.books.length !== 0) {
-      console.log(this.books)
-      return this.initsearchBook()
+//  ~layout/default.vue
+  watch: {
+     ...mapMutations('books', ['initsearchBook']),
+    $route () {
+      ...
+       // 라우터가 변경되면 기존 검색기능 초기화할 수 있도록 하기
+     if (this.books.length !== 0) {
+        console.log(this.books)
+        return this.initsearchBook()
+      }
     }
   }
  ```
+ - `watch`를 이용하여 `route`를 지켜보고, 변경시에는 이미지를 초기화하는 `mutations`함수를 호출하여 `state`의 `searchbooks`배열을 초기화시켜줍니다.
  ```js
 //  ~/store/book.js mutations
 // 책의 정보와 meta에 저장된 정보를 초기화시켜줍니다.
@@ -1452,38 +1047,36 @@ methods:{
     state.meta = {}
   },
  ```
- <br>
+ <br><br>
 
-4. 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
+#### 4. 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
 
-4-1. store
+#### 4-1 store
 |<div>actions</div>|
 |---|
 |createBook|
 
 ```js
 //store/book.js actions
-    async createBook (_,bookData) {
-    const res = await this.$axios.post('/books/add', bookData)
+    async createBook (_,bookinfo) {
+    const res = await this.$axios.post('/books/add', bookinfo)
     return res
   }
 ```
-- `axios`를 이용해 책 추가 API를 호출합니다.
+- `axios`를 이용해 api를 호출합니다.
 - <b>책을 추가한 후, 추가한 책은 다른 라우터 `/books/_page`에 보여주도록 구현하였고, 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
 
 <br><br>
 
-4-2 추가하기 버튼 클릭
+#### 4-2 `추가하기 버튼`을 클릭하면 데이터를 추가하는 api를 호출합니다.
 - `store`의 `actioins` 함수 `createBook`를 호출합니다. 
-
-- `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(<a href="#bus">이벤트 버스로 구현</a>)
 ```html
-<!-- ~/pages/books/search/index.vue -->
+<!-- ~/page/search/index.vue -->
 <template>
   ...
   <div v-for="(book,index) in books" :key="index" class="search_book">
         <!-- book-card-detail -->
-        <BookCardDetail :book="book" />
+        <book-card-detail :book="book"></book-card-detail>
         <!-- 추가하기 버튼 -->
         <button class="round-btn addbtn red" @click="onaddBook(book)">
           추가하기
@@ -1493,85 +1086,422 @@ methods:{
 </template>
 ```
 ```js
-// ~/pages/books/search/index.vue
-import bus from '~/utils/bus.js'
-export default {
-  methods:{
-          async onaddBook (book) {
-        try {
-          const bookData = { title: book.title, contents: book.contents, datetime: book.datetime, isbn: book.isbn, publisher: book.publisher, thumbnail: book.thumbnail, url: book.url, authors: this.bookauthors(book.authors) }
-          await this.createBook(bookData)
-            .then((res) => {
-              // 데이터가 성공적으로 호출됐을 때 알림메세지로 알려주도록 구현했습니다.
-              bus.$emit('on:alert', res.data.msg)
-              setTimeout(() => {
-                bus.$emit('off:alert')
-              }, 3000)
-            })
-        } catch (error) {
-          // 이미 저장된 데이터를 또 추가하려고 할 때, 알림메세지로 알려주도록 구현했습니다.
-          console.log(error)
-          bus.$emit('on:alert', error.response.data.msg)
-          setTimeout(() => {
-            bus.$emit('off:alert')
-          }, 3000)
-        }
-      },
-      bookauthors (authors) {
-        //  book.authors 는 배열이므로, 문자열로 포맷합니다.
-        return authors.join(',')
-      },
-      ...
-  }
+// ~/page/search/index.vue
+methods:{
+        async onaddBook (book) {
+      try {
+        const bookinfo = { title: book.title, contents: book.contents, datetime: book.datetime, isbn: book.isbn, publisher: book.publisher, thumbnail: book.thumbnail, url: book.url, authors: this.bookauthors(book.authors) }
+        await this.createBook(bookinfo)
+          .then((res) => {
+            // 데이터가 성공적으로 호출됐을 때 알림메세지로 알려주도록 구현했습니다.
+            bus.$emit('on:alert', res.data.msg)
+            setTimeout(() => {
+              bus.$emit('off:alert')
+            }, 3000)
+          })
+      } catch (error) {
+        // 이미 저장된 데이터를 또 추가하려고 할 때, 알림메세지로 알려주도록 구현했습니다.
+        console.log(error)
+        bus.$emit('on:alert', error.response.data.msg)
+        setTimeout(() => {
+          bus.$emit('off:alert')
+        }, 3000)
+      }
+    },
+     bookauthors (authors) {
+      //  book.authors 는 배열이므로, 문자열로 포맷합니다.
+      return authors.join(',')
+    },
 }
+```
+#### metohds
+|onaddBook|
+|---|
+|`state`의 `actions` 함수 `createBook` 를 호출합니다.|
+|데이터는 `title` , `contents` , `datetime` , `isbn`,`publisher` , `thumbnail` , `url` , `authors`를 객체로 보내줍니다.|
+
+#### 4-3 `추가하기 버튼`을 클릭한 후, 알람메세지를 띄워 알려줍니다.
+
+- `eventbus`로 구현하였습니다.
+#### eventbus
+```html
+<!-- ~layouts/default.vue -->
+<template>
+  ...
+  <common-alert-msg :alert-state="alertState" :data="data"></common-alert-msg>
+  ...
+</template>
+
+```
+```js
+//  ~layouts/default.vue
+import bus from '~/utils/bus'
+...
+ data () {
+    return {
+      alertState: false,
+      data: ''
+    }
+  },
+    created () {
+    bus.$on('on:alert', (data) => {
+      this.data = data
+      this.onalert()
+    })
+    bus.$on('off:alert', this.offalert)
+  },
+  methods:{
+      onalert () {
+      this.alertState = true
+    },
+    offalert () {
+      this.alertState = false
+    }
+  }
+```
+<br>
+
+```html
+<!-- ~/components/common/alertMsg.vue -->
+<!-- transition으로 애니메이션 효과 -->
+<transition name="upSlide">
+    <div v-if="alertState" class="alertmsg">
+      {{ data }}
+    </div>
+  </transition>
+```
+- `transition`으로 애니메이션 효과를 주었습니다.
+(<a href="https://vuejs.org/v2/api/#transition">vue transitioin 문서 바로 가기</a>)
+```css
+/* upSlide animation */
+.upSlide-enter-active {
+    transition: all .3s ease;
+  }
+  .upSlide-leave-active {
+    transition: all .5s ease-in-out;
+  }
+  .upSlide-enter, .upSlide-leave-to/ {
+    transform:translateX(-50%) translateY(10px);
+    opacity: 0;
+  }
+```
+<br>
+
+```js
+//  ~/components/common/alertMsg.vue
+  props: {
+    alertState: {
+      type: Boolean,
+      required: true
+    },
+    data: {
+      type: String,
+      required: true
+    }
+  }
+```
+### props
+|alertState|data|
+|---|---|
+|알람메세지 여부를 `Boolean`으로 받도록 구현했습니다.|`데이터 추가`,`데이터 삭제` 등에 상관없이 알람메세지를 공통으로 적용해주기 위해 알림메세지 내용을 `data` `props`로 받도록 구현했습니다.|
+
+```js
+ async onaddBook (book) {
+      try {
+        ....
+        await this.createBook(bookinfo)
+          .then((res) => {
+            // 서버에서 내려준 데이터를 출력하도록 하고, 3초뒤에 알람메세지가 보이지 않도록 구현했습니다.
+            bus.$emit('on:alert', res.data.msg)
+            setTimeout(() => {
+              bus.$emit('off:alert')
+            }, 3000)
+          })
+      } catch (error) {
+        console.log(error)
+         // 서버에서 내려준 데이터를 출력하도록 하고, 3초뒤에 알람메세지가 보이지 않도록 구현했습니다.
+        bus.$emit('on:alert', error.response.data.msg)
+        setTimeout(() => {
+          bus.$emit('off:alert')
+        }, 3000)
+      }
+    },
 ```
 <br><br>
 
-### <div id="book_create"><b>4. 직접 책 추가 및 추가한 책 수정 및 삭제</b></div>
+### <div id="book_create" style="color:blue;"><b>3. 직접 책 추가 및 추가한 책 수정 및 삭제</b></div>
+
 
 |컴포넌트|라우터|
 |---|---|
-|components/form/BookAdd.vue|books/add|
+|components/form/FormBookAdd.vue|books/add|
 |components/book/Edit.vue|books/b/_id|
-<br>
 
-#### <div><b>4-1. 직접 책 추가 및 수정 공통 내용</b></div>
+#### <div  style="color:red;"><b>3-1. 직접 책 추가</b></div>
 |컴포넌트|라우터|
 |---|---|
-|components/form/BookAdd.vue|books/add|
+|components/form/FormBookAdd.vue|books/add|
 
-1. 믹스인으로 공통 요소 구현
-```js
-import BookFetchMixin from '~/mixins/BookFetchMixin'
-export default {
-  mixins: [BookFetchMixin]
-  ...
-}
+#### 1. `책제목` , `책 내용` , `저자` 는 필수 값으로 입력되도록 구현하고, 필수 값이 입력되지 않으면 버튼을 클릭 할 수 없도록 구현하였습니다.
+```html
+<!-- ~/components/form/BookAdd.vue -->
+<template>
+  <form class="form_content addform" @submit.prevent="onaddBook">
+    <div>
+      <label for="">책제목</label>
+      <p>
+        <input ref="titleInput" v-model="newBook.title" :class="{'invalid':!newBook.title}" type="text"><i
+          v-if="newBook.title" class="fas fa-plus-circle" @click="resetInput($event,'title')"></i>
+      </p>
+    </div>
+    <div v-if="!newBook.title" class="err">
+      책제목은 필수입니다.
+    </div>
+    <div>
+      <label for="">책 내용</label>
+      <p class="text">
+        <textarea v-model="newBook.contents" cols="30" rows="10" :class="{'invalid':!newBook.contents}"></textarea><i
+          v-if="newBook.contents" class="fas fa-plus-circle" @click="resetInput($event,'contents')"></i>
+      </p>
+    </div>
+    <div v-if="!newBook.contents" class="err">
+      책내용은 필수입니다.
+    </div>
+    ....
+    <label>저자</label>
+    <p>
+      <input v-model="newBook.authors" :class="{'invalid':!newBook.authors}" type="text"><i v-if="newBook.authors"
+        class="fas fa-plus-circle" @click="resetInput($event,'authors')"></i>
+    </p>
+    </div>
+    <div v-if="!newBook.authors" class="err">
+      저자는 필수입니다.
+    </div>
+    ...
+    <button type="submit" class="round-btn red addbtn"
+      :disabled="!newBook.title || !newBook.authors || !newBook.contents">
+      추가하기
+    </button>
+  </form>
+</template>
 ```
+```js
+data () {
+    return {
+      newBook: {
+        title: '',
+        contents: '',
+        url: '',
+        isbn: '',
+        authors: '',
+        publisher: '',
+        selectedFile: '',
+        datetime: new Date()
+      }
+    }
+  }
+```
+- `button`의 `disabled`에 바운딩시켜 필수값이 없으면 버튼을 클릭 하지 못하도록 구현하였습니다.
+
+- `class`를 바운딩시켜 입력값이 없으면 `invalid`가 추가되도록 구현하였습니다.(<a href="invalid">클래스명 `invalid` 참고</a>)
+
+- 참고로 `<input>` 태그에서는 `after` 가상요소 선택자가 적용되지 않아, 별도의 `<p>` 태그로 감싸주어 해당 태그에서 `class`를 바운딩시켜 `invalid::after`요소를 추가하였습니다.
+```html
+<!-- ~/components/form/BookAdd.vue -->
+...
+<!-- 입력폼에 입력값이 없다면 클래스명에 invalid 를 추가합니다.  -->
+<p :class="{'invalid':!newBook.title}" >
+  <input ref="titleInput" v-model="newBook.title"type="text"><i
+    v-if="newBook.title" class="fas fa-plus-circle" @click="resetInput($event,'title')"></i>
+</p>
+...
+```
+<br><br>
+
+#### 2. 입력폼에 입력된 값이 하나라도 있다면 `엑스 버튼`이 생기고, 해당 버튼을 클릭하면 해당  입력폼을 초기화시켜줍니다.
+```html
+<!-- ~/components/form/BookAdd.vue -->
+...
+<p :class="{'invalid':!newBook.title}" >
+  <input ref="titleInput" v-model="newBook.title"type="text">
+  <!-- 엑스버튼 -->
+  <i v-if="newBook.title" class="fas fa-plus-circle" @click="resetInput($event,'title')"></i>
+</p>
+...
+```
+```js
+ resetInput (e, data) {
+  //  target은 input태그가 된다
+      const target = e.target.parentNode.firstChild
+      // 입력값 초기화
+      this.newBook[data] = ''
+      // 입력값을 초기화 한후 target 태그 포커스
+      target.focus()
+    }
+```
+#### methods
+|resetInput|
+|---|
+|`event`를 인자로 넘겨주어,`target`이 `input`태그가 선택되도록 구현하였습니다.|
+|` const target = e.target.parentNode.firstChild` : `i`태그의 부모요소의 첫번째 자식요소 태그인 `input` 태그|
+|`data`의 `newBook`에서 해당 되는 속성을 찾아 빈값을 대입 : `v-model`로 `newBook`의 값을 양방향 바운딩시켜주었기 때문에 해당 값을 빈값으로 초기화 할시, 입력폼에 있는 입력값도 초기화됩니다.|
+|`엑스 버튼`으로 입력값을 초기화 시켜주고, 다시 해당 입력폼에 `focus`되도록 구현하였습니다.(`target`인 `input`태그에 `focus`)|
 <br>
 
-- `BookFetchMixin`
+#### <div style="color:blue;">* 참고로 IE(인터넷 익스플로러) 10 이상에서 Input text Box에 포커스 되면 우측에 x 표시가 생기는데, 이는 직접 구현하였으므로, IE(인터넷 익스플로러) 우측에 x 표시가 생기지 않도록 초기화시켜주었습니다.</div>
+```css
+/* static/css/style.css */
+/* ms 인풋요소 엑스박스제거 */
+::-ms-clear{display: none;}
+```
+
+<br><br>
+
+####  <div id="book_image_add">3. 책의 썸네일 이미지를 추가할 수 있도록 구현하였습니다.</div>
+```html
+<!-- ~/components/form/BookAdd.vue -->
+<template>
+  ...
+  <!-- 이미지 추가 -->
+  <div class="file_container add">
+    <div class="txt">
+      <label for="fileinput"><span class="round-btn yellow"><i class="far fa-file-image"></i>책 이미지 추가</span></label>
+      <input id="fileinput" style="display:none" type="file" @change="onChangeImage">
+    </div>
+   ....
+  </div>
+  ...
+</template>
+```
+- 이미지 추가 관련 내용은 위의 사용자 프로필(썸네일) 업로드 내용과 유사합니다.
+(<a href="#image_add">이미지 업로드 관련 내용 바로가기</a>)
+
+```js
+ data() {
+     return {
+       selectedFile: ''
+     }
+   },
+   methods: {
+     ...mapActions('books', ['uploadImg']),
+     onChangeImage(e) {
+       const selectedFile = e.target.files[0]
+       const imageFormData = new FormData()
+       imageFormData.append('photo', selectedFile)
+       this.uploadImg(imageFormData, {
+         user: true
+       })
+     },
+   }
+```
+
+### methods
+|onChangeImage|
+|---|
+| FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.)|
+<br><br>
+
+#### 4. 책의 썸네일 이미지를 미리볼 수 있도록 구현하였습니다.
+- 책의 썸네일 이미지를 선택하면, 이미지를 미리 보여줍니다.
+(<b>`추가하기 버튼`을 클릭해야 책의 썸네일 이미지가 저장됩니다.</b>)
+- 책의 썸네일 이미지를 미리 보여줄 때, `엑스 버튼`이 보이고, 해당 버튼을 누르면 미리 보여주고 있는 책의 썸네일 이미지를 없애줍니다.
+```html
+<!-- ~/components/form/BookAdd.vue  -->
+<template>
+...
+    <div class="file_container add">
+      <div class="txt">
+        <label for="fileinput"><span class="round-btn yellow"><i class="far fa-file-image"></i>책 이미지 추가</span></label>
+        <input id="fileinput" style="display:none" type="file" @change="onChangeImage">
+      </div>
+      <div v-if="getImagePath.length !== 0" class="photos">
+        <div class="images">
+          <img :src="getImagePath" alt="">
+        </div>
+        <div>
+        <!-- 미리보기 이미지가 있다면 엑스버튼이 보이고, 엑스버튼을 클릭하면 미리보기 이미지를 업애줍니다. -->
+          <button class="deletebtn" type="button" @click="onRemoveImage">
+            <i class="fas fa-plus-circle"></i>
+          </button>
+        </div>
+      </div>
+    </div>    
+    ...
+    </template>
+```
+```js
+...mapMutations('books', ['removeThumbnail']
+ onRemoveImage () {
+      this.newBook.selectedFile = null
+      this.removeThumbnail()
+    }
+```
+
+#### metohds
+|onRemoveImage |
+|---|
+|`store`의 `mutations`함수인 `removeThumbnail`를 호출하여 `state`의 `imagePath`를 초기화시켜줍니다.|
+#### mutations
+|mutations|
+|---|
+|removeThumbnail|
+```js
+// store/book.js mutations
+// 이미지 초기화
+ removeThumbnail (state) {
+    state.imagePath = []
+  },
+```
+<br><br>
+
+#### 5. 날짜는 <a href="https://github.com/mengxiong10/vue2-datepicker#readme">vue2-datepicker</a> 라이브러리를 사용하였습니다.
+
+|해당 라이브러리를 사용한 이유|
+|---|
+|`<input type="date">`는 브라우저마다 다르게 보여지기 때문에 브라우저에 상관없이 동일하게 보여주기 위해 사용하였습니다.|
+<br><br>
+
+#### 6. 책 추가 api 호출
+#### 6-1. store
+|<div>actions</div>|
+|---|
+|createBook|
+
+```js
+//store/book.js actions
+    async createBook (_,bookinfo) {
+    const res = await this.$axios.post('/books/add', bookinfo)
+    return res
+  }
+```
+- `axios`를 이용해 api를 호출합니다.
+- <b>책을 추가한 후, 추가한 책은 다른 라우터 `/books/_page`에 보여주도록 구현하였고, 성공적으로 책 추가시, 라우터를 변경하도록 구현하였습니다.<br>
+` this.$router.push('/books/1')` <br>해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
+
+
+<br><br>
+
+
+#### <div  style="color:red;"><b>3-2. 추가한 책 수정</b></div>
+|컴포넌트|라우터|
+|---|---|
+|components/book/Edit.vue|books/b/_id|
+
+#### 1. 책 추가와 책 수정은 비슷한 구성이므로, 공통적인 요소는 `mixin`으로 처리하였습니다.
+
+#### Mixin
 ```js
 // ~/mixins/BookFetchMixin.js
-  //  마운트될 때, 타이틀입력폼 태그에 포커스되도록 구현
  mounted () {
+  //  마운트될 때, 타이틀입력폼 태그에 포커스되도록 구현
     setTimeout(() => {
       this.$refs.titleInput.focus()
     }, 400)
   },
   computed: {
-  ...mapGetters('books', ['getImagePath']),
-  // 유효성 검사
-  InputLenValid () {
-    const data = ['title', 'isbn', 'authors', 'publisher']
-    return inputLen(this.newBook, data, 50)
+    ...mapGetters('books', ['getImagePath'])
   },
-  disabledBtn () {
-    return !this.newBook.title || !this.newBook.authors || !this.newBook.contents || !this.InputLenValid
-  }
-},
   methods: {
-    // 데이터 불러오기
     async fetchData () {
       try {
         const data = new FormData()
@@ -1617,7 +1547,7 @@ export default {
         }, 3000)
       }
     },
-   // 이미지 미리보기 업로드
+    // 이미지 업로드시, 실행되는 함수
     onChangeImage (e) {
       this.selectedFile = e.target.files[0]
       const imageFormData = new FormData()
@@ -1633,231 +1563,9 @@ export default {
   }
 ```
 <br><br>
-<br>
 
-2. 유효성 검사
-
-|필수 입력 값|입력 값 길이 제한|
-|---|---|
-|`책 제목(title)`|`책 제목(title)`|
-|`책 내용(contents)`|`isbn`|
-|`책 저자(authors)`|`책 저자(authors)`|
-|_|`책 출판사(publisher)`|
-
-```js
-data () {
-    return {
-      // 책 데이터
-       newBook: {
-        title: '',
-        isbn: '',
-        authors: '',
-        publisher: '',
-        contents: '',
-        url: '',
-        datetime: ''
-      },
-      // 추가할 이미지 
-      selectedFile: ''
-  }
-```
-<br>
-
--  `computed`를 통해 유효성 검사를 통과하지 못 했을 경우, 에러 메세지를 보여줍니다.
-
-```js
-// ~/mixins/BookFetchMixin
-  computed: {
-    InputLenValid () {
-      const data = ['title', 'isbn', 'authors', 'publisher']
-      return inputLen(this.newBook, data, 50)
-    },
-    disabledBtn () {
-      return !this.newBook.title || !this.newBook.authors || !this.newBook.contents || !this.InputLenValid
-    }
-  },
-```
-- `computed`
-
-|InputLenValid|
-|---|
-|`title`,`isbn`,`authors`,`publisher`의 길이가 50자 이하인지 확인합니다.|
-
-|disabledBtn|
-|---|
-|유효성 검사를 모두 통과하는지 확인합니다.|
-|`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
-
-<br>
-
-3. 입력폼에 입력된 값이 하나라도 있다면 `엑스 버튼`이 생기고, 해당 버튼을 클릭하면 해당  입력폼을 초기화시켜줍니다.
-```html
-<!-- ~/components/form/BookAdd.vue -->
-...
-  <form class="form_content addform" @submit.prevent="onaddBook">
-    <p :class="{'invalid':!newBook.title}" >
-      <input ref="titleInput" v-model="newBook.title"type="text">
-      <!-- 엑스버튼 -->
-      <i v-if="newBook.title" class="fas fa-plus-circle" @click="resetInput($event,'title')"></i>
-    </p>
-  </form>
-...
-```
-```js
-// ~/mixins/BookFetchMixin
- resetInput (e, data) {
-  //  target은 input태그가 된다
-      const target = e.target.parentNode.firstChild
-      // 입력값 초기화
-      this.newBook[data] = ''
-      // 입력값을 초기화 한후 target 태그 포커스
-      target.focus()
-    }
-```
-<br>
-
-- `methods`
-
-|resetInput|
-|---|
-|`data`의 `newBook`에서 해당 되는 속성을 찾아 초기화합니다.<br> `v-model`로 `newBook`의 값을 양방향 바운딩시켜주었기 때문에 해당 값을 빈값으로 초기화 할시, 입력폼에 있는 입력값도 초기화됩니다.|
-|`엑스 버튼`으로 입력값을 초기화 시켜주고, 다시 해당 입력폼에 `focus`되도록 구현하였습니다.(`target`인 `input`태그에 `focus`)|
-
-<br>
-
->  참고로 IE(인터넷 익스플로러) 10 이상에서 Input text Box에 포커스 되면 우측에 x 표시가 생기는데, 이는 직접 구현하였으므로, IE(인터넷 익스플로러) 우측에 x 표시가 생기지 않도록 초기화시켜주었습니다.</div>
-
-```css
-/* static/css/style.css */
-/* ms 인풋요소 엑스박스제거 */
-::-ms-clear{display: none;}
-```
-
-<br><br>
-
-4. 책의 썸네일 이미지를 추가 및 삭제할 수 있도록 구현하였습니다.
-
-4-1. 책의 썸네일 이미지 추가
-- 책의 썸네일 이미지를 선택하면, 이미지를 미리 보여줍니다.
-(<b>`추가하기 버튼`을 클릭해야 책의 썸네일 이미지가 저장됩니다.</b>)
-```html
-<!-- ~/components/form/BookAdd.vue -->
-<template>
-  ...
-  <!-- 이미지 추가 -->
-  <div class="file_container add">
-    <div class="txt">
-      <label for="fileinput"><span class="round-btn yellow"><i class="far fa-file-image"></i>책 이미지 추가</span></label>
-      <input id="fileinput" style="display:none" type="file" @change="onChangeImage">
-      <!-- 책의 썸네일 이미지를 미리 보여줍니다. -->
-    </div>
-          <div v-if="getImagePath.length !== 0" class="photos">
-        <div class="images">
-          <img :src="getImagePath" alt="썸네일 이미지">
-        </div>
-        <div>
-         ...
-        </div>
-      </div>
-   ....
-  </div>
-  ...
-</template>
-```
-- 이미지 추가 관련 내용은 위의 사용자 프로필(썸네일) 업로드 내용과 유사합니다.
-(<a href="#image_add">이미지 업로드 관련 내용 바로가기</a>)
-
-<br>
-
-```js
-// ~/mixins/BookFetchMixin
- export default {
-  methods: {
-     ...mapActions('books', ['uploadImg']),
-       // 이미지 미리보기 업로드
-    onChangeImage (e) {
-      this.selectedFile = e.target.files[0]
-      const imageFormData = new FormData()
-      imageFormData.append('photo', this.selectedFile)
-      this.uploadImg(imageFormData)
-    }
-  }
- }
-```
-
-- `methods`
-
-|onChangeImage|
-|---|
-|FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.)|
-<br>
-
-4-2. 책의 썸네일 이미지 삭제
-- 책의 썸네일 이미지를 미리 보여줄 때, `엑스 버튼`이 보이고, 해당 버튼을 누르면 미리 보여주고 있는 책의 썸네일 이미지를 없애줍니다.
-```js
-export default {
-  methods: {
-    ...mapMutations('books', ['removeThumbnail']),
-}
-```
-<br>
-
-
-|mutations|
-|---|
-|removeThumbnail|
-```js
-// store/book.js mutations
-// 이미지 초기화
- removeThumbnail (state) {
-    state.imagePath = []
-  },
-```
-<br><br>
-
-5. 날짜는 <a href="https://bootstrap-vue.org/docs/components/form-datepicker/">buutstrap-vue</a>에서 `datepicker`를 사용하였습니다.
-
-|해당 라이브러리를 사용한 이유|
-|---|
-|`<input type="date">`는 브라우저마다 다르게 보여지기 때문에 브라우저에 상관없이 동일하게 보여주기 위해 사용하였습니다.|
-<br><br>
-
-
-#### <div><b>4-2. 직접 책 추가</b></div>
-
-1. 책 추가 API 호출
-
-1-1. store
-|<div>actions</div>|
-|---|
-|createBook|
-
-```js
-//store/book.js actions
-  async createBook (_, bookData) {
-    const res = await this.$axios.post('/books/add', bookData)
-    return res
-  }
-```
-- `axios`를 이용해 책 추가 API를 호출합니다.
-- <b>책을 추가한 후, 추가한 책은 다른 라우터 `/books/_page`에 보여주도록 구현하였고, 성공적으로 책 추가시, 라우터를 변경하도록 구현하였습니다.<br>
-` this.$router.push('/books/1')`
- - 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
-
-
-<br>
-
-
-#### <div><b>4-3. 추가한 책 수정</b></div>
-|컴포넌트|라우터|
-|---|---|
-|components/book/Edit.vue|books/b/_id|
-<br>
-
-
-1. 책 수정 API 호출
-
-1-1. store
+#### 2. 책 수정 api 호출
+#### 2-1. store
 |<div>actions</div>|
 |---|
 |updateBook|
@@ -1870,7 +1578,7 @@ export default {
     return res
   }
 ```
-- `axios`를 이용해  책 수정 API를 호출합니다.
+- `axios`를 이용해 api를 호출합니다.
 - `commit`를 이용해 `mutatonis`을 호출합니다.
 
 
@@ -1905,83 +1613,105 @@ export default {
   book: {}
 ```
 
-<br>
+<br><br>
 
-#### <div><b>4-4. 추가한 책 삭제</b></div>
+#### <div  style="color:red;"><b>3-3. 추가한 책 삭제</b></div>
 |라우터|
 |---|
 |books/b/_id|
 
+#### 1. `삭제 버튼`을 클릭하면 한번 더 확인하는 알림창이 뜨고, 확인 버틀을 누를시에만 삭제하도록 구현하였습니다.
+- `삭제 버튼`은 다른 사람의 책이 아닌 내 책에서만 `버튼`이 보이도록 구현하였습니다.
+```html
+<!-- ~/pages/books/b/_id.vue -->
+<template>
+  <div>
+  ...
+  <!-- 삭제 / 수정 버튼 -->
+    <div class="control_btns">
+      <div class="left_btn">
+        <button class="primary-btn red" @click="onremoveBook">
+          <i class="fas fa-trash-alt"></i>삭제
+        </button>
+        <button class="primary-btn" @click="onEditBook">
+          <i class="fas fa-pen-square"></i>수정
+        </button>
+      </div>
+  ...
+  <!-- 삭제 버튼 클릭 시, 알림창을 띄우기 -->
+   <form-alert v-if="alert" :data="getBook && getBook.title" :confirm="`삭제`" @onagree=" agree" @ondisagree="disagree"></form-alert>
+  </div>
+</template>
+```
+```html
+<!-- ~/components/form/Alert.vue -->
+<template>
+  <common-modal class="alert_main">
+    <div slot="header">
+      <b>{{ data }}</b> 을(를) {{ confirm }}하시겠어요??
+    </div>
+    <div slot="body" class="body">
+    <!-- "네" 버튼 클릭 시, onagree 이벤트를 상위 컴포넌트에 보내줍니다. -->
+      <button class="primary-btn" @click="$emit('onagree')">
+        네
+      </button>
+        <!-- "아니오" 버튼 클릭 시, ondisagree 이벤트를 상위 컴포넌트에 보내줍니다. -->
+      <button class="primary-btn red" @click="$emit('ondisagree')">
+        아니오
+      </button>
+    </div>
+    <div slot="footer"></div>
+  </common-modal>
+</template>
+```
+```js
+  props: {
+    data: {
+      type: String,
+      required: true
+    },
+    confirm: {
+      type: String,
+      required: true
+    }
+  }
+```
+- 상위컴포넌트에서 `data`와 `confirm`을 `props`로 내려주었습니다.
+<br><br>
 
-1. 책 삭제 API 호출
-
-1-1. store
+#### 2. 확인 알림창에서 "네" 클릭시 삭제 api를 호출합니다.
+#### 2-1. store
 |<div>actions</div>|
 |---|
 |deleteBook|
 
 ```js
 //store/book.js actions
-  async deleteBook (_, { id }) {
+    async deleteBook ({ commit }, { id }) {
     const res = await this.$axios.delete(`/books/${id}`)
     return res
-  },
+  }
 ```
-- `axios`를 이용해 책 삭제 API를 호출합니다.
+- `axios`를 이용해 api를 호출합니다.
 - <b>책을 삭제한 후, 성공적으로 책 삭제시, 라우터를 변경하도록 구현하였습니다.<br>
-` this.$router.push('/books/1')` 
-- 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
-
-1-2. 삭제 버튼 클릭
-- 삭제 확인 알림창에서 "네" 클릭 시, `store`의 `actioins` 함수 `deleteBook`를 호출합니다. 
-(<a href="#alert">삭제 알림창 내용 바로가기</a>)
- 
-```html
-<!-- ~/pages/books/b/_id.vue -->
-<template>
-  <div class="book-details">
-    <div>
-      <!-- 삭제 확인 알림창 -->
-      ...
-      <FormAlert v-if="alert" :data="getBook && getBook.title" :confirm="`삭제`" @onagree=" agree" @ondisagree="disagree" />
-    </div>
-  </div>
-</template>
-```
+` this.$router.push('/books/1')` <br>해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
+#### 2-2. 확인 알림창에서 "네" 클릭 시, `agree`함수를 호출합니다.
 ```js
 // ~/pages/books/b/_id.vue
- data () {
-    return {
-      alert: false
-    }
-  },
-  methods:{
-    ...mapActions('books', ['deleteBook']),
     agree () {
       try {
         this.deleteBook({ id: this.$route.params.id })
           .then(() => {
-            // 삭제 후 라우터 이동
             this.$router.push('/books/1')
           })
       } catch (error) {
         console.error(error)
       }
     }
-  }
 ```
+<br><br>
 
-
-### <div id="get_data"><b>5. 책 보여주기</b></div>
-
-#### <div>5-1. 공통 내용</div>
-#### <div>5-2. 내가 추가한 책 보여주기</div>
-#### <div>5-3. 다른 사용자가 추가한 책 보여주기</div>
-#### <div>5-4. 태그별로 책 보여주기</div>
-#### <div>5-5. 검색한 책 보여주기</div>
-
-# 여기까지
-### <div id="books" style="color:blue;">4. 내가 추가한 책 보여주기</div>
+### <div id="books" style="color:blue;"><b>4. 내가 추가한 책 보여주기</b></div>
 |컴포넌트|라우터|
 |---|---|
 |components/books/Card.vue|books/_page|
@@ -3419,7 +3149,7 @@ comments: [{
     </button>
     <div v-if="showComment" class="comment">
       <div class="comment_head">
-        <h3>댓글 쓰기</h3>
+        <h2>댓글 쓰기</h2>
         <div v-if="loading" class="loading-spin">
           <i class="fas fa-spinner fa-spin"></i>
         </div>
