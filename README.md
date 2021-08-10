@@ -307,7 +307,7 @@ props
 - `props`
 
 |len|
-|:---|
+|:---:|
 |글자 길이를 `props`로 받도록 구현했습니다.|
 
 <br>
@@ -354,7 +354,7 @@ props
 - `props`
 
 |data|confirm|
-|---|---|
+|:---:|:---:|
 |삭제/수정할 데이터를 `props`로 받도록 구현했습니다.|삭제/수정 여부를 `props`로 받도록 구현했습니다.|
 
 <br>
@@ -535,9 +535,11 @@ export default {
 ```
 
 - `computed`
+<div style="font-size:20px;">computed</div>
+
 
 | isvalidLength|
-|---|
+|:---:|
 |`data`의 `password`의 길이가 8자 이상인지 30자 이하인지 확인합니다.|
 
 |isvalidEmail|
@@ -562,6 +564,29 @@ export default {
 |`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
 
 <br>
+<div style="font-size:20px;">computed</div>
+
+|computed|설명|
+|:---:|:---:|
+|isvalidLength|`data`의 `password`의 길이가 8자 이상인지 30자 이하인지 확인합니다.|
+|isvalidEmail|`data`의 `email`의 양식이 이메일인지 확인합니다.|
+|isconfirmPassword|`data`의 `password`와 `data`의 `confirm_password`가 완전히 일치하는지 확인합니다.|
+|isuserInfoLength|`data`의 `user` 객체 데이터의 길이가 20자 이하인지 확인합니다.|
+|inputErrMsg|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
+|disabledBtn|위의 유효성 검사를 모두 통과하는지 확인합니다. <br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
+
+<br>
+<div style="font-size:20px;">computed</div>
+
+|computed|설명|
+|:---|:---|
+|isvalidLength|`data`의 `password`의 길이가 8자 이상인지 30자 이하인지 확인합니다.|
+|isvalidEmail|`data`의 `email`의 양식이 이메일인지 확인합니다.|
+|isconfirmPassword|`data`의 `password`와 `data`의 `confirm_password`가 완전히 일치하는지 확인합니다.|
+|isuserInfoLength|`data`의 `user` 객체 데이터의 길이가 20자 이하인지 확인합니다.|
+|inputErrMsg|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
+|disabledBtn|위의 유효성 검사를 모두 통과하는지 확인합니다. <br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
+
 
 3. <b>필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
 
