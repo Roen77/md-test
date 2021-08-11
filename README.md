@@ -94,7 +94,7 @@
  3. mutations
  4. actions
 
- #### 3-4. 구현 공통 요소 
+### 3-4. 구현 공통 요소 
 1. `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
  - <a href="https://nuxtjs.org/docs/2.x/directory-structure/components">`nuxt` 컴포넌트 디렉토리 공식 문서 바로 가기</a>
 ```js
@@ -126,11 +126,11 @@ export default function ({ $axios, error, redirect }) {
 }
 ```
 |IE 캐시 이슈 |
-|---|
+|:---|
 |브라우져가 캐시하는 대상은 GET 메소드에 한정되는데 IE일 경우 GET 메소드 호출시, 캐시를 사용하여 메서드가 재호출되지 않는 문제가 발생했습니다.|
 
 |IE 캐시 이슈 해결|
-|---|
+|:---|
 |IE일 경우, 요청 헤더에 `Cache-Control: no-cache`를 담아 서버로 전송하면 브라우져는 캐시를 사용하지 않고 서버로 요청합니다.|
 
 <br>
@@ -199,6 +199,7 @@ export default {
 3. 공통 컴포넌트
 
 <div id="bus">3-1. 알림창</div>
+
  - `eventbus` 를 이용하여 구현하였습니다.
 
 ```html
@@ -255,7 +256,7 @@ import bus from '~/utils/bus'
 
 <br>
 
-props
+- `props`
 
 ```js
 //  ~/components/common/alertMsg.vue
@@ -270,12 +271,11 @@ props
     }
   }
 ```
-# 테스트
-- `props`
+|props|타입|설명|
+|:---|:---|:---|
+|alertState|Boolean|알람메세지 여부|
+|data|String|`데이터 추가`,`데이터 삭제` 등에 상관없이 알람메세지를 공통으로 적용해주기 위해 알림메세지 내용을 `data` `props`로 받도록 구현했습니다.|
 
-|alertState|data|
-|:---|:---|
-|알람메세지 여부를 `Boolean`으로 받도록 구현했습니다.|`데이터 추가`,`데이터 삭제` 등에 상관없이 알람메세지를 공통으로 적용해주기 위해 알림메세지 내용을 `data` `props`로 받도록 구현했습니다.|
 
 <br>
 
@@ -293,8 +293,7 @@ props
 
 <br>
 
-props
-
+- `props`
 ```js
 // ~/components/common/LenConfirm.vue
  props: {
@@ -304,11 +303,11 @@ props
     }
   }
 ```
-- `props`
 
-|len|
-|:---:|
-|글자 길이를 `props`로 받도록 구현했습니다.|
+|props|타입|설명|
+|:---|:---|:---|
+|len|String|글자 길이|
+
 
 <br>
 <div id="alert">3-3. 삭제/수정 확인 알림창</div>
@@ -336,7 +335,7 @@ props
 
 <br>
 
-props
+- `props`
 
 ```js
 //  ~/components/form/Alert.vue 
@@ -351,13 +350,94 @@ props
     }
   }
 ```
-- `props`
 
-|data|confirm|
-|:---:|:---:|
-|삭제/수정할 데이터를 `props`로 받도록 구현했습니다.|삭제/수정 여부를 `props`로 받도록 구현했습니다.|
+|props|타입|설명|
+|:---|:---|:---|
+|data|String|삭제/수정할 데이터의 제목|
+|confirm|String|삭제/수정 여부|
 
 <br>
+
+<div id="alert">3-4. 검색 폼</div>
+
+- `props`
+
+```js
+// ~/components/form/Search.vue
+export default {
+  props: {
+    options: {
+      type: Array,
+      required: true
+    },
+    value: {
+      type: String || Number,
+      required: false
+    }
+  },
+  ...
+}
+```
+|props|타입|설명|
+|:---|:---|:---|
+|options|Array|검색 옵션<br> ex)책제목,저자 등 검색 옵션|
+|value|String / Number|검색 입력폼에 입력한 값(`input`태그의 값)|
+<br>
+
+- `methods`
+```js
+// ~/components/form/Search.vue
+export default {
+  data () {
+    return {
+      selected: false,
+      selectedOption: this.options[0]
+    }
+  },
+  methods: {
+    changeSelect (option) {
+      this.selectedOption = option
+      this.selected = false
+      this.$refs.searchInput.focus()
+      this.$emit('selectedOption', option)
+    }
+  }
+}
+```
+
+|methods|설명|
+|:---|:---|
+|changeSelect|검색 옵션 수정시, 수정한 옵션을 `$emit`을 이용해 상위컴포넌트에 전달해줍니다. |
+
+<br>
+
+- `events`
+```html
+<template>
+  <form class="search_form" @submit.prevent="$emit('searchBook')">
+    <div class="main_select" @mouseenter="selected=!selected" @mouseleave="selected=false">
+      ...
+      <ul v-if="selected" class="custom_select">
+        <li v-for="(option,index) in options" :key="index" @click="changeSelect(option)">
+          {{ option }}
+        </li>
+      </ul>
+    ...
+    <input ref="searchInput" :value="value" type="text" placeholder="검색" @input="$emit('input',$event.target.value)">
+    <button type="submit">
+      <i class="fas fa-search"></i>
+    </button>
+  </form>
+</template>
+
+```
+
+|events|설명|
+|:---|:---|
+|searchBook|`submit`이벤트 발생시, `$emit`을 이용해 상위컴포넌트에 전달해줍니다. |
+|input|`input`이벤트 발생시,`$emit`을 이용해 입력폼에 입력된 값을 상위컴포넌트에 전달해줍니다. |
+
+
 
 ## 4. 구현 세부 내용 정리
 <br>
@@ -535,48 +615,6 @@ export default {
 ```
 
 - `computed`
-<div style="font-size:20px;">computed</div>
-
-
-| isvalidLength|
-|:---:|
-|`data`의 `password`의 길이가 8자 이상인지 30자 이하인지 확인합니다.|
-
-|isvalidEmail|
-|---|
-|`data`의 `email`의 양식이 이메일인지 확인합니다.|
-
-|isconfirmPassword|
-|---|
-|`data`의 `password`와 `data`의 `confirm_password`가 완전히 일치하는지 확인합니다.|
-
-|isuserInfoLength|
-|---|
-|`data`의 `user` 객체 데이터의 길이가 20자 이하인지 확인합니다.|
-
-|inputErrMsg|
-|---|
-|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
-
-|disabledBtn|
-|---|
-|위의 유효성 검사를 모두 통과하는지 확인합니다.|
-|`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
-
-<br>
-<div style="font-size:20px;">computed</div>
-
-|computed|설명|
-|:---:|:---:|
-|isvalidLength|`data`의 `password`의 길이가 8자 이상인지 30자 이하인지 확인합니다.|
-|isvalidEmail|`data`의 `email`의 양식이 이메일인지 확인합니다.|
-|isconfirmPassword|`data`의 `password`와 `data`의 `confirm_password`가 완전히 일치하는지 확인합니다.|
-|isuserInfoLength|`data`의 `user` 객체 데이터의 길이가 20자 이하인지 확인합니다.|
-|inputErrMsg|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
-|disabledBtn|위의 유효성 검사를 모두 통과하는지 확인합니다. <br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
-
-<br>
-<div style="font-size:20px;">computed</div>
 
 |computed|설명|
 |:---|:---|
@@ -587,6 +625,8 @@ export default {
 |inputErrMsg|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
 |disabledBtn|위의 유효성 검사를 모두 통과하는지 확인합니다. <br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
 
+
+<br>
 
 3. <b>필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
 
@@ -882,11 +922,6 @@ export const actions = {
 |---|
 |user/info|
 
-#### 1. 사용자 정보 수정은 크게 2가지로 나누었습니다.
-  - 프로필 정보 수정
-  - 비밀번호 수정
-
-<br>
 
 #### <div>1-1. 프로필 정보 수정</div>
 
@@ -1053,12 +1088,11 @@ export const actions = {
    }
 ```
 
-- methods
+- `methods`
 
-|onChangeImage|
-|---|
-| FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.)|
-|`{user:true}`속성으로, 책의 썸네일 이미지가 아닌 사용자의 프로필(썸네일) 이미지를 업로드하는 API를 호출합니다. (<a href="#uploadImg">`actions` 함수 `uploadImg` 바로가기</a>)|
+|methods|설명|
+|:---|:---|
+|onChangeImage|FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.) <br>`{user:true}`속성으로, 책의 썸네일 이미지가 아닌 사용자의 프로필(썸네일) 이미지를 업로드하는 API를 호출합니다. (<a href="#uploadImg">`actions` 함수 `uploadImg` 바로가기</a>)|
 <br><br>
 
 4. 사용자가 변경할 프로필(썸네일) 이미지를 저장하기전에 미리 보여줍니다. <br>
@@ -1089,7 +1123,7 @@ export const actions = {
 |해결|
  |---|
  |`created`훅을 이용해 인스턴스가 생성된 후 `state`의 `imagePath`값을 초기화시켜줍니다.|
-``
+
  ```js
 //  ~components/user/info.vue
    created () {
@@ -1113,7 +1147,7 @@ export const actions = {
 
 #### <div>1-2. 비밀번호 수정</div>
 
-1.카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
+1. 카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
 (<a href="#state_user">`store`의 `state` `user`정보</a>)
 ```js
 // 로그인시 저장된 user 정보 중 provider 속성+
@@ -1148,6 +1182,7 @@ export const actions = {
 
 ### <div id="book_search" >3. 원하는 책 검색 및 추가</div>
 
+#### 3-1. 원하는 책 검색
 
 |컴포넌트|라우터|
 |---|---|
@@ -1446,9 +1481,9 @@ methods:{
 ```
 - `methods`
 
-|addFetchBook|
-|---|
-|더 불러올 데이터가 있다면, 현재페이지를 증가시켜주고, 책 검색 API를 호출합니다.( 초기화할 필요 없으므로 `resetBook`에 `false`를 전달해줍니다.)|
+|methods|설명|
+|:---|:---|
+|addFetchBook|더 불러올 데이터가 있다면, 현재페이지를 증가시켜주고, 책 검색 API를 호출합니다.( 초기화할 필요 없으므로 `resetBook`에 `false`를 전달해줍니다.)|
 <br><br>
 
 
@@ -1480,9 +1515,13 @@ methods:{
  ```
  <br>
 
-4. 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
+#### 3-2. 원하는 책 검색 후 추가
 
-4-1. store
+- 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
+
+1. 검색한 책 추가 API 호출
+
+1-1. store
 |<div>actions</div>|
 |---|
 |createBook|
@@ -1499,7 +1538,7 @@ methods:{
 
 <br><br>
 
-4-2 추가하기 버튼 클릭
+1-2 추가하기 버튼 클릭
 - `store`의 `actioins` 함수 `createBook`를 호출합니다. 
 
 - `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(<a href="#bus">이벤트 버스로 구현</a>)
@@ -1553,7 +1592,7 @@ export default {
 ```
 <br><br>
 
-### <div id="book_create"><b>4. 직접 책 추가 및 추가한 책 수정 및 삭제</b></div>
+### <div id="book_create"><b>4. 직접 책 추가 및 수정 및 삭제</b></div>
 
 |컴포넌트|라우터|
 |---|---|
@@ -1598,15 +1637,16 @@ export default {
 },
   methods: {
     // 데이터 불러오기
-    async fetchData () {
+     async fetchData () {
       try {
         const data = new FormData()
+        const imageFile = this.selectedFile || this.mybook.thumbnail
         data.append('title', this.newBook.title)
         data.append('contents', this.newBook.contents)
-        data.append('datetime', this.newBook.datetime)
+        data.append('datetime', new Date(this.newBook.datetime))
         data.append('isbn', this.newBook.isbn)
         data.append('publisher', this.newBook.publisher)
-        data.append('photo', this.selectedFile)
+        data.append('photo', imageFile)
         data.append('url', this.newBook.url)
         data.append('authors', this.newBook.authors)
         if (!this.$route.params.id) {
@@ -1614,7 +1654,6 @@ export default {
           await this.createBook(data)
             .then((res) => {
               this.$router.push('/books/1')
-              // 이벤트 버스로 알림메세지 구현
               bus.$emit('on:alert', res.data.msg)
               setTimeout(() => {
                 bus.$emit('off:alert')
@@ -1627,7 +1666,6 @@ export default {
               this.oneditStateChange()
               this.showimage = false
               this.resetImage = false
-               // 이벤트 버스로 알림메세지 구현
               bus.$emit('on:alert', res.data.msg)
               setTimeout(() => {
                 bus.$emit('off:alert')
@@ -1636,8 +1674,7 @@ export default {
         }
       } catch (error) {
         console.log(error)
-          // 이벤트 버스로 알림메세지 구현
-        bus.$emit('on:alert', error.response.msg)
+        bus.$emit('on:alert', error.response.data.msg)
         setTimeout(() => {
           bus.$emit('off:alert')
         }, 3000)
@@ -1658,6 +1695,25 @@ export default {
     }
   }
 ```
+
+- `computed`
+
+|computed|설명|
+|:---|:---|
+|InputLenValid|입력 값 길이 확인합니다.|
+|disabledBtn|유효성 검사를 모두 통과하는지 확인합니다.<br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
+
+<br>
+
+- `methods`
+
+|methods|설명|
+|:---|:---|
+|fetchData|책 데이터 추가/수정시 `state`의 `actions`함수를 호출하여 책 추가/수정 API 호출합니다.|
+|onChangeImage|`state`의 `actions`함수를 호출하여 책 이미지(썸네일) 추가 API 호출|
+|resetInput|입력데이터 초기화합니다.|
+
+<br>
 <br><br>
 <br>
 
@@ -1693,6 +1749,7 @@ data () {
 
 ```js
 // ~/mixins/BookFetchMixin
+import { inputLen } from '~/utils/validate'
   computed: {
     InputLenValid () {
       const data = ['title', 'isbn', 'authors', 'publisher']
@@ -1703,16 +1760,24 @@ data () {
     }
   },
 ```
+```js
+// ~/utils/validate.js
+// 유효섬 검사
+// 입력값 데이터(객체) 전부의 길이를 확인하는 함수
+const inputLen = (value, data, len) => {
+  return data.every(key => value[key].length < len)
+}
+
+export { validLength, validEmail, inputLen }
+
+```
 - `computed`
 
-|InputLenValid|
-|---|
-|`title`,`isbn`,`authors`,`publisher`의 길이가 50자 이하인지 확인합니다.|
+|computed|설명|
+|:---|:---|
+|InputLenValid|`title`,`isbn`,`authors`,`publisher`의 길이가 50자 이하인지 확인합니다.|
+|disabledBtn|유효성 검사를 모두 통과하는지 확인합니다.<br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
 
-|disabledBtn|
-|---|
-|유효성 검사를 모두 통과하는지 확인합니다.|
-|`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
 
 <br>
 
@@ -1744,10 +1809,9 @@ data () {
 
 - `methods`
 
-|resetInput|
-|---|
-|`data`의 `newBook`에서 해당 되는 속성을 찾아 초기화합니다.<br> `v-model`로 `newBook`의 값을 양방향 바운딩시켜주었기 때문에 해당 값을 빈값으로 초기화 할시, 입력폼에 있는 입력값도 초기화됩니다.|
-|`엑스 버튼`으로 입력값을 초기화 시켜주고, 다시 해당 입력폼에 `focus`되도록 구현하였습니다.(`target`인 `input`태그에 `focus`)|
+|methods|설명|
+|:---|:---|
+|resetInput|`data`의 `newBook`에서 해당 되는 속성을 찾아 초기화합니다.<br> `v-model`로 `newBook`의 값을 양방향 바운딩시켜주었기 때문에 해당 값을 빈값으로 초기화 할시, 입력폼에 있는 입력값도 초기화됩니다.<br>`엑스 버튼`으로 입력값을 초기화 시켜주고, 다시 해당 입력폼에 `focus`되도록 구현하였습니다.(`target`인 `input`태그에 `focus`)|
 
 <br>
 
@@ -1761,7 +1825,7 @@ data () {
 
 <br><br>
 
-4. 책의 썸네일 이미지를 추가 및 삭제할 수 있도록 구현하였습니다.
+4. 책의 썸네일 이미지를 추가 및 수정할 수 있도록 구현하였습니다.
 
 4-1. 책의 썸네일 이미지 추가
 - 책의 썸네일 이미지를 선택하면, 이미지를 미리 보여줍니다.
@@ -1813,12 +1877,13 @@ data () {
 
 - `methods`
 
-|onChangeImage|
-|---|
-|FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.)|
+|methods|설명|
+|:---|:---|
+|onChangeImage|FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.)|
+
 <br>
 
-4-2. 책의 썸네일 이미지 삭제
+4-2. 책의 썸네일 이미지 수정(삭제)
 - 책의 썸네일 이미지를 미리 보여줄 때, `엑스 버튼`이 보이고, 해당 버튼을 누르면 미리 보여주고 있는 책의 썸네일 이미지를 없애줍니다.
 ```js
 export default {
@@ -1870,9 +1935,33 @@ export default {
 ` this.$router.push('/books/1')`
  - 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
 
-
 <br>
+1-2. 추가하기 버튼 클릭
 
+- 책 추가 버튼 클릭 시, 공통으로 구현한 `BookFetchMixin` 의 `fetchData` 함수를 호춣하여 책 데이터 추가 API를 호출합니다.
+
+```html
+<!-- ~/components/form/BookAdd.vue -->
+<template>
+  <form class="form_content addform" @submit.prevent="onaddBook">
+    ...
+    <button type="submit" class="round-btn red addbtn" :disabled="disabledBtn">
+      추가하기
+    </button>
+    ...
+  </form>
+</template>
+```
+
+```js
+// ~/components/form/BookAdd.vue
+  methods: {
+    ...
+     onaddBook () {
+       this.fetchData()
+    }
+  }
+```
 
 #### <div><b>4-3. 추가한 책 수정</b></div>
 |컴포넌트|라우터|
@@ -1890,8 +1979,8 @@ export default {
 
 ```js
 //store/book.js actions
-    async updateBook ({ commit }, bookinfo) {
-    const res = await this.$axios.put(`/books/${bookinfo.id}`, bookinfo.data)
+    async updateBook ({ commit }, bookData) {
+    const res = await this.$axios.put(`/books/${bookData.id}`, bookData.data)
     commit('loadbook', res.data.book)
     return res
   }
@@ -1905,8 +1994,8 @@ export default {
 |loadbook|
 ```js
 //store/book.js  mutations
-  loadbook (state, bookinfo) {
-    state.book = bookinfo
+  loadbook (state, bookData) {
+    state.book = bookData
   }
 ```
 -  `state`의 `book` 객체에 데이터를 저장합니다.
@@ -1929,6 +2018,38 @@ export default {
 ```js
 //store/book.js state
   book: {}
+```
+
+1-2. 수정하기 버튼 클릭
+
+- 책 수정 버튼 클릭 시, 공통으로 구현한 `BookFetchMixin` 의 `fetchData` 함수를 호춣하여 책 데이터 수정 API를 호출합니다.
+
+```html
+<!-- ~/components/book/Edit.vue -->
+<template>
+<CommonModal class="book_form">
+    ...
+    <div slot="body">
+      <form class="form_content" @submit.prevent="onEditBook">
+        ...
+        <button type="submit" class="round-btn red editbtn" :disabled="disabledBtn">
+          수정하기
+        </button>
+        ...
+      </form>
+    </div>
+  </CommonModal>
+</template>
+```
+
+```js
+// ~/components/book/Edit.vue
+  methods: {
+    ...
+     onEditBook () {
+       this.fetchData()
+    },
+  }
 ```
 
 <br>
@@ -1958,6 +2079,8 @@ export default {
 ` this.$router.push('/books/1')` 
 - 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
 
+<br>
+
 1-2. 삭제 버튼 클릭
 - 삭제 확인 알림창에서 "네" 클릭 시, `store`의 `actioins` 함수 `deleteBook`를 호출합니다. 
 (<a href="#alert">삭제 알림창 내용 바로가기</a>)
@@ -1967,9 +2090,24 @@ export default {
 <template>
   <div class="book-details">
     <div>
+      ...
+      <div class="control_btns">
+        <div class="left_btn">
+          <!-- 삭제 버튼 -->
+          <button class="primary-btn red" @click="onremoveBook">
+            <i class="fas fa-trash-alt"></i>삭제
+          </button>
+          <!-- 수정 버튼 -->
+          <button class="primary-btn" @click="onEditBook">
+            <i class="fas fa-pen-square"></i>수정
+          </button>
+        </div>
+        ...
+      </div>
       <!-- 삭제 확인 알림창 -->
       ...
-      <FormAlert v-if="alert" :data="getBook && getBook.title" :confirm="`삭제`" @onagree=" agree" @ondisagree="disagree" />
+      <FormAlert v-if="alert" :data="getBook && getBook.title" :confirm="`삭제`" @onagree=" agree"
+        @ondisagree="disagree" />
     </div>
   </div>
 </template>
@@ -1983,6 +2121,10 @@ export default {
   },
   methods:{
     ...mapActions('books', ['deleteBook']),
+    // 삭제 버튼 클릭시 삭제 알림창 보여줍니다.
+    onremoveBook () {
+      this.alert = true
+    },
     agree () {
       try {
         this.deleteBook({ id: this.$route.params.id })
@@ -1996,279 +2138,249 @@ export default {
     }
   }
 ```
-
+<br>
 
 ### <div id="get_data"><b>5. 책 보여주기</b></div>
 
 #### <div>5-1. 공통 내용</div>
-#### <div>5-2. 내가 추가한 책 보여주기</div>
-#### <div>5-3. 다른 사용자가 추가한 책 보여주기</div>
-#### <div>5-4. 태그별로 책 보여주기</div>
-#### <div>5-5. 검색한 책 보여주기</div>
 
-# 여기까지
-### <div id="books" style="color:blue;">4. 내가 추가한 책 보여주기</div>
-|컴포넌트|라우터|
-|---|---|
-|components/books/Card.vue|books/_page|
-|components/books/Empty.vue|books/_page|
-|components/books/Pagination.vue|books/_page|
-
-#### 1. `페이지네이션` 으로 구현하였고, `1페이지당` 12개의 데이터를 호출하여 가져오도록 구현하였습니다.
-- `params`를 `_page`로 설정하여 라우터를 변경할 수 있도록 구현하였습니다.
-예시) 1페이지: /books/1, 2페이지: /books/2 ...
-
-|`params`로 라우터를 변경해주는 이유|
-|---|
-|`페이지네이션 버튼`을 직접 클릭하지 않아도,사용자가 직접 검색창에 `페이지`를 검색 할 수 있게 하기 위해서입니다. |
-
-#### 2. 책 데이터가 존재하지 않거나, 잘못된 라우터로 진입시, 사용자에게 알려줍니다.
-- 책 데이터가 존재하지 않거나, 사용자가 검색창에 `/books/333` 나
-`/books/aa` 등 존재하지 않는 `params`로 검색했을 경우,
-오류가 발생하지 않고, 사용자에게 책이 없다는 것을 알려줍니다.
-```html
-<template>
-  <div class="bookshelf">
-    <div class="head">
-      <h2>나만의 책장</h2>
-    </div>
-    <div class="main_menu" @mouseleave="showMenu=false">
-      <ul v-if="showMenu" class="sub_menu">
-        <li>
-          <nuxt-link to="/books/add">
-            <i class="fas fa-book-open"></i>
-            책 직접 추가
-          </nuxt-link>
-        </li>
-        <li>
-          <nuxt-link to="/books/search">
-            <i class="fas fa-search"></i>
-            책 검색
-          </nuxt-link>
-        </li>
-      </ul>
-      <a href="#" class="floating_btn" @mouseenter="showMenu=true"><i class="fas fa-plus"></i></a>
-    </div>
-    <!-- 책 데이터가 존재할 경우에만 보여줍니다. -->
-    <div v-if="hasBook">
-      <div class="books">
-        <div v-for="book in getBooks" :key="book.id" class="book">
-        <!-- 하위컴포넌트에 api를 호출하여 가져온 데이터를 props로 내려줍니다. -->
-          <book-card :book="book"></book-card>
-        </div>
-      </div>
-      <!-- books -->
-      <!-- 페이지네이션 구현 -->
-      <book-pagination :total-page="totalPage" @pageFirst="pagination" @pagination="pagination" @pageLast="pagination"></book-pagination>
-    </div>
-    <!-- 책 데이터가 존재하지 않으면 해당 컴포넌트를 보여줍니다. -->
-    <div v-else>
-      <book-empty></book-empty>
-    </div>
-  </div>
-</template>
-```
-- `book-empty` `component`를 구현하여, 책 데이터가 없을 경우, 해당 컴포넌트를 보여주도록 구현하였습니다.
-
-```html
-<!-- ~/components/book/Empty.vue -->
-<template>
-  <div class="empty_book">
-    <h3>책이 없어요</h3>
-  </div>
-</template>
-```
-
-#### <div id="fetchmxin">3. `페이지네이션`으로 구현하여 공통적으로 사용된 내용은 믹스인으로 처리하였습니다.</div>
-<br>
-
-#### 해당 라우터에서는 믹스인으로 처리하였습니다.
 |라우터|구현 내용|
 |---|---|
 |books/_page|<a href="#books">내가 추가한 책 보여주기</a>|
 |books/others/_page|<a href="#other_books">다른 사용자가 추가한 책 보여주기</a>|
 |books/hashtags/_page|<a href="#tags">태그별로  책 보여주기</a>|
-|ooks/search/_page|<a href="#other_search">다른 사용자의 책 검색하여 보여주기</a>|
+|books/search/_page|<a href="#other_search">다른 사용자의 책 검색하여 보여주기</a>|
+
+1. 페이지네이션 구현
+- `bootstrap-vue`에서 제공하는 `BPagination` 을 사용하여 페이지네이션 구현(<a href="https://bootstrap-vue.org/docs/components/pagination#pagination">bootstrap-vue 페이지네이션 바로가기</a>)
+```html
+<template>
+  ...
+   <BookPagination :total-page="totalPag" @pagination="pagination" />
+</template>
+```
 <br>
 
-#### <div style="color:red;">3-1. books/_page</div>
+ - `Pagination` 커포넌트
+```html
+<!-- ~/components/book/Pagination.vue -->
+<template>
+  <div v-if="showPage" class="pagination_inner">
+    <BPagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      first-number
+      @change="pageClick"
+    />
+  </div>
+</template>
+```
 ```js
-// ~/pages/books/_page.vue
-import PaginationFetchMixin from '~/mixins/PaginationFetchMixin'
+import { BPagination } from 'bootstrap-vue'
+import { mapGetters } from 'vuex'
 export default {
-  mixins: [PaginationFetchMixin],
+  components: { BPagination },
+  // 전체 페이지
+  props: {
+    totalPage: {
+      type: Number,
+      required: true
+    }
+  },
   data () {
     return {
-      showMenu: false
+      perPage: 1,
+      // 현재 페이지
+      currentPage: 1
     }
-  }
-
-}
-```
-<br>
-
-#### <div style="color:red;">3-2. books/others/_page</div>
-```js
-// ~/pages/books/others/_page.vue
-import PaginationFetchMixin from '~/mixins/PaginationFetchMixin'
-export default {
-  mixins: [PaginationFetchMixin]
-
-}
-```
-<br>
-
-#### <div style="color:red;">3-3. books/hashtags/_page</div>
-```js
-// ~/pages/books/hashtags/_page.vue
-import PaginationFetchMixin from '~/mixins/PaginationFetchMixin'
-export default {
-  mixins: [PaginationFetchMixin],
-  watchQuery: ['name']
-
-}
-```
-<br>
-
-#### <div style="color:red;">3-4. books/search/_page</div>
-```js
-// ~/pages/books/search/_page.vue
-import { mapGetters, mapMutations } from 'vuex'
-import PaginationFetchMixin from '~/mixins/PaginationFetchMixin'
-export default {
-  mixins: [PaginationFetchMixin],
+  },
   computed: {
-    ...mapGetters('books', ['getSearch'])
+    ...mapGetters('books', ['getBooks', 'getCurrentPage']),
+    // 전체 페이지의 수가 1페이지면 페이지네이션을 보여주지 않고, 2페이지 이상일 경우에만 페이지네이션을 보여줍니다.
+    showPage () {
+      return this.getBooks && this.totalPage > 1
+    },
+    // 전체 페이지
+    rows () {
+      return this.totalPage
+    }
   },
   watch: {
-    '$route.query': {
-      handler (query) {
-        this.searchOption(query.search)
-        this.searchData(query.target)
+    $route: {
+      handler (to) {
+        const currentPage = parseInt(to.params.page, 10) - 1
+        // 현재 페이지 활성화
+        if (this.getCurrentPage === currentPage) {
+          this.currentPage = parseInt(to.params.page, 10)
+        }
       },
       deep: true,
       immediate: true
     }
   },
-  watchQuery: ['search', 'target'],
   methods: {
-    ...mapMutations('books', ['searchOption', 'searchData'])
-
+    pageClick (page) {
+      this.$emit('pagination', page)
+    }
   }
-
 }
 ```
 <br>
 
-#### 믹스인
+- `props`
+
+|props|타입|설명|
+|:---|:---|:---|
+|totalPage|Number|책 데이터를 불러올 때, 전체 페이지 수인 `totalPage`를  `props`로 내려줍니다.|
+
+<br>
+
+- `computed`
+
+|computed|설명|
+|:---|:---|
+|showPage|`props`로 받은 전체페이지의 수가 1페이지면 페이지네이션을 보여주지 않고, 2페이지 이상일 경우에만 페이지네이션을 보여줍니다.|
+| rows|전체 페이지 수|
+<br>
+
+- `watch`
+
+|watch|설명|
+|:---|:---|
+|$route|라우터를 관찰하여 페이지네이션의 번호를 클릭시, 책 데이터를 불러올 때 `state`의 `currentPage`에 저장한 현재페이지와 비교하여 현재 페이지를 활성화시켜줍니다. |
+
+- ` methods`
+
+|methods|설명|
+|:---|:---|
+|pageClick|페이지네이션의 페이지 클릭 시, 상위 컴포넌트에 클릭한 페이지의 번호와 함께 이벤트를 전달해줍니다.|
+
+<br>
+
+2. 믹스인으로 공통 요소 구현
+```js
+import PaginationFetchMixin from '~/mixins/PaginationFetchMixin'
+export default {
+  mixins: [PaginationFetchMixin]
+}
+```
+<br>
+
+- `PaginationFetchMixin`
 ```js
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  // 해당 라우터에 진입시 api를 호출합니다.
   async asyncData ({ store, params, route }) {
     try {
       let total
       let totalPage
       const page = params.page
-        // 라우터가 /books/_page 와 /books/others/_page 일 때,
+      // 나의 책/다른 사용자의 책 데이터 
       let data = { page: page - 1, route: route.name }
-      // 라우터가  /books/search/_page 일 때,
+      // 검색한 책 데이터
       if (route.name === 'books-search-page') {
         data = { ...data, search: encodeURIComponent(route.query.search), target: encodeURIComponent(route.query.target) }
-         // 라우터가 /books/hashtags/_page 일 때,
+        // 해시태그 책 데이터
       } else if (route.name === 'hashtags-page') {
         data = { ...data, name: encodeURIComponent(route.query.name) }
       }
-      // store의 actions 함수 fetchBooks 호출
       await store.dispatch('books/fetchBooks', data)
         .then((res) => {
+          // 총 책의 수
           total = res.data.totalCount
+          // 전체 페이지 수
           totalPage = res.data.totalPage
         })
       return { total, totalPage }
-    } catch (error) {
-      console.error(error)
+    } catch (err) {
+      console.error(err)
     }
   },
   computed: {
     ...mapGetters('books', ['getBooks']),
-    // 책 데이터가 존재하는지 여부 확인
     hasBook () {
       return this.getBooks.length
     }
   },
   methods: {
     ...mapActions('books', ['fetchBooks']),
-    // 페이지네이션 버튼을 눌렀을 때 호출
-    pagination (index) {
+    pagination (page) {
       switch (this.$route.name) {
-        // 라우터가 /books/_page 일때,
+        // 나의 책
         case 'books-page':
-          return this.$router.push(`/books/${index + 1}`)
-        // 라우터가 /books/others/_page 일때,
+          return this.$router.push(`/books/${page}`)
+        // 다른 사용자의 책
         case 'books-others-page':
-          return this.$router.push(`/books/others/${index + 1}`)
-        // 라우터가 /books/search/_page 일때,
+          return this.$router.push(`/books/others/${page}`)
+        // 검색한 책
         case 'books-search-page':
-          return this.$router.push(`/books/search/${index + 1}?search=${this.getSearch.selectedOption}&target=${this.getSearch.data}`)
-        // 라우터가 /books/hashtags/_page 일때,
+          return this.$router.push(`/books/search/${page}?search=${this.getSearch.selectedOption}&target=${this.getSearch.data}`)
+        // 해시태그별로 검색한 책
         case 'hashtags-page':
-          return this.$router.push(`/books/hashtags/${index + 1}?name=${this.$route.query.name}`)
+          return this.$router.push(`/books/hashtags/${page}?name=${this.$route.query.name}`)
         default:
           break
       }
     }
 
   }
-
 }
-
 ```
+- `computed`
+
+|computed|설명|
+|:---|:---|
+| hasBook|불러온 책 데이터가 있는지 확인합니다.|
+
 <br>
 
-#### 4. 해당 라우터에 진입시, api를 호출하도록 구현하였습니다.
-|라우터|
-|---|
-|books/_page|
-|books/others/_page|
-|books/hashtags/_page|
-|ooks/search/_page|
+- `methods`
 
-#### 4-1. store
+|methods|설명|
+|:---|:---|
+|pagination|하위 컴포넌트인 `Pagination.vue`에서 페이지를 클릭 시, 이벤트를 발생시키면 해당 함수를 호출합니다. <br> 라우터의 `name`속성을 이용해, 페이지 라우터를 이동시킵니다. |
+
+<br>
+
+3. 책 조회 API 호출
+
+3-1. store
 |<div>actions</div>|
 |---|
 |fetchBooks|
 
 ```js
 //store/book.js actions
-   async fetchBooks ({ commit }, bookInfo) {
+  // 책 데이터 가져오기
+  async fetchBooks ({ commit }, bookData) {
+    const { route, page, search, target, name } = bookData
     let res
-    switch (bookInfo.route) {
-      // 라우터가 /books/_page 일때,
+    switch (route) {
+      // 나의 책 데이터
       case 'books-page':
-        res = await this.$axios.get(`/books?page=${bookInfo.page}`)
+        res = await this.$axios.get(`/books?page=${page}`)
         break
-      // 라우터가 /books/others/_page 일때,
+      // 다른 사용자의 책 데이터
       case 'books-others-page':
-        res = await this.$axios.get(`books/others/book?page=${bookInfo.page}`)
+        res = await this.$axios.get(`books/others/book?page=${page}`)
         break
-      // 라우터가 /books/search/_page 일때,
+      // 검색한 책 데이터
       case 'books-search-page':
-        res = await this.$axios.get(`books/others/book?page=${bookInfo.page}&search=${bookInfo.search}&target=${bookInfo.target}`)
+        res = await this.$axios.get(`books/others/book?page=${page}&search=${search}&target=${target}`)
         break
-      // 라우터가 /books/hashtags/_page 일때,
+      // 태그별 겸색한 데이터
       case 'hashtags-page':
-        res = await this.$axios.get(`books/hashtags/${bookInfo.name}/?page=${bookInfo.page}`)
+        res = await this.$axios.get(`books/hashtags/${name}/?page=${page}`)
         break
       default:
         break
     }
-
-    commit('loadBooks', { books: res.data.books, page: bookInfo.page })
+    commit('loadBooks', { books: res.data.books, page })
     return res
-  },
+  }
 ```
-- `axios`를 이용해 api를 호출합니다.
+- `axios`를 이용해 책 조회 API를 호출합니다.
 - `commit`를 이용해 `mutatonis`을 호출합니다.
 
 
@@ -2284,7 +2396,7 @@ export default {
     state.currentPage = page
   },
 ```
--  `state`의 `book` 객체에 데이터를 저장합니다.
+-  `state`의 `books` 배열에 데이터를 저장합니다.
 <br><br>
 
 |getters|
@@ -2318,6 +2430,7 @@ export default {
     Likers:Array[0],
     UserId: 7
     authors: "dd"
+    // 북마크 여부
     bookmark: false
     contents: "dd"
     createdAt: "2021-06-14T15:39:04.810Z"
@@ -2331,271 +2444,75 @@ export default {
     url: ""
   }, ...]
 ```
-<br>
 
-#### <div id="#page" >4. `페이지네이션`은 컴포넌트를 따로 구현하였습니다.</div>
-- 상위컴포넌트에서 `props`로 `totalPage`를 받아 총 페이지 갯수를 구현하였습니다.
-```html
-<!-- ~/components/book/Pagination.vue -->
-<template>
-...
-<div v-if="showPage" class="pagination">
-    ...
-    <div class="page">
-      <button
-        v-for="(page,index) in totalPage"
-        :key="page"
-        :class="{'active':getCurrentPage=== index}"
-        @click=" onPagination(index)"
-      >
-        {{ page }}
-      </button>
-    </div>
-  ...
-  </div>
-</template>
-```
+3-2. 책 데이터 가져오기
+- `nuxt`의 `asyncData`훅으로 데이터를 가져옵니다.
+-  `1페이지당` 12개의 데이터를 호출하여 가져오도록 구현하였습니다.
+- `params`를 `page`로 설정하여 라우터를 변경할 수 있도록 구현하였습니다.
+예시) 1페이지: /books/1, 2페이지: /books/2 ...
 ```js
- props: {
-    totalPage: {
-      type: Number,
-      required: true
-    }
-  },
-    computed: {
-      // 책데이터가 1페이지안에 존재하는 경우에는 페이지네이션을 보이지 않도록 했습니다.(한번에 12개씩 데이터를 불러오고,13개 미만이면 페이지네이션을 보여주지 않는다.)
-    showPage () {
-      return this.getBooks && this.totalPage > 1
-    }
-  },
-  methods:{
-        onPagination (index) {
-          // 현재페이지와 내가 클릭한 페이지네이션의 인덱스가 같으면, 굳이 다시 데이터를 불러올 필요없이 리턴해줍니다.
-      if (this.getCurrentPage === index) {
-        return
+// ~/mixins/PaginationFetchMixin
+ async asyncData ({ store, params, route }) {
+    try {
+      let total
+      let totalPage
+      const page = params.page
+      // 나의 책/다른 사용자의 책 데이터 
+      let data = { page: page - 1, route: route.name }
+      // 검색한 책 데이터
+      if (route.name === 'books-search-page') {
+        data = { ...data, search: encodeURIComponent(route.query.search), target: encodeURIComponent(route.query.target) }
+        // 해시태그 책 데이터
+      } else if (route.name === 'hashtags-page') {
+        data = { ...data, name: encodeURIComponent(route.query.name) }
       }
-      this.$emit('pagination', index)
+      await store.dispatch('books/fetchBooks', data)
+        .then((res) => {
+          // 총 책의 수
+          total = res.data.totalCount
+          // 전체 페이지 수
+          totalPage = res.data.totalPage
+        })
+      return { total, totalPage }
+    } catch (err) {
+      console.error(err)
     }
   }
 ```
-#### computed
-|showPage|
-|---|
-|데이터가 13개 미만일 경우에는 1페이지만 존재하므로, 페이지네이션 버튼이 보이지 않도록 구현하였습니다.|
-#### methods
-|onPagination |
-|---|
-|현재페이지와 인덱스 번호가 같으면, 같은 페이지를 누른것으로, api가 호출되지 않도록 리턴해줍니다.|
-|예시)2페이지에서 다시 2페이시 클릭시 데이터를 호출하지 않는다.|
-
-<br><br>
-
-
-### <div id="other_books" style="color:blue;"><b>5. 다른 사용자가 추가한 책 보여주기</b></div>
-|컴포넌트|라우터|
-|---|---|
-|components/books/Card.vue|books/others/_page|
-|components/books/Empty.vue|books/others/_page|
-|components/books/Pagination.vue|books/others/_page|
-
-#### 1. `페이지네이션`으로 구현하여 공통적으로 사용된 내용은 믹스인으로 처리하였습니다.<br>(<a href="#fetchmxin">믹스인</a> 및 <a href="page">페이지네이션</a> 바로가기)
 <br>
 
-### <div id="tags" style="color:blue;"><b>6. 태그별로  책 보여주기</b></div>
-|컴포넌트|라우터|쿼리|
-|---|---|---|
-|components/books/Card.vue|hashtags/_page|name|
-|components/books/Empty.vue|hashtags/_page|name|
-|components/books/Pagination.vue|hashtags/_page|name|
-
-#### 1. `페이지네이션`으로 구현하여 공통적으로 사용된 내용은 믹스인으로 처리하였습니다.<br>(<a href="#fetchmxin">믹스인</a> 및 <a href="page">페이지네이션</a> 바로가기)
-<br>
-
-#### 2. 태그이름을 쿼리로 받아 라우터를 구현하였습니다.
-- /hashtags/페이지번호/?name="태그 이름"
+4. 가져온 책 데이터가 존재한다면, 책 데이터를 보여줍니다.
 ```html
-<!-- ~/components/hashtag/List.vue -->
-<template>
-  <ul class="hashtags tagList">
-    <li v-for="(tag,index) in hashtags" :key="index" class="tag" @mouseenter="onChangeState(tag,index)" @mouseleave="tagNum=''">
-      <nuxt-link :to="`/hashtags/1/?name=${tag.name}`">
-        #{{ tag.name }}
-      </nuxt-link>
-    ...
-    </li>
-  </ul>
-</template>
-```
-
-### <div id="other_search" style="color:blue;"><b>5. 다른 사용자의 책 검색하여 보여주기</b></div>
-|컴포넌트|라우터|쿼리|
-|---|---|---|
-|components/books/Card.vue|books/search/_page|search,target|
-|components/books/Empty.vue|books/search/_page|search,target|
-|components/books/Pagination.vue|books/search/_page|search,target|
-
-#### 1. `페이지네이션`으로 구현하여 공통적으로 사용된 내용은 믹스인으로 처리하였습니다.<br>(<a href="#fetchmxin">믹스인</a> 및 <a href="page">페이지네이션</a> 바로가기)
-<br>
-
-#### 2. `메뉴`에서 `다른 사용자 책 검색`을 클릭하면 입력폼이 보여지고, `책제목` , `저자` 두가지 옵션으로 검색할 수 있도록 구현하였습니다.
-- - /books/search/페이지번호/?search="검색옵션"&target="검색 내용"
-```html
-<!-- ~/components/AppHeader.vue -->
-<template>
-  <header class="header">
-    <div class="m_menu">
-      <div class="menu" :class="{'active':activeMenu}" @click="onactive">
-        <h3>{{ getUser.username }}<br><span>my Profile</span></h3>
-        <ul>
-          ...
-          <li>
-            <a href="#" @click.prevent="showSearchForm"> <img src="/images/settings.png">다른 사용자 책 검색</a>
-          </li>
-          ....
-        </ul>
-      </div>
-      ....
-      <!-- 검색창은 로그인 되어 사용자 정보가 있을 경우에만 보이도록 구현하였습니다.(로그인을 하지 않았다면 검색창은 보이지 않는다.) -->
-      <div v-if="getUser && search.showsearchState" class="search_area">
-        <div class="btn">
-          <a href="#" @click.prevent="search.showsearchState=false">검색창 끄기</a>
-        </div>
-        <!-- 검색폼 -->
-        <form-search v-model="search.input" :options="search.options" @searchBook="onsearchBook"
-          @selectedOption="onselectedOption"></form-search>
-      </div>
-    </div>
-    </div>
-  </header>
-</template>
-```
-- `v-model`로 바운딩 시켜준 `data` `search.input`의 `value`값을 `props`로 내려줍니다.
-
-- 공통 컴포넌트인 `AppHeader.vue`에 검색 기능을 구현하였으므로, 라우터에 상관없이 책을 검색할 수 있도록 하였습니다.(단, 로그인 시에만 보이고, 로그아웃 시에는 검색창이 보이지 않도록 구현하였습니다.)
-
-- 검색 옵션과 검색 내용은 `store`를 이용해 관리되도록 구현하였습니다.
-
-#### store
-|mutations|
-|---|
-|loadBooks|
-```js
-//store/book.js  mutations
-// 검색 옵션 "책제목","저자" 중 선택 요소 저장
-  searchOption (state, option) {
-    state.search.selectedOption = option
-  },
-  // 검색 내용 저장
-  searchData (state, input) {
-    state.search.data = input
-  }
-```
--  `state`의 `book` 객체에 데이터를 저장합니다.
-<br><br>
-
-
-|state|
-|---|
-|books|
-```js
-//store/book.js state
-  search: {
-    // 검색 내용
-    data: '',
-    // 검색 옵션(디폴트값은 책제목으로 설정)
-    selectedOption: '책제목'
-  }
-```
-<br>
-
-- `watch`로 `쿼리` 변화를 감지하여 `책제목` , `저자` 중 옵션과 검색 내용을 `state`의 `search` 객체에 저장합니다.
-```js
-// ~/pages/search/_page.vue
- watch: {
-  //  라우트의 쿼리를 감지하여 state 의 search 객체에 값을 저장합니다.
-    '$route.query': {
-      handler (query) {
-        this.searchOption(query.search)
-        this.searchData(query.target)
-      },
-      deep: true,
-      immediate: true
-    }
-  },
-  watchQuery: ['search', 'target'],
-    methods: {
-    ...mapMutations('books', ['searchOption', 'searchData'])
-  }
-```
-
-|문제점|
-|---|
-|`nuxt`의 `asyncData`나 `fetch` 훅은 기본적으로 쿼리 문자열 변경에 대해서 호출되지 않습니다.|
-
-|해결|
-|---|
-|` watchQuery: ['search', 'target']` 속성으로 쿼리 변경 사항을 확인하고, 해당 쿼리 변경시 `astncData`훅이 호출될 수 있도록 구현하였습니다.|
-(<a href="https://nuxtjs.org/docs/2.x/components-glossary/pages-watchquery">`nuxt` `watchQuery`에 관한 문서</a>)
-<br>
-
-#### 3. 검색 결과의 데이터의 갯수를 보여주고, 검색 결과가 없다면 검색 결과가 없다고 사용자에게 보여지도록 구현하였습니다.
-```html
-<!-- ~/pages/book/search/_page.vue -->
+<!-- ~/components/books/_page.vue -->
 <template>
   ...
-  <div class="head search_result other_books">
-    <h2>{{ getSearch.data }} 검색 결과</h2>
-    <b>{{ dataCount }}</b>
-  </div>
+  <div class="books">
+      <div v-for="book in getBooks" :key="book.id" class="book">
+        <BookCard :book="book" />
+      </div>
+    </div>
   ...
 </template>
 ```
-```js
-// ~/pages/book/search/_page.vue
- computed: {
-    dataCount () {
-      // Books 배열에 데이터가 있다면 해당 데이터의 갯수를 보여주고, 데이터가 없다면 검색된 결과가 없다고 알려줍니다.
-      return this.getBooks.length ? this.total : '검색된 책이 없습니다.'
-    }
-  },
-```
-<br><br>
+<br>
 
-### <div id="bookmark" style="color:blue;"><b>7. 내 책 북마크 추가 및 삭제</b></div>
-|컴포넌트|라우터|
-|---|---|
-|components/books/Card.vue|books/_page|
-#### <div id="book_card_props">1. api 호출 후, 데이터를 받아 `BookCard.vue` `컴포넌트`에 props로 책 데이터를 내려주었습니다.</div>
-(해당 내용은 아래 <a href="#like_props">8. 다른 유저의 책 좋아요 생성 및 삭제의 `props`와 같습니다.</a>)
-```html
-<!-- ~/pages/books/_page.vue -->
-<!-- ~/pages/books/others/_page.vue -->
-<template>
-...
-<!-- api 호출 후 가져온 데이터를 상위 컴포넌트에서 props로 데이터를 내려줍니다. -->
- <div v-for="book in getBooks" :key="book.id" class="book">
-   <book-card :book="book"></book-card>
- </div>
- </div>
-...
-</template>
-```
+- `bookCard` 컴포넌트
+
 ```js
-// ~/components/book/Card.vue
   props: {
     book: {
       type: Object,
       required: true
     }
   }
- }
 ```
-<br>
+ 
+ - `props`
 
-#### <div id="book_props">props</div>
-|book|
-|---|
-|`api` 호출하여 가져온 데이터를 `props` 객체로 내려받았습니다.|
+ |props|타입|설명|
+|:---|:---|:---|
+|book|Object|책 조회 API를 호출하여 가져온 책 데이터|
+
 ```js
 // props로 받은 book 객체 정보 예시
 book: {
@@ -2620,28 +2537,550 @@ book: {
 ```
 <br>
 
-#### 2. 내가 추가한 책인지 다른 사용자가 추가한 책인지 구분하여, 내 책이면 북마크 표시를 보여주고, 다른 사용자의 책이라면 하트 표시를 보여줍니다.
+5. 책 데이터가 존재하지 않는다면,
+다른 컴포넌트를 보여줍니다.
+-  `book-empty` `component`를 구현하여, 책 데이터가 없을 경우, 해당 컴포넌트를 보여주도록 구현하였습니다.
+```html
+<!-- ~/components/books/_page.vue -->
+<template>
+  <div class="bookshelf">
+    ...
+    <div v-if="hasBook">
+      <div class="books">
+        <div v-for="book in getBooks" :key="book.id" class="book">
+          <BookCard :book="book" />
+        </div>
+      </div>
+      <!-- books -->
+      <BookPagination :total-page="totalPage" @pagination="pagination" />
+    </div>
+    <!-- 책 데이터가 없다면 해당 컴포넌트를 보여줍니다. -->
+    <div v-else>
+      <BookEmpty />
+    </div>
+  </div>
+</template>
+```
+<Br>
+
+- `book-empty` 컴포넌트 
+
+```html
+<!-- ~/components/books/Empty.vue -->
+<template>
+  <div class="empty_book">
+    <h3>책이 없어요</h3>
+  </div>
+</template>
+```
+
+#### <div>5-2. 내가 추가한 책 보여주기</div>
+
+|컴포넌트|라우터|
+|---|---|
+|components/books/Card.vue|books/_page|
+|components/books/Empty.vue|books/_page|
+|components/books/Pagination.vue|books/_page|
+<br>
+
+#### <div>5-3. 다른 사용자가 추가한 책 보여주기</div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/Card.vue|books/others/_page|
+|components/books/Empty.vue|books/others/_page|
+|components/books/Pagination.vue|books/others/_page|
+<br>
+
+#### <div>5-4. 검색한 책 보여주기</div>
+
+|컴포넌트|라우터|쿼리|
+|---|---|---|
+|components/books/Card.vue|books/search/_page|search,target|
+|components/books/Empty.vue|books/search/_page|search,target|
+|components/books/Pagination.vue|books/search/_page|search,target|
+
+1. 쿼리를 이용하여 책을 검색하도록 구현하였습니다.
+
+|쿼리|설명|
+|:---:|:---|
+|search|검색 옵션 <br>ex)책제목,저자|
+|target|검색 내용|
+
+- `watch`로 `쿼리` 변화를 감지하여 `책제목` , `저자` 중 옵션과 검색 내용을 `state`의 `search` 객체에 저장합니다.
+
+```js
+// ~/pages/book/search/index.vue
+export default {
+  watch: {
+    '$route.query': {
+      handler (query) {
+       this.updateSearch({
+          data: query.target,
+          selectedOption: query.search
+        })
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+  watchQuery: ['search', 'target'],
+  methods: {
+   ...mapMutations('books', ['updateSearch'])
+  }
+}
+```
+
+|문제점|
+|---|
+|`nuxt`의 `asyncData`나 `fetch` 훅은 기본적으로 쿼리 문자열 변경에 대한 감지에 대해 비활성화 되어 있습니다.|
+
+|해결|
+|---|
+|` watchQuery: ['search', 'target']` 속성으로 쿼리 변경 사항을 확인하고, 해당 쿼리 변경시 `astncData`훅이 호출될 수 있도록 구현하였습니다.|
+(<a href="https://nuxtjs.org/docs/2.x/components-glossary/pages-watchquery">`nuxt` `watchQuery`에 관한 문서</a>)
+<br>
+
+2. 다른 사용자의 책 검색 메뉴 클릭
+- `메뉴`에서 `다른 사용자 책 검색`을 클릭하면 입력폼이 보여지고, `책제목` , `저자` 두가지 옵션으로 검색할 수 있도록 구현하였습니다.
+> /books/search/페이지번호/?search="검색옵션"&target="검색 내용"
+```html
+<!-- ~/components/AppHeader.vue -->
+<template>
+    <header class="header">
+      ...
+        <!--  메뉴 -->
+        <div class="m_menu">
+            ...
+            <!-- 검색창은 로그인 되어 사용자 정보가 있을 경우에만 보이도록 구현하였습니다.(로그인을 하지 않았다면 검색창은 보이지 않습니다.) -->
+           <div v-if="getUser" class="action_menu">
+             ...
+              <ul>
+                ...
+                <li>
+                  <a href="#" @click.prevent="showSearchForm">
+                    <img src="/images/settings.png" />다른 사용자 책 검색</a>
+                </li>
+              </ul>
+            </div>
+        </div>
+      ...
+    <div v-if="getUser && search.showsearchState" class="search_area">
+      <div class="btn">
+        <a href="#" @click.prevent="search.showsearchState = false">검색창 끄기</a>
+      </div>
+      <!-- 검색폼 -->
+      <FormSearch
+        v-model="search.input"
+        :options="search.options"
+        @searchBook="onsearchBook"
+        @selectedOption="onselectedOption"
+      />
+    </div>
+  </header>
+</template>
+```
+```js
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+export default {
+  data () {
+    return {
+      search: {
+        input: '',
+        options: ['책제목', '저자'],
+        showsearchState: false
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('books', ['getSearch'])
+  },
+  methods: {
+    ...mapMutations('books', ['updateSearch']),
+    // 기존 검색 데이터 초기화
+    showSearchForm () {
+      this.search.showsearchState = !this.search.showsearchState
+      this.updateSearch({
+        data: '',
+        selectedOption: this.search.options[0]
+      })
+    },
+    onselectedOption (option) {
+      this.updateSearch({
+        selectedOption: option
+      })
+    },
+    onsearchBook () {
+      // 입력값이 없으면 리턴해준다.
+      if (this.search.input.length === 0) {
+        return
+      }
+      this.updateSearch({
+        data: this.search.input
+      })
+      this.$router.push(
+        `/books/search/1?search=${this.getSearch.selectedOption}&target=${this.search.input}`
+      )
+    }
+  }
+}
+```
+
+- `methods`
+
+|methods|설명|
+|:---|:---|
+|showSearchForm|검색창을 보여줍니다.|
+| onselectedOption |검색 옵션을 `state`의 `search`객체에 저장합니다.|
+|onsearchBook|검색 내용을 `state`의 `search`객체에 저장하고 라우터를 이동시킵니다.|
+
+
+|mutations|
+|---|
+|updateSearch|
+```js
+//store/book.js  mutations
+  updateSearch (state, payload) {
+    Object.keys(payload).forEach(key => state.search[key] = payload[key])
+  }
+```
+-  `state`의 `search` 객체에 데이터를 저장합니다.
+<br><br>
+
+
+|state|
+|---|
+|search|
+```js
+//store/book.js state
+search: {
+  // 검색 내용
+    data: '',
+  // 검색 옵션
+    selectedOption: '책제목'
+  }
+```
+
+<br>
+
+
+#### <div>5-5. 태그별로 책 보여주기</div>
+|컴포넌트|라우터|쿼리|
+|---|---|---|
+|components/books/Card.vue|hashtags/_page|name|
+|components/books/Empty.vue|hashtags/_page|name|
+|components/books/Pagination.vue|hashtags/_page|name|
+
+1. 쿼리를 이용하여 해시태그별 책을 검색하도록 구현하였습니다.
+
+|쿼리|설명|
+|:---:|:---|
+|name|태그 이름|
+> /hashtags/페이지번호/?name="태그 이름"
+
+- `watch`로 `쿼리` 변화를 감지하도록 하였습니다.
+```js
+// ~/pagees/hashtags/_page.vue
+export default {
+  watchQuery: ['name']
+}
+```
+
+```html
+<!-- ~/components/hashtag/List.vue -->
+<template>
+  <ul class="hashtags tagList">
+    <li v-for="(tag,index) in hashtags" :key="index" class="tag" @mouseenter="onChangeState(tag,index)" @mouseleave="tagNum=''">
+      <!-- 라우터 이동 -->
+      <nuxt-link :to="`/hashtags/1/?name=${tag.name}`">
+        #{{ tag.name }}
+      </nuxt-link>
+    ...
+    </li>
+  </ul>
+</template>
+```
+<br>
+
+### <div id="get_data"><b>6. 책 상세 보기</b></div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/CardDetail.vue|books/_page|
+|components/books/CardDetail.vue|books/others/_page|
+
+#### <div>6-1. 공통 내용</div>
+1. `nuxt`의 `asyncData`훅을 이용해
+책 데이터를 가져오도록 구현하였습니다.
+
+2. 성공적으로 책 데이터를 가져왔다면, 책 데이터를 보여줍니다.
+```html
+<!-- ~/components/books/_page.vue -->
+<template>
+  ...
+  <div class="book-details">
+    <div>
+      <BookCardDetail :book="getBook" />
+    </div>
+  ...
+</template>
+```
+<br>
+
+- `bookCard` 컴포넌트
+
+```js
+  props: {
+    book: {
+      type: Object,
+      required: true
+    }
+  }
+```
+ 
+ - `props`
+
+ |props|타입|설명|
+|:---|:---|:---|
+|book|Object|책 조회 API를 호출하여 가져온 책 데이터|
+
+<br>
+
+#### <div>6-2. 나의 책 상세보기</div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/CardDetail.vue|books/_page|
+
+1. 단일 책 데이터 조회 API 호출
+
+1-1. store
+|<div>actions</div>|
+|---|
+|fetchBook|
+
+```js
+//store/book.js actions
+  async fetchBook ({ commit }, { id }) {
+    const res = await this.$axios.get(`/books/${id}`)
+    commit('loadbook', res.data.book)
+    return res
+  }
+```
+- `axios`를 이용해 책 조회 API를 호출합니다.
+- `commit`를 이용해 `mutations`을 호출합니다.
+<br>
+
+|mutations|
+|---|
+|loadbook|
+```js
+//store/book.js  mutations
+  loadbook (state, bookData) {
+    state.book = bookData
+  }
+```
+-  `state`의 `book` 객체에 데이터를 저장합니다.
+<br>
+
+|getters|
+|---|
+|getBook|
+```js
+//store/book.js  getters
+  getBook (state) {
+    return state.book
+  }
+```
+- `state`의 `book` 객체를 가져옵니다.
+
+|state|
+|---|
+|book|
+```js
+//store/book.js state
+  book: {}
+```
+<br>
+
+ -  `state`의 `book` 객체에는 아래 정보를 저장합니다.
+```js
+book: {
+  // 코멘트
+  Comments: Array[0]
+  // 해시태그
+  Hashtags: Array[0]
+  // 사용자의 id
+  UserId: 7
+  // 책 저자
+  authors: "dd"
+  // 북마크 여부
+  bookmark: false
+  // 책 내용
+  contents: "dd"
+  // 생성 날짜
+  createdAt: "2021-06-14T15:39:04.810Z"
+  // 책 출간 날짜
+  datetime: "2021-06-14T15:38:52.000Z"
+  // 책 id
+  id: 144
+  // 책 isbn
+  isbn: ""
+  // 책 출판사
+  publisher: ""
+  // 책 이미지
+  thumbnail: null
+  // 책 제목
+  title: "d"
+  // 업데이트 날짜
+  updatedAt: "2021-06-14T15:39:04.810Z"
+  // 책 url
+  url: ""
+}
+```
+<br>
+
+1-2. `nuxt`의 `asyncData`훅으로 데이터를 가져옵니다.
+```js
+//  ~/pages/books/b/_id.vue
+  async asyncData ({ store, params }) {
+    try {
+      await store.dispatch('books/fetchBook', { id: params.id })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+```
+<br>
+
+#### <div>6-3. 다른 사용자의 책 상세보기</div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/CardDetail.vue|books/others/_page|
+
+1. 단일 책 데이터 조회 API 호출
+
+1-1. store
+|<div>actions</div>|
+|---|
+|otherFetchBook|
+
+```js
+//store/book.js actions
+  // 다른 사용자의 책(단일) 불러오기
+  async otherFetchBook ({ commit }, { id }) {
+    const res = await this.$axios.get(`/books/others/book/${id}`)
+    commit('loadbook', res.data.book)
+    return res
+  }
+```
+- `axios`를 이용해 책 조회 API를 호출합니다.
+- `commit`를 이용해 `mutations`을 호출합니다.
+<br>
+
+|mutations|
+|---|
+|loadbook|
+```js
+//store/book.js  mutations
+  loadbook (state, bookData) {
+    state.book = bookData
+  }
+```
+-  `state`의 `book` 객체에 데이터를 저장합니다.
+<br>
+
+|getters|
+|---|
+|getBook|
+```js
+//store/book.js  getters
+  getBook (state) {
+    return state.book
+  }
+```
+- `state`의 `book` 객체를 가져옵니다.
+
+|state|
+|---|
+|book|
+```js
+//store/book.js state
+  book: {}
+```
+<br>
+
+ -  `state`의 `book` 객체에는 아래 정보를 저장합니다.
+```js
+book: {
+  // 해시태그
+  Hashtags: Array[0]
+  // 좋아요 누른 사람
+  Likers:Array[0]
+  // 책의 사용자 정보
+  User:Object
+  // 사용자의 id
+  UserId: 7
+  // 책 저자
+  authors: "dd"
+  // 북마크 여부
+  bookmark: false
+  // 책 내용
+  contents: "dd"
+  // 생성 날짜
+  createdAt: "2021-06-14T15:39:04.810Z"
+  // 책 출간 날짜
+  datetime: "2021-06-14T15:38:52.000Z"
+  // 책 id
+  id: 144
+  // 책 isbn
+  isbn: ""
+  // 책 출판사
+  publisher: ""
+  // 책 이미지
+  thumbnail: null
+  // 책 제목
+  title: "d"
+  // 업데이트 날짜
+  updatedAt: "2021-06-14T15:39:04.810Z"
+  // 책 url
+  url: ""
+}
+```
+<br>
+
+1-2. `nuxt`의 `asyncData`훅으로 데이터를 가져옵니다.
+```js
+//  ~/pages/books/others/b/_id.vue
+  async asyncData ({ store, params }) {
+    try {
+      let otherBookList
+      await store.dispatch('books/otherFetchBook', { id: params.id })
+        .then((res) => {
+          otherBookList = res.data.book
+        })
+      return { otherBookList }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+```
+<br>
+
+### <div id="bookmark"><b>7. 북마크 및 좋아요 기능</b></div>
+
+#### 7-1.  공통 내용
+
+|_|나의 책|다른 사용자의 책|
+|:---:|:---:|:---:|
+|기능|북마크 추가/삭제|하트(좋아요) 추가/삭제|
+
+- 내가 추가한 책인지 다른 사용자가 추가한 책인지 구분하여, 내 책이면 북마크 표시를 보여주고, 다른 사용자의 책이라면 하트 표시를 보여줍니다.
 ```html
 <!-- ~/components/book/Card.vue -->
 <template>
   <div class="book_inner">
-    <nuxt-link :to="changeBook">
-    <!-- 북마크 여부 -->
-      <div class="marks">
-      <!-- 내 책이고 북마크가 되어 있다면 해당 마크 표시를 보여줍니다. -->
-        <span v-if=" ismybook && onBookmarked" class="top_bookmark">
-          {{ isbookmark }}
-        </span>
-        <!-- 코멘트가 작성이 하나라도 되어 있다면 "c"표시를 보여줍니다. -->
-        <span v-if="book.Comments && book.Comments.length>0" class="c_bookmark">c</span>
-      </div>
-      <div class="photo" :style="{'background-image':setbackground}">
-        <div class="overlay"></div>
-      </div>
-    </nuxt-link>
+    ...
     <div class="txt">
      ...
-     <!-- 북마크 -->
+     <!-- 북마크 및 좋아요 -->
      <!-- 내 책이라면 북마크를 보여줍니다. -->
       <span v-if=" ismybook " class="bookmark" :class="{'bookmarked':onBookmarked}" @click="onClickBookmark(book.id)"><i class="fas fa-bookmark"></i></span>
       <!-- 내 책이 아니라면 하트를 보여줍니다. -->
@@ -2651,40 +3090,53 @@ book: {
 </template>
 ```
 ```js
+// ~/components/book/Card.vue
  computed: {
     ...mapGetters('user', ['getUser']),
     ismybook () {
       return this.book.UserId === this.getUser.id
-    },
+    }
+    ...
+  },
+```
+- `computed`
+
+|computed|설명|
+|:---:|:---|
+|ismybook|`props`로 받은 `book`의 `UserId`(사용자 아이디)와 로그인 할 때 저장한 사용자의 아이디가 같은 지 확인하여 내 책을 구분합니다|
+
+
+#### 7-2. 북마크
+
+|컴포넌트|라우터|
+|---|---|
+|components/books/Card.vue|books/_page|
+
+#### 7-2-1. 북마크 보여주기
+
+```js
+// ~/components/books/Card.vue
+computed: {
     onBookmarked () {
       return !!(this.book && this.book.bookmark)
     },
     isbookmark () {
       return this.onBookmarked ? 'B' : ''
     }
-    ...
   },
+
 ```
-#### computed
+- `computed`
 
-|ismybook|
-|---|
-|`props`로 받은 `book`의 사용자 아이디와 로그인 할 때 저장한 사용자의 아이디가 같은 지 확인하여 내 책을 구분합니다.|
-(<a href="#book_props">`props` `book` 데이터 </a>)
+|computed|설명|
+|:---:|:---|
+|onBookmarked|`props`로 받은 `book`의 `bookmark` 속성으로 북마크 여부를 구분합니다.|
+|isbookmark|`computed`인 `onBookmarked`로 북마크 여부 확인하여, 해당 값이 `true`라면 "B" 글자를 리턴해줍니다. <br>(북마크된다면 "B"마크 표시가 보이도록 구현)|
 
-|onBookmarked|
-|---|
-|`props`로 받은 `book`의 `bookmark` 속성으로 북마크 여부를 구분합니다. |
-|`props`로 받은 `book`의 `bookmark` 속성이 `true` 라면, 이미 북마크가 추가된 것 |
-|`props`로 받은 `book`의 `bookmark` 속성이 `false` 라면, 북마크가 추가되지 않은 것 |
-(<a href="#book_props">`props` `book` 데이터 </a>)
+<br>
 
-| isbookmark |
-|---|
-|`computed`인 `onBookmarked`로 북마크 여부 확인하여, 해당 값이 `true`라면 "B" 글자를 리턴해줍니다.
-(북마크된다면 "B"마크 표시가 보이도록 구현)|
-
-- `class`를 바운딩하여 북마크 여부 표시도 따로 포현하였습니다.
+- 북마크 표시 보여주기
+> `class`를 바운딩하여 북마크 여부 표시도 따로 표현하였습니다.
 ```html
 <!-- ~/components/book/Card.vue -->
 <template>
@@ -2694,6 +3146,7 @@ book: {
 </template>
 ```
 ```css
+/* stlye.css */
 /* 기존북마크 */
 .bookshelf .book .bookmark {
     position: absolute;
@@ -2710,12 +3163,11 @@ book: {
     color: rgb(7, 82, 126);
 }
 ```
-<br>
 
-#### 3. 이미 북마크가 추가되어 있다면, 북마크를 삭제시키는 api를 호출하고, 북마크가 되어 있지 않다면, 북마크를 추가하는 api를 호출하도록 구현하였습니다.
-#### 3-1. store
 
-- 북마크 추가
+#### 7-2-2. 북마크 추가
+
+1. 북마크 추가 API 호출
 
 |<div>actions</div>|
 |---|
@@ -2731,7 +3183,7 @@ book: {
       console.error(error)
     }
 ```
-- `axios`를 이용해 api를 호출합니다.
+- `axios`를 이용해 북마크 추가 API를 호출합니다.
 - `commit`를 이용해 `mutatonis`을 호출합니다.
 
 
@@ -2748,16 +3200,43 @@ book: {
 -  `state`의 `books` 배열에서 `id`로 해당 책을 찾아 `bookmark` 속성을 바꿔줍니다.
 <br><br>
 
+2. 북마크 추가 버튼 클릭
 
-|state|
-|---|
-|books|
-```js
-//store/book.js state
- books: []
+- 이미 북마크가 추가되어 있다면, 북마크를 삭제시키는 API를 호출하고, 북마크가 추가되어 있지 않다면, 북마크를 추가하는 API를 호출하도록 구현하였습니다.
+```html
+<!-- ~/components/book/Card.vue -->
+<template>
+...
+ <div class="book_inner">
+<span
+  v-if="ismybook"
+  class="bookmark"
+  :class="{ bookmarked: onBookmarked }"
+  @click="onClickBookmark(book.id)"
+  ><i class="fas fa-bookmark"></i>
+  </span>
+  </div>
+</template>
 ```
-<br>
-- 북마크 삭제
+```js
+// components/Book/Card.vue
+  methods: {
+    ...mapActions('books', ['createBookmark', 'deleteBookmark']),
+    onClickBookmark (id) {
+      if (this.onBookmarked) {
+        // 이미 북마크가 되어 있다면 북마크 삭제 API 호출
+        this.deleteBookmark({ bookId: id })
+      } else {
+         //북마크가 되어 있지 않다면 북마크 추가 API  호출
+        this.createBookmark({ bookId: id })
+      }
+    },
+  }
+```
+
+#### 7-2-3. 북마크 삭제
+
+1. 북마크 삭제 API 호출
 
 |<div>actions</div>|
 |---|
@@ -2789,29 +3268,37 @@ book: {
   }
 ```
 -  `state`의 `books` 배열에서 `id`로 해당 책을 찾아 `bookmark` 속성을 바꿔줍니다.
-<br><br>
 
-
-|state|
-|---|
-|books|
-```js
-//store/book.js state
- books: []
-```
 <br>
 
-#### 3-2. 북마크 여부에 따라 api 호출하도록 구현하였습니다.
+2. 북마크 해제 버튼 클릭
+
+- 이미 북마크가 추가되어 있다면, 북마크를 삭제시키는 API를 호출하고, 북마크가 추가되어 있지 않다면, 북마크를 추가하는 API를 호출하도록 구현하였습니다.
+```html
+<!-- ~/components/book/Card.vue -->
+<template>
+...
+ <div class="book_inner">
+<span
+  v-if="ismybook"
+  class="bookmark"
+  :class="{ bookmarked: onBookmarked }"
+  @click="onClickBookmark(book.id)"
+  ><i class="fas fa-bookmark"></i>
+  </span>
+  </div>
+</template>
+```
 ```js
 // components/Book/Card.vue
   methods: {
     ...mapActions('books', ['createBookmark', 'deleteBookmark']),
     onClickBookmark (id) {
       if (this.onBookmarked) {
-        // 이미 북마크가 되어 있다면 북마크 삭제 api 호출
+        // 이미 북마크가 되어 있다면 북마크 삭제 API 호출
         this.deleteBookmark({ bookId: id })
       } else {
-         //북마크가 되어 있지 않다면 북마크 추가 api 호출
+         //북마크가 되어 있지 않다면 북마크 추가 API  호출
         this.createBookmark({ bookId: id })
       }
     },
@@ -2819,116 +3306,54 @@ book: {
 ```
 <br>
 
-### <div id="heart" style="color:blue;"><b>8. 다른 유저의 책 좋아요 생성 및 삭제</b></div>
+#### 7-3. 좋아요
+
 |컴포넌트|라우터|
 |---|---|
 |components/books/Card.vue|books/others/_page|
 
+#### 7-3-1. 좋아요 보여주기
 
-#### <div id="like_props">1. api 호출 후, 데이터를 받아 `BookCard.vue` `컴포넌트`에 props로 책 데이터를 내려주었습니다.</div>
-(<a href="#book_card_props">해당 내용 바로가기</a>)
-#### <div id="book_props_like">props</div>
-|book|
-|---|
-|`api` 호출하여 가져온 데이터를 `props` 객체로 내려받았습니다.|
- * 여기서는 `좋아요` 여부를 확인하기 위해 `Likers` 배열을 추가적으로 저장했습니다.
 ```js
-// props로 받은 book 객체 정보 예시
-book: {
-  // 코멘트
-  Comments: Array[0]
-  //  해시태그
-  Hashtags: Array[0]
-  // 좋아요
-  Likers: Array[0]
-  User: Object
-  UserId: 2
-  authors: "편집부 편"
-  bookmark: false
-  contents: ""
-  createdAt: "2021-06-11T15:34:11.070Z"
-  datetime: "1993-10-31T15:00:00.000Z"
-  id: 135
-  isbn: " 2004223004539"
-  publisher: "아름출판사"
-  thumbnail: ""
-  title: "아름 피스(2000)"
-  updatedAt: "2021-06-11T15:34:11.070Z"
-  url: "https://search.daum.net/search?w=bookpage&bookId=151500&q=%EC%95%84%EB%A6%84+%ED%94%BC%EC%8A%A4%282000%29"
-}
-```
-
-#### 2. 내가 추가한 책인지 다른 사용자가 추가한 책인지 구분하여, 내 책이면 북마크 표시를 보여주고, 다른 사용자의 책이라면 하트 표시를 보여줍니다.
-```html
-<!-- ~/components/book/Card.vue -->
-<template>
-  <div class="book_inner">
-    <nuxt-link :to="changeBook">
-    <!-- 북마크 여부 -->
-      <div class="marks">
-      <!-- 내 책이고 북마크가 되어 있다면 해당 마크 표시를 보여줍니다. -->
-        <span v-if=" ismybook && onBookmarked" class="top_bookmark">
-          {{ isbookmark }}
-        </span>
-        <!-- 코멘트가 작성이 하나라도 되어 있다면 "c"표시를 보여줍니다. -->
-        <span v-if="book.Comments && book.Comments.length>0" class="c_bookmark">c</span>
-      </div>
-      <div class="photo" :style="{'background-image':setbackground}">
-        <div class="overlay"></div>
-      </div>
-    </nuxt-link>
-    <div class="txt">
-     ...
-     <!-- 북마크 -->
-     <!-- 내 책이라면 북마크를 보여줍니다. -->
-      <span v-if=" ismybook " class="bookmark" :class="{'bookmarked':onBookmarked}" @click="onClickBookmark(book.id)"><i class="fas fa-bookmark"></i></span>
-      <!-- 내 책이 아니라면 하트를 보여줍니다. -->
-      <span v-else class="heart" @click="onClickLike(book.id)"><i :class="isheart"></i></span>
-    </div>
-  </div>
-</template>
-```
-```js
- computed: {
-    ...mapGetters('user', ['getUser']),
-    ismybook () {
-      return this.book.UserId === this.getUser.id
-    },
+// ~/components/books/Card.vue
+computed: {
     onclickHearted () {
-      return !!(this.book.Likers || []).find(liker => this.getUser.id === liker.id)
+      // 배열 아닌 요소에서 `find` 메서드가 작동하지 못하도록 `Likers`배열이 없다면 빈배열을 넣어주었습니다.
+      return !!(this.book.Likers || []).find(
+        liker => this.getUser.id === liker.id
+      )
     },
     isheart () {
-      // 폰트 어썸
       return this.onclickHearted ? 'fas fa-heart' : 'far fa-heart'
-    },
+    }
   },
+
 ```
-#### computed
+- `computed`
 
-|ismybook|
-|---|
-|`props`로 받은 `book`의 사용자 아이디와 로그인 할 때 저장한 사용자의 아이디가 같은 지 확인하여 내 책을 구분합니다.|
-(<a href="#book_props_like">`props` `book` 데이터 </a>)
-
-|onclickHearted|
-|---|
-| - `props`로 받은 `book`에서 `Likers` 배열로 좋아요를 누른 사용자의 id 속성 값을 받도록 구현하였습니다.|
-예시)`Likers:[{Like:{...},id:6}...]`: `Likers`배열에는 좋아요를 추가한 사용자의 `id`와 사용자의 `username`을 받도록 구현(id가 6인 사용자가 해당 책에 좋아요를 추가함)|
-| - 로그인할 때 저장된 나의 `id`와 `Likers`배열의 `userId` 정보를 이용해 해당 책에 대한 좋아요 추가 여부를 확인할 수 있도록 구현하였습니다. |
-|배열 아닌 요소에서 `find` 메서드가 작동하지 못하도록 `Likers`배열이 없다면 빈배열을 넣어주었습니다.|
-(<a href="#book_props_like">`props` `book` 데이터 </a>)
-
-|  isheart |
-|---|
-|`computed`인 `onclickHearted`로 좋아요 여부 확인하여, 
-`class`에 바운딩하여 `좋아요`가 추가된 상태이면 색이 채워진 하트를 보여주고,그렇지 않다면 빈 하트를 보여줍니다.|
+|computed|설명|
+|:---:|:---|
+|onclickHearted|로그인할 때 저장된 나의 `id`와 `Likers`배열의 `userId` 정보를 이용해 해당 책에 대한 좋아요 추가 여부를 확인할 수 있도록 구현하였습니다.<br>ex)`Likers:[{Like:{...},id:6}...]`: `Likers`배열에는 좋아요를 추가한 사용자의 `id`와 사용자의 `username`을 받도록 구현(id가 6인 사용자가 해당 책에 좋아요를 추가함)|
+|isheart|`onclickHearted`로 좋아요 여부 확인합니다.|
 
 <br>
 
-#### 3. 이미 좋아요가 추가되어 있다면, 좋아요를 삭제시키는 api를 호출하고, 좋아요가 되어 있지 않다면, 좋아요를 추가하는 api를 호출하도록 구현하였습니다.
-#### 3-1. store
+- 좋아요 표시 보여주기
+> `class`에 바운딩하여 `좋아요`가 추가된 상태이면 색이 채워진 하트를 보여주고,그렇지 않다면 빈 하트를 보여줍니다
+```html
+<!-- ~/components/book/Card.vue -->
+<template>
+...
+  <span v-if="ismybook" class="bookmark" :class="{ bookmarked: onBookmarked }" @click="onClickBookmark(book.id)"><i class="fas fa-bookmark"></i></span>
+  <span v-else class="heart" @click="onClickLike(book.id)"><i :class="isheart"></i></span>
+...
+</template>
+```
+<br>
 
-- 좋아요 추가
+#### 7-3-2. 좋아요 추가
+
+1. 좋아요 추가 API 호출
 
 |<div>actions</div>|
 |---|
@@ -2951,26 +3376,50 @@ book: {
 |addlike|
 ```js
 //store/book.js  mutations
-  addlike (state, likeInfo) {
-    const { bookId, userId } = likeInfo
+  addlike (state, likeData) {
+    const { bookId, userId } = likeData
     const index = state.books.findIndex(book => book.id === bookId)
     state.books[index].Likers.push({ id: userId })
   }
 ```
 -  `state`의 `books` 배열에서 `id`로 해당 책을 찾아 
 `Likers`배열에 `userId`를 추가해줍니다.
-<br><br>
 
+<br>
 
-|state|
-|---|
-|books|
+2. 좋아요 추가 버튼 클릭
+
+- 이미 좋아요가 추가되어 있다면, 좋아요를 삭제시키는 api를 호출하고, 좋아요가 되어 있지 않다면, 좋아요를 추가하는 api를 호출하도록 구현하였습니다.
+```html
+<!-- ~/components/book/Card.vue -->
+<template>
+...
+ <div class="book_inner">
+   ...
+ <span v-else class="heart" @click="onClickLike(book.id)"><i :class="isheart"></i></span>
+  </div>
+</template>
+```
 ```js
-//store/book.js state
- books: []
+// components/Book/Card.vue
+  methods: {
+    ...mapActions('books', ['otheraddLike', 'otherremoveLike']),
+    onClickLike (id) {
+      if (this.onclickHearted) {
+         // 이미 좋아요를 클릭했다면 좋아요 삭제 api 호출
+        this.otherremoveLike({ bookId: id })
+      } else {
+          // 좋아요가 추가되어 있지 않다면 좋아요 추가 api 호출
+        this.otheraddLike({ bookId: id })
+      }
+    }
+  }
 ```
 <br>
-- 좋아요 삭제
+
+#### 7-3-3. 좋아요 삭제
+
+1. 좋아요 삭제 API 호출
 
 |<div>actions</div>|
 |---|
@@ -2993,27 +3442,30 @@ book: {
 |removelike|
 ```js
 //store/book.js  mutations
-  removelike (state, likeInfo) {
-    const { bookId, userId } = likeInfo
+  removelike (state, likeData) {
+    const { bookId, userId } = likeData
     const index = state.books.findIndex(book => book.id === bookId)
     state.books[index].Likers = state.books[index].Likers.filter(like => like.id !== userId)
   }
 ```
 -   `state`의 `books` 배열에서 `id`로 해당 책을 찾아 
 `Likers`배열에 `id`를 비교해 제거해줍니다.
-<br><br>
 
-
-|state|
-|---|
-|books|
-```js
-//store/book.js state
- books: []
-```
 <br>
 
-#### 3-2. 좋아요 여부에 따라 api 호출하도록 구현하였습니다.
+2. 좋아요 해제 버튼 클릭
+
+- 이미 좋아요가 추가되어 있다면, 좋아요를 삭제시키는 api를 호출하고, 좋아요가 되어 있지 않다면, 좋아요를 추가하는 api를 호출하도록 구현하였습니다.
+```html
+<!-- ~/components/book/Card.vue -->
+<template>
+...
+ <div class="book_inner">
+   ...
+ <span v-else class="heart" @click="onClickLike(book.id)"><i :class="isheart"></i></span>
+  </div>
+</template>
+```
 ```js
 // components/Book/Card.vue
   methods: {
@@ -3031,116 +3483,17 @@ book: {
 ```
 <br>
 
-#### 4. `좋아요` 누른 사용자의 닉네임과 몇 명이 좋아요를 눌렀는지 보여주도록 구현하였습니다.
 
-#### 4-1. `books/_page`, `books/others/_page` 라우터에서는 좋아요 갯수만 보이도록 구현하였습니다.
-```html
-<!-- ~/components/book/Card.vue -->
-<template>
-  <div class="book_inner">
-    <nuxt-link :to="changeBook">
-      ...
-      <!-- 책 이미지 -->
-      <div class="photo" :style="{'background-image':setbackground}">
-        <div class="overlay"></div>
-        <!-- 좋아요 받은 갯수 -->
-        <div v-if=" book.Likers && book.Likers.length" class="like heart_count">
-          <i class="fas fa-heart"></i>
-          <span>{{ book.Likers.length }}</span>
-        </div>
-      </div>
-    </nuxt-link>
-    <div class="txt">
-        ...
-    </div>
-  </div>
-</template>
-```
-```js
-  props: {
-    book: {
-      type: Object,
-      required: true
-    }
-  }
-```
-```js
-// book.Likers 배열에 담긴 정보 예시
-Likers: [{
-  Like: Object
-  username: "1234"
-}, ...]
+### <div id="get_data"><b>8. 댓글 보기 및 추가 및 삭제</b></div>
+|컴포넌트|
+|---|
+|components/form/Comment.vue|
+|components/comment/Edit.vue|
+|components/comment/List.vue|
+#### 8-1. 댓글 보기
+1. 댓글 조회 API 호출
 
-```
-- `props`로 내려준 `book`객체에서 `Likers`의 배열의 갯수로 `좋아요` 받은 갯수를 보여줍니다.
-<br>
-
-#### 4-2. `books/b/_id` 라우터에서는 좋아요 갯수와 좋아요를 누른 사용자의 닉네임이 보이도록 구현하였습니다.
-```html
-<!-- ~/components/book/CardDetail.vue -->
-<template>
-  <div>
-    <div v-if="book">
-      <h2 v-if="book.User" class="book_user">
-        {{ book.User.username }}님의 책장
-      </h2>
-      <div class="book_detail">
-        ...
-        <!-- 좋아요  -->
-        <!-- 마우스를 호버할때만 좋아요 누른 사용자의 닉네임을 보여줍니다. -->
-        <div v-if=" book.Likers && book.Likers.length" class="heart_count" @mouseenter="showLikers=true"
-          @mouseleave="showLikers=false">
-          <i class="fas fa-heart"></i>{{ book.Likers.length }}
-          <!-- 좋아요 누른 사용자의 닉네임 -->
-          <div v-if="showLikers" class="heart_list">
-            <ul>
-              <li v-for="(liker,index) in book.Likers" :key="index">
-                {{ liker.username }}님이 좋아요
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-</template>
-
-```
-```js
-  props: {
-    book: {
-      type: Object,
-      required: true
-    }
-  },
-    data () {
-    return {
-      showLikers: false
-    }
-  }
-```
-- `하트`에 마우스를 올리면, `좋아요` 누른 사용자의 닉네임을 보여줍니다. `좋아요` 누른 사용자가 많다면 무한히 길어지는 것을 방지하기 위해 `높이`가 `300px` 이상인 경우에는 높이가 더이상 길어지지 않고 스크롤바가 생기도록 구현하였습니다.
-```css
-/* 최소 높이를 주어 300px 이상으로 높이가 길어지면 스크롤이 생깁니다.*/
-.heart_count .heart_list{... max-height: 300px; overflow-y: auto;}
-```
-
-
-<br>
-<br>
-
-### <div id="comment" style="color:blue;"><b>10. 댓글 보기 및 추가 및 삭제</b></div>
-|컴포넌트|라우터|
-|---|---|
-|components/form/Comment.vue|books/b/_id|
-|components/comment/Edit.vue|books/b/_id|
-|components/comment/List.vue|books/b/_id|
-
-#### <div id="comment" style="color:red;">1-3. 댓글 보기</div>
-
-#### 1. `댓글 보기` 버튼을 누르면 `댓글 작성란`과 `댓글`이 보여지도록 구현하였습니다.
-- `댓글 보기` 버튼을 누르면 `api`를 호출하여 데이터를 가져옵니다.
-
-#### 1-1. store
+1-1. store
 |<div>actions</div>|
 |---|
 |fetchComments|
@@ -3168,7 +3521,7 @@ Likers: [{
     }
   },
 ```
-- `axios`를 이용해 api를 호출합니다.
+- `axios`를 이용해 댓글 조회 API를 호출합니다.
 - `IntersectionObserver`를 이용하여 댓글을 불러오도록 구현하였습니다.
 
 
@@ -3178,13 +3531,15 @@ Likers: [{
 
 |처음으로 댓글을 불러오는지 여부를 확인하는 이유|
 |---|
-|맨 처음으로 `댓글 보기 버튼`을 클릭한다면, 최근에 생성된 댓글 기준 내림 차순으로 10개씩 데이터를 불러오는 api를 호출합니다.|
-| `화면 하단`에 스크롤이 내려온다면, 이어서 다음 댓글 10개를 불러오는 api를 호출합니다|
-|`화면 하단`에 스크롤이 내려올시에만, 다음 데이터를 불러오도록 구현하였기 때문에,처음으로 데이터를 호출했는지 여부를 구분하여 `api`를 호출합니다.|
+|맨 처음으로 `댓글 보기 버튼`을 클릭한다면, 최근에 생성된 댓글 기준 내림 차순으로 10개씩 데이터를 불러오는 API를 호출합니다.|
+| `화면 하단`에 스크롤이 내려온다면, 이어서 다음 댓글 10개를 불러오는 API를 호출합니다|
+|`화면 하단`에 스크롤이 내려올시에만, 다음 데이터를 불러오도록 구현하였기 때문에,처음으로 데이터를 호출했는지 여부 확인이 필요합니다.|
 
-|`댓글보기`버튼 클릭|
-|---|
-|`{init:true}`일 때, 처음으로 데이터(댓글 10개)를 불러오는 api를 호출합니다.|
+<br>
+
+>`댓글보기`버튼 클릭
+
+- `{init:true}`일 때, 처음으로 데이터(댓글 10개)를 불러오는 api를 호출합니다.
 ```js
  if (comments.init) {
       ...
@@ -3194,9 +3549,9 @@ Likers: [{
 ```
 <br>
 
-|`화면 하단`에 스크롤 진입|
-|---|
-|데이터의 마지막 `id`(마지막 댓글의 `id`)를 찾아서 그 이후 다음 데이터 10개((다음 댓글 10개))를 불러오는 api를 호출합니다. |
+>`화면 하단`에 스크롤 진입
+
+- 데이터의 마지막 `id`(마지막 댓글의 `id`)를 찾아서 그 이후 다음 데이터 10개(다음 댓글 10개)를 불러오는 API를 호출합니다. 
 ```js
 ....
  else {
@@ -3206,20 +3561,19 @@ Likers: [{
         res = await this.$axios.get(`books/${comments.bookId}/comments?lastId=${lastComment && lastComment.id}&limit=10&page=${comments.page}`)
       } 
 ```
-
-
+<br>
 
 - `commit`를 이용해 `mutatonis`을 호출합니다.
 
+<br>
 
 |mutations|
 |---|
 |loadComments|
 ```js
 //store/comments.js  mutations
-  loadComments (state, commentInfo) {
-    // const { end, commentCount, comments } = commentInfo
-    const { data, init } = commentInfo
+  loadComments (state, commentData) {
+    const { data, init } = commentData
     // 처음 데이터를 불러올 때 배열에 저장합니다.
     if (init) {
       state.comments = [...data.comments]
@@ -3237,15 +3591,13 @@ Likers: [{
 ```
 <br>
 
-|처음으로 데이터를 불러올 때|
-|---|
-|처음으로 데이터(댓글)을 불러올 때 `state`의 `comments`배열에 데이터를 저장합니다.|
+|처음으로 데이터를 불러올 때|처음이 아닌 이후 데이터를 불러올 때|
+|---|---|
+|처음으로 데이터(댓글)을 불러올 때 `state`의 `comments`배열에 데이터를 저장합니다.|처음이 아니라면  기존 `state`의 `comments`배열에 데이터를 누적시킵니다.|
 
-|처음이 아닌 이후 데이터를 불러올 때|
-|---|
-|처음이 아니라면  기존 `state`의 `comments`배열에 데이터를 누적시킵니다. |
+<br>
 
-- `api`를 호출할때 `마지막 페이지 여부`와 `총 댓글의 갯수`를 받아 저장합니다.
+- 댓글 조회 API를 호출 후, 데이터를 가져올 때, `마지막 페이지 여부`와 `총 댓글의 갯수`를 받아 저장합니다.
 <br>
 
 |getters|
@@ -3261,13 +3613,11 @@ Likers: [{
     return state.commentPage
   }
 ```
-|getComments|
-|---|
-|`state`의 `comments`배열을 가져옵니다.|
+|getters|설명|
+|:---:|:---|
+|getComments|`state`의 `comments`배열을 가져옵니다.|
+|getCommentPage|`state`의 `commentPage`객체를 가져옵니다.|
 
-|getCommentPage|
-|---|
-|`state`의 `commentPage`객체를 가져옵니다|
 <br>
 
 |state|
@@ -3276,21 +3626,22 @@ Likers: [{
 |commentPage|
 ```js
 //store/comments.js state
+  // 코멘트
   comments: [],
+  // 코멘트 정보
   commentPage: {
     commentCount: 0,
     end: false
   }
 ```
-|comments|
-|---|
-|댓글 데이터를 저장합니다.|
 
-|commentPage|
-|---|
-|`마지막 페이지 여부`를 `end`에 `Boolean`값으로 저장하고, `commentCount`에 `총 댓글의 갯수`를 저장합니다.|
+|state|설명|
+|:---:|:---|
+|comments|댓글 데이터를 저장합니다.|
+|commentPage|`마지막 페이지 여부`를 `end`에 `Boolean`값으로 저장하고, `commentCount`에 `총 댓글의 갯수`를 저장합니다.|
 
-- <div id="c_api"> api 호출시,  아래 정보를 저장합니다.</div>
+
+- <div id="c_api">댓글 조회 API 호출시,  아래 정보를 저장합니다.</div>
 ```js
 comments: [{
     BookId: 138
@@ -3308,7 +3659,8 @@ comments: [{
   }
 ```
 
-#### 1-2. `댓글 보기 버튼` 클릭시 api 호출
+
+1-2. 댓글 보기 버튼 클릭
 - `store`의 `actions` 함수 `fetchComments`를 호출합니다.
 ```html
 <!-- ~/component/comment/Edit.vue -->
@@ -3323,7 +3675,7 @@ comments: [{
    <div class="comment_area">
         <div>댓글</div>
         <ul>
-          <comment-list v-for="(comment) in getComments" :key="comment.id" :comment="comment" @onRemoveComment="onRemoveComment"></comment-list>
+          <CommentList v-for="comment in getComments" :key="comment.id" :comment="comment" @onRemoveComment="onRemoveComment" />
         </ul>
       </div>
     </div>
@@ -3340,10 +3692,20 @@ comments: [{
  mounted () {
     this.onaddComments()
   },
+  computed: {
+  ...mapGetters('comments', ['getComments', 'getCommentPage']),
+  onStateComment () {
+    return !this.showComment ? '댓글 보기' : '댓글 접기'
+  },
+  // 코멘트 추가 확인
+  isaddComment () {
+    return this.showComment && this.getComments && this.getComments.length > 9 && !this.getCommentPage.end
+  }
+},
  methods: {
    onshowComments() {
      this.ontoggleComment()
-   //  댓글 보기 버튼을 클릭할 때 api 호출
+   //  댓글 보기 버튼을 클릭할 때 댓글 조회 API 호출
      if (this.showComment) {
        this.loading = true
       //  처음 데이터를 호출하므로 page는 1로 초기화
@@ -3357,13 +3719,13 @@ comments: [{
          })
      }
    },
-   // IntersectionObserver 로 다음 데이터를 가져오는 api 호출
+   // IntersectionObserver 로 다음 데이터를 가져오는 API 호출
    onaddComments() {
      const observer = new IntersectionObserver((entries) => {
        entries.forEach((entry) => {
          // 댓글 보기 버튼을 클릭하고, 스크롤이 화면 하단에 위치하고, 댓글이 이미 10개가 호출이 되어 있을 때 다음 댓글를 호출하여 누적시킵니다.
          // 다음 댓글를 호출했을 때 댓글이 더이상 남아 있는지 확인하여 더이상 불러올 댓글이 존재하지 않는다면 호출하지 않습니다.
-         if (this.showComment && entry.isIntersecting && this.getComments && this.getComments.length > 9 && !this.getCommentPage.end) {
+         if (this.isaddComment && entry.isIntersecting) {
            this.loading = true
           // page는 호출될때마다 증가시킵니다.
            this.page++
@@ -3390,50 +3752,21 @@ comments: [{
 
 <br>
 
-#### 2. `댓글 보기` 버튼을 클릭했을 때, 해당 버튼은 `댓글 접기`버튼으로 보여지고,`댓글 접기`버튼을 클릭했을 때, `댓글 보기`버튼이 보이도록 구현하였습니다.
-```html
-<template>
-  <div class="comment_area">
-    <button class="round-btn yellow" @click.prevent="onshowComments">
-      {{ onStateComment }}
-    </button>
-    ...
-  </div>
-</template>
-```
-```js
-// ~/components/comment/Edit.vue
-  data () {
-    return {
-      showComment: false,
-    }
-  },
-  computed: {
-    onStateComment() {
-      return !this.showComment ? '코멘트 보기' : '코멘트 접기'
-    }
-  },
-  methods: {
-    ontoggleComment() {
-      this.showComment = !this.showComment
-    },
-     onshowComments () {
-      this.ontoggleComment()
-    //  이후 데이터를 불러오는 api 호출
-    },
-  }
-```
 
-#### methods
-|ontoggleComment|
-|---|
-|`댓글 보기`버튼 클릭시, `data`의 `showComment`값을 변 화시킵니다.|
 
-#### computed
-|onStateComment|
-|---|
-| `data`의 `showComment` 변화에 따라 버튼을 다르게 보여줍니다.|
-<br>
+#### 8-2. 댓글 추가
+#### 8-3. 댓글 삭제
+
+
+
+
+
+
+
+
+
+
+
 
 #### 3. `api` 호출을 통해 불러온 데이터(데이터는) 보여주기
 ```html
