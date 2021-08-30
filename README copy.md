@@ -16,7 +16,7 @@
 ||<a href="https://axios.nuxtjs.org/">nuxtjs/axios</a>|<a href="https://vue-chartjs.org/">chart.js / vue-chartjs</a>|<a href="https://bootstrap-vue.org/docs">bootstrap-vue</a>|<a href="https://github.com/nuxt-community/moment-module">@nuxtjs/moment</a>|<a href="https://www.npmjs.com/package/intersection-observer">intersection-observer</a>|<a href="https://www.npmjs.com/package/is-iexplorer">is-iexplorer</a>|<a href="https://pm2.keymetrics.io/docs/usage/quick-start/">pm2</a>|<a href="https://docs.cypress.io/guides/overview/why-cypress#In-a-nutshell">cypress</a>|
 |---|---|:---|:---|:---|:---|:---|:---|:---|
 |버전|v5.13.1|v2.9.4|v2.21.2|v1.6.1|v0.12.0|v1.0.0|v5.1.0|v8.0.0|
-|이유|HTTP 클라이언트 라이브러리로 서버와의 통신을 위해 사용|데이터를 이용해 chart 사용|페이지네이션과 달력 사용|날짜 포맷 변경|IE 에서 `intersection-observer`를 사용할 수 있도록 해주는 라이브러리|IE 브라우저인지 확인|node.js 에서 실행한 프로세스를 관리해주는 프로세스 매니져로 관리해주는 라이브러리 |E2E 테스트(종단간 테스트)|
+|이유|HTTP 클라이언트 라이브러리로 서버와의 통신을 위해 사용|데이터를 이용해 chart 사용|페이지네이션과 달력 사용|날짜 포맷 변경|IE 에서 `intersection-observer`를 사용할 수 있도록 해주는 라이브러리|IE 브라우저인지 확인|node.js 에서 실행한 프로세스를 관리해주는 프로세스 매니져로 |E2E 테스트(종단간 테스트)|
 
 
 
@@ -43,7 +43,7 @@
 10. <a href="#other_books">다른 사용자가 추가한 책 보여주기</a>
 11. <a href="#comment">댓글 추가 및 삭제</a>
     - 다른 사용자의 책과 내가 추가한 책에 댓글 쓰기 기능 구현
-    - 내가 추가한 댓글만 삭제 가능하도록 구현
+    - 내가 추가한 댓글만 삭제 가능하도록 구현 
 12. <a href="#star">책에 별점 주기 가능</a>
 13. <a href="#other_search">다른 사용자의 책 검색 구현</a>
     - 책 제목과 책의 저자를 선택하여 검색할 수 있도록 구현
@@ -58,8 +58,8 @@
 / ---- atuh ---- register
     |    |------- login
     |
-    |--user ----profile
-    |    |------info
+    |--user ----profile  
+    |    |------info 
     |
     |--books
     |    |----b
@@ -72,14 +72,14 @@
     |    |----others
     |    |      |-----b
     |    |      |     |----_id
-    |    |      |
+    |    |      |   
     |    |      |-----_page
     |    |
     |    |----search
     |    |----search
     |           |-----_page
     |
-    |--hastags/_page
+    |--hastags/_tagname
 ```
 ### 3-2. css
 |구현 방법|구현 내용|
@@ -88,10 +88,14 @@
 |CSS|static/css/style.css 만들어 css 요소 정리|
 
 ### 3-3. `vuex` `store` 사용
+ 
+ 1. store
+ 2. getter
+ 3. mutations
+ 4. actions
 
-### 3-4. 구현 공통 요소
-#### 1. component(컴포넌트)
-- `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
+### 3-4. 구현 공통 요소 
+1. `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
  - <a href="https://nuxtjs.org/docs/2.x/directory-structure/components">`nuxt` 컴포넌트 디렉토리 공식 문서 바로 가기</a>
 ```js
 // nuxt.config.js
@@ -102,7 +106,8 @@ export default {
 ```
 <br>
 
-#### 2. axios
+2. axios
+
 
 - `axios Interceptors`를 이용해 요청을 보내기 전에 내용을 처리할 수 있도록 하였습니다.
 ```js
@@ -129,8 +134,6 @@ export default function ({ $axios, error, redirect }) {
 |IE일 경우, 요청 헤더에 `Cache-Control: no-cache`를 담아 서버로 전송하면 브라우져는 캐시를 사용하지 않고 서버로 요청합니다.|
 
 <br>
-
-#### 3. 오류 처리
 
 - 데이터 요청시, 오류가 발생할 때 처리할 수 있도록 하였습니다.
 
@@ -192,9 +195,12 @@ export default {
 ```
 <br>
 
-### 3-5. 구현 공통 컴포넌트
-#### 1. 알림창
- `eventbus` 를 이용하여 구현하였습니다.
+
+3. 공통 컴포넌트
+
+<div id="bus">3-1. 알림창</div>
+
+ - `eventbus` 를 이용하여 구현하였습니다.
 
 ```html
 <!-- ~/layouts/default.vue -->
@@ -233,7 +239,7 @@ import bus from '~/utils/bus'
 ```
 <br>
 
-<b>common-alert-msg 컴포넌트</b>
+- `common-alert-msg` 컴포넌트
 
 `transition`으로 애니메이션 효과를 주었습니다.
 (<a href="https://vuejs.org/v2/api/#transition">vue transitioin 문서 바로 가기</a>)
@@ -241,8 +247,8 @@ import bus from '~/utils/bus'
 ```html
 <!-- ~/components/common/alertMsg.vue -->
 <!-- transition으로 애니메이션 효과 -->
-  <transition name="upSlide">
-    <div v-if="alertState" class="alertmsg" :style="{ 'background-color': bgcolor }">
+<transition name="upSlide">
+    <div v-if="alertState" class="alertmsg">
       {{ data }}
     </div>
   </transition>
@@ -250,7 +256,7 @@ import bus from '~/utils/bus'
 
 <br>
 
-<b>props</b>
+- `props`
 
 ```js
 //  ~/components/common/alertMsg.vue
@@ -262,24 +268,49 @@ import bus from '~/utils/bus'
     data: {
       type: String,
       required: true
-    },
-    bgcolor: {
-      type: String,
-      required: false,
-      default: '#222'
     }
   }
 ```
 |props|타입|설명|
 |:---|:---|:---|
 |alertState|Boolean|알람메세지 여부|
-|data|String|`데이터 추가`,`데이터 삭제` 등에 상관없이 알람메세지를 공통으로 적용해주기 위해 알림메세지 내용을  `props`로 받도록 구현했습니다.|
-|bgcolor|String|알림창 배경색|
+|data|String|`데이터 추가`,`데이터 삭제` 등에 상관없이 알람메세지를 공통으로 적용해주기 위해 알림메세지 내용을 `data` `props`로 받도록 구현했습니다.|
 
 
 <br>
 
-#### 2. 삭제/수정 확인 알림창
+<div id="len-alert">3-2. 입력 길이 알림창</div>
+
+```html
+<!-- ~/components/common/LenConfirm.vue -->
+<template>
+  <div class="alert_len">
+    {{ len }}자 이상 작성하실 수 없습니다.
+  </div>
+</template>
+
+```
+
+<br>
+
+- `props`
+```js
+// ~/components/common/LenConfirm.vue
+ props: {
+    len: {
+      type: String,
+      required: true
+    }
+  }
+```
+
+|props|타입|설명|
+|:---|:---|:---|
+|len|String|글자 길이|
+
+
+<br>
+<div id="alert">3-3. 삭제/수정 확인 알림창</div>
 
 ```html
 <!-- ~/components/form/Alert.vue -->
@@ -304,10 +335,10 @@ import bus from '~/utils/bus'
 
 <br>
 
-<b>props</b>
+- `props`
 
 ```js
-//  ~/components/form/Alert.vue
+//  ~/components/form/Alert.vue 
   props: {
     data: {
       type: String,
@@ -327,9 +358,9 @@ import bus from '~/utils/bus'
 
 <br>
 
-#### 3. 검색 폼
+<div id="alert">3-4. 검색 폼</div>
 
-<b>props</b>
+- `props`
 
 ```js
 // ~/components/form/Search.vue
@@ -353,8 +384,7 @@ export default {
 |value|String / Number|검색 입력폼에 입력한 값(`input`태그의 값)|
 <br>
 
-<b>methods && data</b>
-
+- `methods`
 ```js
 // ~/components/form/Search.vue
 export default {
@@ -375,21 +405,14 @@ export default {
 }
 ```
 
-|data|설명|
-|:---|:---|
-|selected|옵션창에 마우스가 진입했는지 여부|
-|selectedOption|`props`로 받은 `options` 배열 중 내가 클릭하여 선택한 데이터|
-
 |methods|설명|
 |:---|:---|
 |changeSelect|검색 옵션 수정시, 수정한 옵션을 `$emit`을 이용해 상위컴포넌트에 전달해줍니다. |
 
 <br>
 
-<b>events</b>
-
+- `events`
 ```html
-<!-- ~/components/form/Search.vue -->
 <template>
   <form class="search_form" @submit.prevent="$emit('searchBook')">
     <div class="main_select" @mouseenter="selected=!selected" @mouseleave="selected=false">
@@ -411,16 +434,15 @@ export default {
 
 |events|설명|
 |:---|:---|
-|searchBook|`submit`이벤트 발생시, `$emit`을 이용해 상위 컴포넌트에 전달해줍니다. |
-|input|`input`이벤트 발생시,`$emit`을 이용해 입력폼에 입력된 값을 상위 컴포넌트에 전달해줍니다. |
+|searchBook|`submit`이벤트 발생시, `$emit`을 이용해 상위컴포넌트에 전달해줍니다. |
+|input|`input`이벤트 발생시,`$emit`을 이용해 입력폼에 입력된 값을 상위컴포넌트에 전달해줍니다. |
 
-<br>
+
 
 ## 4. 구현 세부 내용 정리
-
 <br>
 
-### <div id="register"><b>회원가입/로그인 구현</b></div>
+### <div id="register"><b>1. 회원가입/로그인 구현</b></div>
 
 |컴포넌트|라우터|
 |---|---|
@@ -429,15 +451,13 @@ export default {
 
 <br>
 
-### <div><b>회원가입</b></div>
+#### <div>1-1. 회원가입</div>
 
 |컴포넌트|라우터|
 |---|---|
 |components/form/Register.vue|auth/register|
 
-#### <b>구현 내용</b>
-
-<b>1. 이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다</b>
+1. <b>이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다.</b>
 ```html
 <!-- ~/components/form/Register.vue -->
 <template>
@@ -464,8 +484,8 @@ export default {
           <label for="password">password</label>
           <input id="password" v-model="password" type="password" placeholder="비밀번호">
         </div>
-         <div v-if="!isvalidLength && password" class="err">
-          비밀번호는 8자리 이상 30자 이하여야 합니다.
+        <div v-if="!isvalidLength && password" class="err">
+          비밀번호는 8자리 이상이어야 합니다.
         </div>
         <!-- 비밀번호 확인 -->
         <div :class="{'invalid':!confirm_password}">
@@ -476,10 +496,10 @@ export default {
           </div>
         </div>
         <!-- 에러 메세지 -->
-        <!--
+        <!-- 
         회원가입 시 에러가 발생했을 때(이메일이 이미 등록되어 있는 경우 등의 오류가 발생했을 때)
         이를 사용자가 확인할 수 있도록 구현했습니다.-->
-        <div v-if="errmsg" class="errmsg" :class="{'visible':errmsg}">
+          <div v-if="errmsg" class="errmsg" :class="{'visible':email}">
             {{ errmsg }}
           </div>
           <!-- 입력값에 따른 에러 메세지를 보여줍니다. -->
@@ -511,19 +531,11 @@ export default{
     }
   },
 ```
-
-
-|data|설명|
-|:---|:---|
-|user|사용자의 `email`과 `username` 정보|
-|password|비밀번호|
-|confirm_password|data의 `password`값과 비교하기 위한 데이터|
-|errmsg|에러 발생시, 보여줄 데이터|
-> `v-model`를 이용해 데이터를 양방향 바운딩해주었습니다.<br>
+- `v-model`를 이용해 데이터를 양방향 바운딩해주었습니다.<br>
 
 <br>
 
-<b>2. 유효성 검사</b>
+2. <b>유효성 검사</b>
 
 - 별도의 유효성 검사 함수를 만들어 활용하였습니다.
 
@@ -533,20 +545,21 @@ export default{
 // 이메일 유효성 검사
 const validEmail = (mail) => {
   if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail)) {
-    return true
+    return (true)
   }
-  return false
+  return (false)
 }
-// 압력값의 길이 범위를 확인(몇자 이상 이하 인지 확인)
-const validLength = (value, min = 0, max = 500) => {
-  let data = false
+// 압력값의 길이 범위를 확인하는 감수(몇자 이상 이하 인지 확인)
+const validLength = (value, num) => {
   const valueData = value.trim().length
-  if (min <= valueData && valueData <= max) {
-    data = true
-  }
-  return data
+  if (num.len2 && valueData < num.len2) {
+    if (!num.len1) { return true }
+    if (valueData > num.len1) {
+      return true
+    } else { return false }
+  } else { return false }
 }
-// 입력값 데이터(객체) 전부의 길이를 확인
+// 입력값 데이터(객체) 전부의 길이를 확인하는 함수
 const inputLen = (value, data, len) => {
   return data.every(key => value[key].length < len)
 }
@@ -557,7 +570,7 @@ export { validLength, validEmail, inputLen }
 
 <br>
 
-- 유효성 검사 리스트
+-  `computed`를 통해 유효성 검사를 통과하지 못 했을 경우, 에러 메세지를 보여줍니다.
 
 1. 비밀번호 길이 검사
 2. 이메일 유효성 검사
@@ -570,9 +583,9 @@ export { validLength, validEmail, inputLen }
 import { validLength, validEmail } from '~/utils/validate'
 export default {
  computed: {
-   //  1. 비밀번호 길이 검사
+  //  1. 비밀번호 길이 검사
     isvalidLength () {
-      return validLength(this.password, 8, 30)
+      return validLength(this.password, { len1: 8, len2: 30 })
     },
     // 2. 이메일 유효성 검사
     isvalidEmail () {
@@ -585,7 +598,7 @@ export default {
     // 4. 이메일과 닉네임의 길이 검사
     isuserInfoLength () {
       return Object.keys(this.user).every((key) => {
-        return validLength(this.user[key], 0, 20)
+        return validLength(this.user[key], { len2: 20 })
       })
     },
     // 입력데이터에 따른 에러 메세지
@@ -601,7 +614,7 @@ export default {
 }
 ```
 
-<b>computed</b>
+- `computed`
 
 |computed|설명|
 |:---|:---|
@@ -609,15 +622,14 @@ export default {
 |isvalidEmail|`data`의 `email`의 양식이 이메일인지 확인합니다.|
 |isconfirmPassword|`data`의 `password`와 `data`의 `confirm_password`가 완전히 일치하는지 확인합니다.|
 |isuserInfoLength|`data`의 `user` 객체 데이터의 길이가 20자 이하인지 확인합니다.|
-|inputErrMsg|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따라 에러 메세지를 보여줄지 확인합니다.|
-|disabledBtn|위의 유효성 검사를 모두 통과하는지 확인합니다. <br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼이 활성화됩니다.|
-
-> `computed`를 통해 데이터 유효성 검사
+|inputErrMsg|`computed`인 `isuserInfoLength`를 확인하여 입력데이터에 따른 에러 메세지를 보여줄지 확인합니다.|
+|disabledBtn|위의 유효성 검사를 모두 통과하는지 확인합니다. <br>`<button>`태그의 `disabled`속성을 바운딩시켜, 유효성 검사르 모두 통과될 때에만 버튼을 클릭할 수 있도록 구현했습니다.|
 
 
 <br>
 
-<b>3. 필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
+3. <b>필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
+
 ```html
 <!-- ~/components/form/Register.vue -->
 <template>
@@ -631,7 +643,6 @@ export default {
   ...
 </template>
 ```
-
 ```css
 /* 클래스명에 invalid가 있다면 *표시를 보여줍니다. */
 .invalid::after {
@@ -642,9 +653,9 @@ export default {
     color: crimson;
 }
 ```
-<br>
 
-<b>4. 편의성을 위해 해당 페이지에 진입시, 이메일 입력폼에 포커스 될 수 있도록 구현하였습니다.</b>
+
+4. <b>편의성을 위해 해당 페이지에 진입시, 이메일 입력폼에 포커스 될 수 있도록 구현하였습니다.</b>
 ```html
 <template>
    ...
@@ -658,7 +669,6 @@ export default {
   </div>
   ...
 ```
-
 ```js
 // ~/components/form/Register.vue
   mounted () {
@@ -671,14 +681,12 @@ export default {
     }
   }
 ```
-> `mounted ` 라이프사이클 훅 함수를 이용해 해당 컴포넌트에 진입시 이메일 input 입력폼에 포커스되도록 구현하였습니다.
+- `mounted ` 라이프사이클 훅 함수를 이용해 해당 컴포넌트에 진입시 이메일 input 입력폼에 포커스되도록 구현하였습니다.
+<br><br>
 
-<br>
+5. <b>회원가입 API 호출</b>
 
-#### <b>회원가입 API</b>
-
-<br>
-<b>store</b>
+5-1. store
 
 |actions|
 |---|
@@ -691,14 +699,12 @@ export default {
     commit('setUser', res.data)
   },
 ```
-> `axios`를 이용해 회원가입 `API`를 호출합니다. <br>
-> `API`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다.
+- `axios`를 이용해 회원가입 `API`를 호출합니다.
+- `API`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다. 
 
 |회원가입시에도 사용자의 정보를 저장한 이유|
 |---|
 |편의성을 위해, 사용자가 회원가입을 한 후, 로그인을 따로 진행하지 않고, 바로 사용자의 정보를 `state`에 저장하여 로그인을 생략할 수 있도록 구현하였습니다.|
-
-<br>
 
 |mutations|
 |---|
@@ -709,9 +715,7 @@ export default {
     state.user = user
   }
 ```
-> `state`의 `user`객체에 사용자의 정보를 저장합니다.
-
-<br>
+- `state`의 `user`객체에 사용자의 정보를 저장합니다.
 
 |getters|
 |---|
@@ -721,9 +725,7 @@ export default {
   getUser (state) {
     return state.user
 ```
-> `state`의 `user` 객체를 가져옵니다.
-
-<br>
+- `state`의 `user` 객체를 가져옵니다.
 
 |state|
 |---|
@@ -733,14 +735,12 @@ export default {
 //store/user.js state
  user: {}
 ```
-<br>
-
- > <div id="state_user">성공적으로 회원가입 시, 아래 사용자 정보를 저장합니다.</div>
+ - <div id="state_user">성공적으로 회원가입 시, 아래 사용자 정보를 저장합니다.</div>
 ```js
 // user 객체에 저장되는 사용자의 정보 예시
   user:{
     // 이메일
-    email:"q@q.com"
+    email:"q@q.com" 
     // 아이디
     id:7
     // 카카오로그인인지,구글로그인인지 구분하는 속성
@@ -755,9 +755,8 @@ export default {
 ```
 <br>
 
-<b>회원가입 버튼 클릭</b>
-
-> `store`의 `actioins` 함수 `register`를 호출합니다.
+5-2. 회원가입 버튼 클릭
+- `store`의 `actioins` 함수 `register`를 호출합니다. 
 ```js
 // <!--components/form/Register.vue -->
 
@@ -796,18 +795,16 @@ export default {
 
 <br><br>
 
-### <div><b>로그인</b></div>
-#### <b>구현 내용</b>
-<b>1. 로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.</b>
+#### <div>1-2. 로그인</div>
 
-> 서버에서 passport를 사용하여 구현하였는데 해당내용은 아래의 서버 구현 내용에서 정리하였습니다.<br>
+ 1. 로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.
+ - 서버에서 passport를 사용하여 구현하였는데 해당내용은 아래의 서버 구현 내용에서 정리하였습니다.<br>
  (<a href="https://www.passportjs.org/packages/passport-kakao/">`passport`카카오 로그인 참고 문서 바로 가기</a>)<br>
  (<a href="https://www.passportjs.org/packages/passport-google-oauth20/">`passport`구글 로그인 참고 문서 바로 가기</a>)<br>
 
-#### <b>로그인 API</b>
+ 2. <b>로그인 API 호출</b>
 
-<br>
-<b>store</b>
+2-1. store
 
 |actions|
 |---|
@@ -820,8 +817,8 @@ export default {
     commit('setUser', res.data)
   },
 ```
-> `axios`를 이용해 로그인 `API`를 호출합니다.<br>
-> `API`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다.
+- `axios`를 이용해 로그인 `API`를 호출합니다.
+- `API`를 호출해 데이터를 가져온다면 `commit`으로 `mutations`를 호출하여 `state`의 `user` 객체에 사용자의 정보를 저장합니다. 
 
 
 |mutations|
@@ -833,9 +830,7 @@ export default {
     state.user = user
   }
 ```
-> `state`의 `user`객체에 사용자의 정보를 저장합니다.
-
-<br>
+- `state`의 `user`객체에 사용자의 정보를 저장합니다.
 
 |getters|
 |---|
@@ -845,9 +840,7 @@ export default {
   getUser (state) {
     return state.user
 ```
-> `state`의 `user` 객체를 가져옵니다.
-
-<br>
+- `state`의 `user` 객체를 가져옵니다.
 
 |state|
 |---|
@@ -857,12 +850,12 @@ export default {
 //store/user.js state
  user: {}
 ```
- > <div id="state_user">성공적으로 로그인 시, 아래 사용자 정보를 저장합니다.</div>
+ - <div id="state_user">성공적으로 로그인 시, 아래 사용자 정보를 저장합니다.</div>
 ```js
 // user 객체에 저장되는 사용자의 정보 예시
   user:{
     // 이메일
-    email:"q@q.com"
+    email:"q@q.com" 
     // 아이디
     id:7
     // 카카오로그인인지,구글로그인인지 구분하는 속성
@@ -877,9 +870,8 @@ export default {
 ```
 <br>
 
-<b>로그인 버틀 클릭</b>
-
-> `store`의 `actioins` 함수 `register`를 호출합니다.
+2-2. 로그인 버튼 클릭
+- `store`의 `actioins` 함수 `register`를 호출합니다. 
 ```js
 // <!--components/form/Login.vue -->
 
@@ -904,7 +896,7 @@ export default {
 ```
 
 
-* 사용자 정보 저장시 문제점</b>
+<b>* 사용자 정보 저장시 문제점</b>
 
  |문제점|
  |---|
@@ -1054,7 +1046,7 @@ export const actions = {
 
 <div id="image_add">3-2. 이미지 수정 버튼 클릭</div>
 
-- `store`의 `actioins` 함수 `uploadImg`를 호출합니다.
+- `store`의 `actioins` 함수 `uploadImg`를 호출합니다. 
 - 참고로 사용자의 프로필(썸네일) 이미지 말고도 책의 썸네일 이미지를 추가하거나 수정할 때도 공통적으로 사용하였습니다.<br>
 (<a href="#book_image_add">책의 이미지 추가 바로가기</a>)<br>
 (<a href="#book_image_">책의 이미지 수정 바로가기</a>)<br>
@@ -1142,7 +1134,7 @@ export const actions = {
   },
    methods: {
     ...mapMutations('books', ['resetImgagePath'])
-   }
+   } 
  ```
  ```js
 //  ~/store/book.js mutations
@@ -1255,7 +1247,7 @@ data(){
       </ul>
     </div>
     <!-- input 입력폼의 값이 변할 때마다 이벤트를 상위 컴포넌트에 보내주어 value값을 변경해줍니다. -->
-    <input ref="searchInput" :value="value" type="text" placeholder="검색"
+    <input ref="searchInput" :value="value" type="text" placeholder="검색" 
     @input="$emit('input',$event.target.value)">
     <button type="submit">
       <i class="fas fa-search"></i>
@@ -1380,7 +1372,7 @@ data(){
    }],
    meta: {
     //  마지막 페이지 여부
-     is_end: false
+     is_end: false 
     //  중복된 문서를 제외하고, 처음부터 요청 페이지까지의 노출 가능 문서 수
      pageable_count: 448
     //  검색된 문서 수
@@ -1391,7 +1383,7 @@ data(){
 <br><br>
 
 3-2. 책 검색 버튼 클릭
-- `store`의 `actioins` 함수 `SearchBooks`를 호출합니다.
+- `store`의 `actioins` 함수 `SearchBooks`를 호출합니다. 
 ```js
 // ~/pages/books/search/index.vue
 methods:{
@@ -1474,7 +1466,7 @@ methods:{
 </template>
 ```
 ```js
-//  ~/pages/books/search/index.vue
+//  ~/pages/books/search/index.vue 
 methods:{
   ...
   // 더보기 버튼을 누르면 해당 함수를 호출합니다.
@@ -1547,7 +1539,7 @@ methods:{
 <br><br>
 
 1-2 추가하기 버튼 클릭
-- `store`의 `actioins` 함수 `createBook`를 호출합니다.
+- `store`의 `actioins` 함수 `createBook`를 호출합니다. 
 
 - `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(<a href="#bus">이벤트 버스로 구현</a>)
 ```html
@@ -1747,7 +1739,7 @@ data () {
         url: '',
         datetime: ''
       },
-      // 추가할 이미지
+      // 추가할 이미지 
       selectedFile: ''
   }
 ```
@@ -2084,15 +2076,15 @@ export default {
 ```
 - `axios`를 이용해 책 삭제 API를 호출합니다.
 - <b>책을 삭제한 후, 성공적으로 책 삭제시, 라우터를 변경하도록 구현하였습니다.<br>
-` this.$router.push('/books/1')`
+` this.$router.push('/books/1')` 
 - 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
 
 <br>
 
 1-2. 삭제 버튼 클릭
-- 삭제 확인 알림창에서 "네" 클릭 시, `store`의 `actioins` 함수 `deleteBook`를 호출합니다.
+- 삭제 확인 알림창에서 "네" 클릭 시, `store`의 `actioins` 함수 `deleteBook`를 호출합니다. 
 (<a href="#alert">삭제 알림창 내용 바로가기</a>)
-
+ 
 ```html
 <!-- ~/pages/books/b/_id.vue -->
 <template>
@@ -2284,7 +2276,7 @@ export default {
       let total
       let totalPage
       const page = params.page
-      // 나의 책/다른 사용자의 책 데이터
+      // 나의 책/다른 사용자의 책 데이터 
       let data = { page: page - 1, route: route.name }
       // 검색한 책 데이터
       if (route.name === 'books-search-page') {
@@ -2465,7 +2457,7 @@ export default {
       let total
       let totalPage
       const page = params.page
-      // 나의 책/다른 사용자의 책 데이터
+      // 나의 책/다른 사용자의 책 데이터 
       let data = { page: page - 1, route: route.name }
       // 검색한 책 데이터
       if (route.name === 'books-search-page') {
@@ -2514,7 +2506,7 @@ export default {
     }
   }
 ```
-
+ 
  - `props`
 
  |props|타입|설명|
@@ -2571,7 +2563,7 @@ book: {
 ```
 <Br>
 
-- `book-empty` 컴포넌트
+- `book-empty` 컴포넌트 
 
 ```html
 <!-- ~/components/books/Empty.vue -->
@@ -2843,7 +2835,7 @@ export default {
     }
   }
 ```
-
+ 
  - `props`
 
  |props|타입|설명|
@@ -3390,7 +3382,7 @@ computed: {
     state.books[index].Likers.push({ id: userId })
   }
 ```
--  `state`의 `books` 배열에서 `id`로 해당 책을 찾아
+-  `state`의 `books` 배열에서 `id`로 해당 책을 찾아 
 `Likers`배열에 `userId`를 추가해줍니다.
 
 <br>
@@ -3456,7 +3448,7 @@ computed: {
     state.books[index].Likers = state.books[index].Likers.filter(like => like.id !== userId)
   }
 ```
--   `state`의 `books` 배열에서 `id`로 해당 책을 찾아
+-   `state`의 `books` 배열에서 `id`로 해당 책을 찾아 
 `Likers`배열에 `id`를 비교해 제거해줍니다.
 
 <br>
@@ -3553,13 +3545,13 @@ computed: {
       ...
       // 10개씩 데이터 호출
         res = await this.$axios.get(`books/${comments.bookId}/comments?limit=10`)
- }
+ }      
 ```
 <br>
 
 >`화면 하단`에 스크롤 진입
 
-- 데이터의 마지막 `id`(마지막 댓글의 `id`)를 찾아서 그 이후 다음 데이터 10개(다음 댓글 10개)를 불러오는 API를 호출합니다.
+- 데이터의 마지막 `id`(마지막 댓글의 `id`)를 찾아서 그 이후 다음 데이터 10개(다음 댓글 10개)를 불러오는 API를 호출합니다. 
 ```js
 ....
  else {
@@ -3567,7 +3559,7 @@ computed: {
         const lastComment = state.comments && state.comments[state.comments.length - 1]
         // 마지막 댓글의 id 를 기준으로 그 이후 10개의 데이터를 불러옵니다.
         res = await this.$axios.get(`books/${comments.bookId}/comments?lastId=${lastComment && lastComment.id}&limit=10&page=${comments.page}`)
-      }
+      } 
 ```
 <br>
 
@@ -3753,7 +3745,7 @@ comments: [{
    },
  }
 ```
-- IntersectionObserver API를 지원하지 않는 브라우저에서도 사용할 수 있도록
+- IntersectionObserver API를 지원하지 않는 브라우저에서도 사용할 수 있도록 
 `IntersectionObserver polyfill` 라이브러리를 사용 하였습니다.(IE에서는 적용되지 않습니다.)
 - <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">IntersectionObserver 참고자료</a>
 - <a href="https://github.com/w3c/IntersectionObserver/tree/main/polyfill">IntersectionObserver 라이브러리</a>
@@ -3809,7 +3801,7 @@ comments: [{
 </template>
 ```
 ```js
-// ~/components/comment/List.vue
+// ~/components/comment/List.vue 
   props: {
     comment: {
       type: Object,
@@ -4250,7 +4242,7 @@ async fetchComments ({ commit, state }, comments) {
  async deleteComment ({ commit, dispatch, state }, comment) {
     try {
       ...
-      // 댓글의 갯수가 10개 미만일때에만 actions함수 fetchComments를 호출합니다. {init: true, removeState: true} 로 데이터를 넘겨줍니다.
+      // 댓글의 갯수가 10개 미만일때에만 actions함수 fetchComments를 호출합니다. {init: true, removeState: true} 로 데이터를 넘겨줍니다. 
       if (state.comments.length < 10) {
         dispatch('fetchComments', { bookId: comment.bookId, init: true, removeState: true })
       }
@@ -5151,14 +5143,14 @@ bookmarks: [{
 
 1. <a href="s_login">로그인/로그아웃 구현</a>
    - passport.js 이용하여 로그인 구현
-   - 이메일/비밀번호 로그인
-   - 카카오 로그인
-   - 네이버 로그인
+   - 이메일/비밀번호 로그인 
+   - 카카오 로그인 
+   - 네이버 로그인 
 2. <a href="s_userinfo">사용자 정보 수정</a>
    - 비밀번호 변경
    - 사용자 프로필(썸네일) 수정
 3. <a href="s_search">책 검색</a>
-  - 카카오 api 책 검색
+  - 카카오 api 책 검색 
 4. 책 추가 및 수정 및 삭제
 5. 내 책 및 다른 사용자의 책 가져오기
 6. 북마크 추가 및 삭제
@@ -5168,7 +5160,7 @@ bookmarks: [{
 10. 해시태그 추가 및 삭제
 11. 해시태그 가져오기
 12. <a href="s_img">이미지 업로드</a>
-   - 책 이미지(썸네일)
+   - 책 이미지(썸네일) 
    - 사용자 프로필(썸네일) 이미지
 13. <a href="s_sum">통계 데이터</a>
 
@@ -5179,7 +5171,7 @@ bookmarks: [{
 
 #### 3-1 구현 내용 공통 요소
 
-- 사용한 DB : <a href="https://www.postgresql.org/">postgreSQL</a>
+- 사용한 DB : <a href="https://www.postgresql.org/">postgreSQL</a> 
 - sequlize(Postgres , MySQL , MariaDB , SQLite 및 Microsoft SQL Server를 위한 Node.js ORM) 사용
 
 #### 3-2. 사용한 라이브러리
@@ -5278,7 +5270,7 @@ bookmarks: [{
           });
         }
         const newUser=await db.User.findOne({where:{id:req.user.id},attributes:['id','email','username','thumbnail']})
-
+         
       return  res.json({
         success:true,
         msg:'프로필 수정 완료되었습니다.',
@@ -5425,15 +5417,15 @@ module.exports={
         try {
             //생성한 책의 수
             const books=await db.Book.findAll({
-                attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'],
-                  [sequelize.fn('count', sequelize.col('id')), 'value']],
+                attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'], 
+                  [sequelize.fn('count', sequelize.col('id')), 'value']], 
                   where:{UserId:req.user.id},
                   group: ['months']
             })
             // 북마크한 수
            const bookmarks=await db.Book.findAll({
-                attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'],
-                  [sequelize.fn('count', sequelize.col('bookmark')), 'value']],
+                attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'], 
+                  [sequelize.fn('count', sequelize.col('bookmark')), 'value']], 
                   where:{[sequelize.Op.and]:[
                       {bookmark:true},
                       {UserId:req.user.id}
@@ -5442,25 +5434,25 @@ module.exports={
             })
             //좋아요한 수
             //직접 작성하여 구현
-           const likeList=await db.sequelize.query(`SELECT
+           const likeList=await db.sequelize.query(`SELECT 
            count(*) as value,date_trunc('month', "createdAt")::date as months
        from "Like"
        where   "Like"."UserId"=${req.user.id}
        GROUP BY date_trunc('month',"createdAt");`)
        //좋아요 받은 수
         //직접 작성하여 구현
-       const likerList=await db.sequelize.query(`SELECT
+       const likerList=await db.sequelize.query(`SELECT 
        count(*) as value,date_trunc('month', "Like"."createdAt")::date as months
    from "Like","Books"
    where   "Books"."UserId"=${req.user.id} and "Books".id ="Like"."BookId"
    GROUP BY date_trunc('month',"Like"."createdAt")`)
    //작성한 코멘트수
    const comments=await db.Comment.findAll({
-    attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'],
-      [sequelize.fn('count', sequelize.col('UserId')), 'value']],
+    attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'], 
+      [sequelize.fn('count', sequelize.col('UserId')), 'value']], 
       where: {UserId:req.user.id},
       group: ['months']
-})
+})   
         const likes=likeList[0]
         const likers=likerList[0]
             Format(books)
@@ -5470,13 +5462,13 @@ module.exports={
             Format(likers,true)
             console.log()
             res.json({
-                bookmarks,
+                bookmarks,   
                 likes,
                 likers,
                 comments,
                 books
             })
-
+        
         } catch (error) {
             console.error(error);
             return next(error);
