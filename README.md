@@ -441,7 +441,7 @@ export default {
 
 <br>
 
-### <div id="register"><b>회원가입/로그인 구현</b></div>
+## <div id="register"><b>회원가입/로그인 구현</b></div>
 
 |컴포넌트|라우터|
 |---|---|
@@ -948,7 +948,7 @@ export const actions = {
 ***
 <br>
 
-### <div id="user_info"><b>사용자 정보 수정</b></div>
+## <div id="user_info"><b>사용자 정보 수정</b></div>
 
 |라우터|
 |---|
@@ -1258,7 +1258,7 @@ async uploadImg ({ commit }, payload) {
 
  <br><br>
 
-#### <b>1-4. 프로필 정보 수정 API</b>
+#### <b>1-3. 프로필 정보 수정 API</b>
 <br>
 <b>store</b>
 
@@ -1365,7 +1365,7 @@ async uploadImg ({ commit }, payload) {
 ***
  <br>
 
-### <div id="book_search" >원하는 책 검색 및 추가</div>
+## <div id="book_search" >원하는 책 검색 및 추가</div>
 
 ### 1. 원하는 책 검색
 
@@ -1784,7 +1784,7 @@ export default {
 
 <br>
 
-### <div id="book_create"><b>4. 직접 책 추가 및 수정 및 삭제</b></div>
+## <div id="book_create"><b>4. 직접 책 추가 및 수정 및 삭제</b></div>
 
 |컴포넌트|라우터|
 |---|---|
