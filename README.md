@@ -90,7 +90,7 @@
 ### 3-3. `vuex` `store` 사용
 
 ### 3-4. 구현 공통 요소
-#### 1. component(컴포넌트)
+#### component(컴포넌트)
 - `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
  - <a href="https://nuxtjs.org/docs/2.x/directory-structure/components">`nuxt` 컴포넌트 디렉토리 공식 문서 바로 가기</a>
 ```js
@@ -102,7 +102,7 @@ export default {
 ```
 <br>
 
-#### 2. axios
+#### axios
 
 - `axios Interceptors`를 이용해 요청을 보내기 전에 내용을 처리할 수 있도록 하였습니다.
 ```js
@@ -130,7 +130,7 @@ export default function ({ $axios, error, redirect }) {
 
 <br>
 
-#### 3. 오류 처리
+#### 오류 처리
 
 - 데이터 요청시, 오류가 발생할 때 처리할 수 있도록 하였습니다.
 
@@ -193,7 +193,7 @@ export default {
 <br>
 
 ### 3-5. 구현 공통 컴포넌트
-#### 1. 알림창
+#### 알림창
  `eventbus` 를 이용하여 구현하였습니다.
 
 ```html
@@ -279,7 +279,7 @@ import bus from '~/utils/bus'
 
 <br>
 
-#### 2. 삭제/수정 확인 알림창
+#### 삭제/수정 확인 알림창
 
 ```html
 <!-- ~/components/form/Alert.vue -->
@@ -327,7 +327,7 @@ import bus from '~/utils/bus'
 
 <br>
 
-#### 3. 검색 폼
+#### 검색 폼
 
 <b>props</b>
 
@@ -420,7 +420,7 @@ export default {
 
 <br>
 
-### <div id="register"><b>회원가입/로그인 구현</b></div>
+### <div id="register"><b>1. 회원가입/로그인 구현</b></div>
 
 |컴포넌트|라우터|
 |---|---|
@@ -429,7 +429,7 @@ export default {
 
 <br>
 
-### <div><b>회원가입</b></div>
+### <div><b>1-1. 회원가입</b></div>
 
 |컴포넌트|라우터|
 |---|---|
@@ -796,7 +796,7 @@ export default {
 
 <br><br>
 
-### <div><b>로그인</b></div>
+### <div><b>1-2. 로그인</b></div>
 #### <b>구현 내용</b>
 <b>1. 로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.</b>
 
