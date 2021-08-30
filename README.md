@@ -88,9 +88,29 @@
 |CSS|static/css/style.css 만들어 css 요소 정리|
 
 ### 3-3. `vuex` `store` 사용
+#### 공통 요소
+```js
+// ~/store/index.js
+export const state = () => ({
+  // 로딩
+  initLoading: false
+})
+export const mutations = {
+  // 로딩 여부
+  changeLoading (state, value) {
+    state.initLoading = value
+  }
+}
+export const actions = {
+  // 서버에서 사용자 정보 가져오기
+  async nuxtServerInit ({ dispatch }) {
+    await dispatch('user/fetchUser')
+  }
+}
+```
 
 ### 3-4. 구현 공통 요소
-#### component(컴포넌트)
+####  component(컴포넌트)
 - `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
  - <a href="https://nuxtjs.org/docs/2.x/directory-structure/components">`nuxt` 컴포넌트 디렉토리 공식 문서 바로 가기</a>
 ```js
@@ -930,11 +950,10 @@ export const actions = {
 |---|
 |user/info|
 
-
-#### <div>1-1. 프로필 정보 수정</div>
-
-1. 닉네임(이름),프로필 이미지를 수정할 수 있도록 구현했습니다.
-2. 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
+### <div>2-1. 프로필 정보 수정</div>
+#### <b>구현 내용</b>
+<b>1. 닉네임(이름),프로필 이미지를 수정할 수 있도록 구현했습니다.</b>
+> 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
 ```html
 <!-- ~/page/user/info.vue -->
 <template>
@@ -961,6 +980,7 @@ export const actions = {
   </div>
 </template>
 ```
+
 ```js
    data () {
     return {
@@ -983,9 +1003,13 @@ export const actions = {
 ```
 <br>
 
-3. 사용자의 프로필(썸네일) 이미지를 업로드할수 있도록 구현하였습니다.(이미지 추가 API 호출)
+#### <b>이미지 업로드 API</b>
+이미지를 `amazon s3 버킷`에 저장하여 해당 이미지를 보여줍니다.
 
-3-1. store
+> 해당 API는  `amazon s3 버킷`에 이미지를 저장 후, 주소를 불러와서 이미지를 보여주므로, `프로필 정보 수정` 버튼을 누르지 않는 이상 사용자의 이미지를 수정하지 않습니다.
+<br>
+
+<b>store</b>
 
 |<div id="uploadImg">actions</div>|
 |---|
@@ -993,25 +1017,31 @@ export const actions = {
 
 ```js
 //store/book.js actions
-  async uploadImg ({ commit }, payload) {
+async uploadImg ({ commit }, payload) {
     try {
+      // 로딩 시작
+      commit('changeLoading', true, { root: true })
       let res
-      // 사용자의 프로필(썸네일) 이미지를 저장하는 api 호출
       if (payload && payload.user) {
-        res = await this.$axios.post('user/thumbnail', userinfo)
+        // 사용자 썸네일 이미지 업로드 API
+        res = await this.$axios.post('user/thumbnail', payload)
       } else {
-        // 책의 썸네일 이미지를 저장하는 api 호출
-        res = await this.$axios.post('books/thumbnail', userinfo)
+        // 책 썸네일 이미지 업로드 API
+        res = await this.$axios.post('books/thumbnail', payload)
       }
       commit('setThumbnail', res.data)
     } catch (error) {
       console.error(error)
+    } finally {
+      // 로딩 종료
+      commit('changeLoading', false, { root: true })
     }
-  },
+  }
 ```
-- `axios`를 이용해 이미지 추가 API 를 호출합니다.
--  사용자의 프로필(썸네일) 이미지 뿐만 아니라, 책의 썸네일 이미지를 업로드할때 사용하기 때문에, `payload.user`가 `true`인 경우에는 사용자 정보 썸네일 이미지를, 그렇지 않다면 책의 썸네일 이미지를 업로드하는 API 함수를 호출 할수 있도록 구현하였습니다.
-- `commit`를 이용해 `mutatonis`을 호출합니다.
+> `axios`를 이용해 이미지 업로드 API 를 호출합니다. <br>
+>  사용자의 프로필(썸네일) 이미지 뿐만 아니라, 책의 썸네일 이미지를 업로드할때 사용하기 때문에, `payload.user`가 `true`인 경우에는 사용자 정보 썸네일 이미지를, 그렇지 않다면 책의 썸네일 이미지를 업로드하는 API 함수를 호출 할수 있도록 구현하였습니다.
+
+`commit`를 이용해 `mutatonis`을 호출합니다.
 
 
 |mutations|
@@ -1023,7 +1053,10 @@ export const actions = {
     state.imagePath = image
   },
 ```
-- `state`의 `imagePath`에 이미지 정보를 저장합니다.(문자열로 저장)
+> `state`의 `imagePath`에 이미지 정보를 저장합니다.(문자열로 저장)
+
+<br>
+
 
 |getters|
 |---|
@@ -1034,7 +1067,7 @@ export const actions = {
     return state.imagePath
   }
 ```
-- `state`의 `imagePath`을 가져옵니다.
+> `state`의 `imagePath`을 가져옵니다.
 
 |state|
 |---|
@@ -1043,7 +1076,7 @@ export const actions = {
 //store/book.js state
  imagePath: ''
 ```
- - 성공적으로 이미지 업로드 시, 아래 이밎 정보를 저장합니다.
+ > 성공적으로 이미지 업로드 시, 아래 이밎 정보를 저장합니다.
 ```js
 // imagePath에 저장되는 사용자의 정보 예시
 // 아마존 버킷(s3)에 저장된 이미지의 주소를 저장합니다.
@@ -1052,81 +1085,100 @@ export const actions = {
 <br><br>
 
 
-<div id="image_add">3-2. 이미지 수정 버튼 클릭</div>
+<b>프로필 이미지 수정 버튼 클릭</b>
 
-- `store`의 `actioins` 함수 `uploadImg`를 호출합니다.
-- 참고로 사용자의 프로필(썸네일) 이미지 말고도 책의 썸네일 이미지를 추가하거나 수정할 때도 공통적으로 사용하였습니다.<br>
-(<a href="#book_image_add">책의 이미지 추가 바로가기</a>)<br>
-(<a href="#book_image_">책의 이미지 수정 바로가기</a>)<br>
+> `store`의 `actioins` 함수 `uploadImg`를 호출합니다.
+<br>
 ```html
 <!-- ~/page/user/info.vue -->
 <template>
   ...
-  <div class="file_container add">
-    <div class="txt">
-      <label for="fileinput"><span class="round-btn yellow"><i class="far fa-file-image"></i>프로필 이미지 수정</span></label>
-      <!-- input type=file로 설정하여 파일창으로 파일을 선택할 시, onChangeImage 함수가 호출됩니다.-->
-      <input id="fileinput" ref="file" style="display:none" type="file" @change="onChangeImage">
-    </div>
+       <!-- 포르필 이미지 수정 -->
+       <div class="file_container add">
+          <!-- 로딩바 -->
+          <LoadingBar v-if="$store.state.initLoading" position />
+          <div class="txt">
+            <label for="fileinput"><span class="round-btn yellow"><i class="far fa-file-image"></i>프로필 이미지
+              수정</span></label>
+              <!-- input type=file로 설정하여 파일창으로 파일을 선택할 시, onChangeImage 함수가 호출됩니다.-->
+            <input id="fileinput" ref="file" style="display:none" type="file" @change="onChangeImage">
+          </div>
+          <!-- 이미지 사진 보여주기 -->
+          <div class="photos">
+            <div class="images">
+              <img v-if="hasThumbnail" :src="getUser.thumbnail" alt="thumbnail">
+              <img v-if="hasImage" :src="`${getImagePath}`" alt="thumbnail">
+            </div>
+          </div>
+        </div>
     ....
   </div>
-  <button class="round-btn" type="submit" :disabled="!isconfirmPassword && password">
-    프로필 정보 수정
+ <button class="round-btn" type="submit" :disabled="errmsg.length !== 0 || isusernamevalid">
+          프로필 정보 수정
   </button>
   ...
 </template>
 ```
+
 ```js
 // ~/page/user/info.vue
  data() {
      return {
-       selectedFile: ''
+       selectedFile: '',
+       errmsg: ''
      }
    },
    methods: {
      ...mapActions('books', ['uploadImg']),
-     onChangeImage(e) {
-       const selectedFile = e.target.files[0]
-       const imageFormData = new FormData()
-       imageFormData.append('photo', selectedFile)
-       this.uploadImg(imageFormData, {
-         user: true
-       })
-     },
-   }
+      // 이미지 업로드
+    // 이미지 업로드
+    onChangeImage (e) {
+      const imageFormData = new FormData()
+      let selectedFile = e.target.files[0]
+      const maxSize = 1024 * 1024
+      const imageType = /^image/.test(selectedFile && selectedFile.type)
+      // 이미지 타입인지 확인
+      if (!imageType) {
+        selectedFile = ''
+        this.errmsg = '이미지 타입만 업로드해주세요.'
+        return
+      }
+      // 이미지 사이즈 확인
+      if (selectedFile.size > maxSize) {
+        selectedFile = ''
+        this.errmsg = '용량을 초과하였습니다. 1mb 이하로 업로드해주세요.'
+        return
+      }
+      // 이미지 업로드 API 호출
+      imageFormData.append('photo', selectedFile)
+      this.uploadImg(imageFormData, { user: true })
+        // eslint-disable-next-line no-return-assign
+        .then(() => this.errmsg = '')
+    },
 ```
 
-- `methods`
+<b>data</b>
+
+|data|설명|
+|:---|:---|
+|selectedFile|`<input type="file">`로 선택한 파일의 정보를 저장합니다.|
+|errmsg|이미지 유효성을 확인해 에러 메세지를 보여줍니다.|
+<br>
+
+<b>methods</b>
 
 |methods|설명|
 |:---|:---|
 |onChangeImage|FormData 형식을 이용해 이미지 정보를 저장합니다.(여기서는 이미지는 1개만 선택할수 있도록 하였습니다.) <br>`{user:true}`속성으로, 책의 썸네일 이미지가 아닌 사용자의 프로필(썸네일) 이미지를 업로드하는 API를 호출합니다. (<a href="#uploadImg">`actions` 함수 `uploadImg` 바로가기</a>)|
 <br><br>
 
-4. 사용자가 변경할 프로필(썸네일) 이미지를 저장하기전에 미리 보여줍니다. <br>
-(<b>프로필 정보 수정 버튼을 눌러야 완전히 사용자의 프로필이 저장됩니다.</b>)
-```html
-<template>
-  <!-- profile -->
-  ...
-  <div v-if="getImagePath" class="photos">
-    <div class="images">
-      <!---사용자의 프로필(썸네일)이미지가 있고 state의 ImagePath에 값이 없다면, 사용자의 프로필(썸네일) 이미지를 보여줍니다. -->
-      <img v-if="getImagePath.length === 0 &&getUser.thumbnail" :src="getUser.thumbnail" alt="userprofile">
-      <!-- state의 ImagePath에 값이 있다면  ImagePath에 저장된 이미지 주소를 src에 바인딩하여 보여줍니다. -->
-      <img v-if="getImagePath.length>0" :src="`${getImagePath}`" alt="">
-    </div>
-  </div>
-  ...
-</template>
-```
-<br>
+
 
 <b>* 이미지를 업로드 할 때 문제점</b>
 
  |문제점|
  |---|
- |`onChangeImage`함수로 이미지를 업로드하는 API 함수를 호출하여 이미지의 주소를 가져와 `state`의 `imagePath`에 저장하도록 구현하였습니다. 다른 라우터로 이동시에도 `imagePath`에 값이 그대로 저장되어 있기 때문에, 프로필 정보 수정하기 위해 해당 라우터로 진입시,`imagePath`의 이미지가 그대로 보여지게 됩니다.  |
+ |`onChangeImage`함수로 이미지를 업로드하는 API 함수를 호출하여 이미지의 주소를 가져와 `state`의 `imagePath`에 저장하도록 구현하였습니다. 다른 라우터로 이동시에도 `imagePath`에 값이 그대로 저장되어 있기 때문에, 프로필 정보 수정하기 위해 해당 라우터로 진입시,`imagePath`에 저장된 이미지가 그대로 보여지게 됩니다.  |
 
 |해결|
  |---|
@@ -1150,13 +1202,125 @@ export const actions = {
     state.imagePath = []
   }
  ```
+<br>
+
+ <b>프로필 이미지 보여주기</b>
+ ```html
+<!-- ~/page/user/info.vue -->
+<template>
+  ...
+       <!-- 포르필 이미지 수정 -->
+       <div class="file_container add">
+          <!-- 로딩바 -->
+          <LoadingBar v-if="$store.state.initLoading" position />
+          ....
+          <!-- 이미지 사진 보여주기 -->
+          <div class="photos">
+            <div class="images">
+              <img v-if="hasThumbnail" :src="getUser.thumbnail" alt="thumbnail">
+              <img v-if="hasImage" :src="`${getImagePath}`" alt="thumbnail">
+            </div>
+          </div>
+        </div>
+    ....
+  </div>
+  ...
+</template>
+```
+
+```js
+  computed: {
+    hasImage () {
+      return this.getImagePath.length > 0
+    },
+    hasThumbnail () {
+      return !this.hasImage && this.getUser.thumbnail
+    }
+  }
+```
+
+<b>computed</b>
+
+|computed|설명|
+|:---|:---|
+|hasImage|이미지 업로드 API를 호출하여 저장한 `state`의 `imagePath` 데이터가 있는지 확인합니다.|
+|hasThumbnail|`state`의 `user` 객체에 사용자의 썸네일 이미지 데이터가 있는지 확인합니다.|
+
+> `computed`를 통해 사용자의 썸네일 이미지가 있다면, 해당 이미지를 보여주고, 이미지 업로드 API를 호출하여 이미지를 업로드 했다면, 해당 이미지를 보여줍니다.
+
  <br><br>
 
+#### <b>프로필 정보 수정 API</b>
 
-#### <div>1-2. 비밀번호 수정</div>
+<br>
+<b>store</b>
 
-1. 카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
+|<div id="#">actions</div>|
+|---|
+|updateProfile|
+
+```js
+//store/user.js actions
+  async updateProfile ({ commit }, userData) {
+    try {
+      const res = await this.$axios.put('user', userData)
+      commit('setUser', res.data.user)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+```
+> `axios`를 이용해 프로필 정보 수정 API를 호출합니다. <br>
+
+`commit`를 이용해 `mutatonis`을 호출합니다.
+
+
+|mutations|
+|---|
+|setUser|
+```js
+//store/user.js  mutations
+ setUser (state, user) {
+    state.user = user
+  }
+```
+> `state`의 `user`객채에 사용자 정보를 저장합니다.
+
+<br>
+
+|state|
+|---|
+| user|
+```js
+//store/user.js state
+  user: {}
+```
+
+<br>
+
+<b>프로필 정보 수정버튼 클릭</b>
+
+> `store`의 `actioins` 함수 `updateProfile`를 호출합니다.
+```js
+  methods: {
+    // 프로파일 정보 수정(닉네임,프로파일 이미지 수정)
+    onChangeProfile () {
+      const userinfo = { username: this.username, thumbnail: this.getImagePath }
+      this.updateProfile(userinfo)
+      // 프로파일 정보 수정 후 라우터 이동
+      this.$router.push('/user/profile')
+    }
+```
+> 이미지 업로드 API를 호출하여 저장한 이미지와
+사용자 닉네임 데이터를 보내 프로필 정보를 수정합니다.
+
+### <div>2-2. 비밀번호 수정</div>
+#### <b>구현 내용</b>
+<b>1. 비밀번호 수정 내용 보여주기</b>
+
+카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
 (<a href="#state_user">`store`의 `state` `user`정보</a>)
+
 ```js
 // 로그인시 저장된 user 정보 중 provider 속성+
   user:{
@@ -1185,22 +1349,25 @@ export const actions = {
       </form>
     </div>
  ```
- - 유효성 검사는 위의 <a href="register">`회원가입/로그인 구현`</a> 시 구현했던 방법과 같습니다.
+ > 유효성 검사는 위의 <a href="register">`회원가입/로그인 구현`</a> 시 구현했던 방법과 같습니다.
+
  <br><br>
 
 ### <div id="book_search" >3. 원하는 책 검색 및 추가</div>
 
-#### 3-1. 원하는 책 검색
+### 3-1. 원하는 책 검색
 
 |컴포넌트|라우터|
 |---|---|
 |components/form/Search.vue|books/search|
 |components/book/CardDetail.vue|books/search|
 
-1. 카카오 책검색 API를 이용하여 검색한 데이터를 가져옵니다.
-([카카오 개발자 센터](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide) 참고)
+#### <b>구현 내용</b>
 
-- 해당 API는 `title(제목)`, `isbn(ISBN)`, `publisher(출판사)`, `person(인명)`로 검색 필드를 제공해주기 때문에 옵션에 따라, 검색 필드를 제한할 수 있도록 구현했습니다.
+<b>1. 카카오 책검색 API를 이용하여 검색한 데이터를 가져옵니다.
+([카카오 개발자 센터](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide) 참고)</b>
+
+> 해당 API는 `title(제목)`, `isbn(ISBN)`, `publisher(출판사)`, `person(인명)`로 검색 필드를 제공해주기 때문에 옵션에 따라, 검색 필드를 제한할 수 있도록 구현했습니다.
 ```html
 <!-- ~pages/search/index.vue -->
 <template>
@@ -1218,25 +1385,12 @@ data(){
 ```
 <br>
 
-- `form-search`컴포넌트
-```js
-// ~/components/form/search.vue
-  props: {
-    // 검색 카테고리
-    options: {
-      type: Array,
-      required: true
-    },
-    // v-model로 바운딩시켜준 search 의 value 값
-    value: {
-      type: String || Number,
-      required: false
-    }
-  },
-```
+> 검색 폼(`form-search 컴포넌트`) 내용 바로가기
+
 <br>
 
-2. `select` 태그는 브라우저마다 다르게 보이기 때문에 통일되게 보일 수 있도록 `select` 태그를 사용하지않고, `ul`태그를 이용해 커스텀하여 구현했습니다.
+<b>2. `select` 태그는 브라우저마다 다르게 보이기 때문에 통일되게 보일 수 있도록 `select` 태그를 사용하지않고, `ul`태그를 이용해 커스텀하여 구현했습니다.</b>
+
 ```html
 <!-- ~/components/form/search.vue -->
 <template>
@@ -1265,9 +1419,10 @@ data(){
 ```
 <br>
 
-3. 옵션에 따라 카카오 검색 API 호출
+#### <b>카카오 책 검색 AP</b>
+옵션에 따라 카카오 책 검색 API 호출합니다.
 
-3-1. store
+<b>store</b>
 |<div>actions</div>|
 |---|
 |SearchBooks|
@@ -1301,10 +1456,13 @@ data(){
       }
   }
 ```
-- `axios`를 이용해 책 검색 API를 호출합니다.
-- <b>통합검색/옵션에 따른 검색</b> 두가지 방법으로 구현하기 위해, 호출하는 API를 구분하였습니다.
-- `commit`를 이용해 `mutatonis`을 호출합니다.
+> `axios`를 이용해 책 검색 API를 호출합니다. <<br>
+> <b>통합검색/옵션에 따른 검색</b> 두가지 방법으로 구현하기 위해, 호출하는 API를 구분하였습니다.
 
+
+`commit`를 이용해 `mutatonis`을 호출합니다.
+
+<br>
 
 |mutations|
 |---|
@@ -1324,9 +1482,9 @@ data(){
     state.meta = data.meta
   }
 ```
-- 카카오 검색 API 호출시, `documents`와 `meta` 로 값을 받아옵니다.
-- 책에 관련된 정보는 `state` 의 `books` 배열에 저장하고, 검색된 문서 수,마지막페이지인지 여부의 정보는 `state`의 `meta`에 저장하였습니다.
-- API 호출시 한번에 `20`개씩 데이터를 불러오고, `더보기 버튼`을 누를 시, 다음 데이터 `20`개를 가져오도록 구현하였습니다.
+> 카카오 검색 API 호출시, `documents`와 `meta` 로 값을 받아옵니다. <br>
+> 책에 관련된 정보는 `state` 의 `books` 배열에 저장하고, 검색된 문서 수,마지막페이지인지 여부의 정보는 `state`의 `meta`에 저장하였습니다. <br>
+
 
 <br>
 
@@ -1341,6 +1499,8 @@ data(){
 |---|
 |`{reset:true}` 별도의 객체 속성을 주어, 해당 속성이 `true`일 경우에만 `books` 배열을 초기화하고, 그러지 않다면 기존 배열에 계속 누적시킵니다.
 예시)옵션을 "통합"으로 설정하여 검색한 후,"제목"이나 "출판사" 등과 같은 다른 옵션으로 다시 재검색시, 기존에 존재하는 책의 정보를 초기화시켜줍니다.|
+
+<br>
 
 |getters|
 |---|
@@ -1387,11 +1547,13 @@ data(){
      total_count: 450
    }
 ```
+> API 호출시 한번에 `20`개씩 데이터를 불러옵니다.
 
 <br><br>
 
-3-2. 책 검색 버튼 클릭
-- `store`의 `actioins` 함수 `SearchBooks`를 호출합니다.
+<b>책 검색 버튼 클릭</b>
+
+> `store`의 `actioins` 함수 `SearchBooks`를 호출합니다.
 ```js
 // ~/pages/books/search/index.vue
 methods:{
@@ -1445,6 +1607,7 @@ methods:{
           this.showbutton()
         })
     },
+    // 기존 데이터 초기화
      resetBook (boolean) {
       this.reset = boolean
     },
@@ -1457,8 +1620,9 @@ methods:{
 ```
 <br>
 
-3-3. 책 검색 후, 더보기 버튼 클릭
-- 더보기 버튼을 클릭할 시, 다음 데이터 `20`개를 불러오도록 구현하였습니다.
+<b>책 검색 후, 더보기 버튼 클릭</b>
+
+> API 호출시 한번에 `20`개씩 데이터를 불러오고, `더보기 버튼`을 누를 시, 다음 데이터 `20`개를 가져오도록 구현하였습니다.
 ```html
 <!-- ~/pages/books/search/index.vue -->
 <template>
@@ -1487,7 +1651,8 @@ methods:{
     },
 }
 ```
-- `methods`
+
+<b>methods</b>
 
 |methods|설명|
 |:---|:---|
@@ -1508,7 +1673,6 @@ methods:{
   created () {
     // 책 데이터 초기화
     if (this.books.length !== 0) {
-      console.log(this.books)
       return this.initsearchBook()
     }
   }
@@ -1523,13 +1687,13 @@ methods:{
  ```
  <br>
 
-#### 3-2. 원하는 책 검색 후 추가
+### 3-2. 원하는 책 검색 후 추가
 
-- 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
+> 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
 
-1. 검색한 책 추가 API 호출
+<b>검색한 책 추가 API 호출</b>
 
-1-1. store
+<b>store</b>
 |<div>actions</div>|
 |---|
 |createBook|
@@ -1541,15 +1705,17 @@ methods:{
     return res
   }
 ```
-- `axios`를 이용해 책 추가 API를 호출합니다.
-- <b>책을 추가한 후, 추가한 책은 다른 라우터 `/books/_page`에 보여주도록 구현하였고, 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
+> `axios`를 이용해 책 추가 API를 호출합니다.
+
+><b>책을 추가한 후, 추가한 책은 다른 라우터 `/books/_page`에 보여주도록 구현하였고, 해당 라우터에 진입시 `nuxt`의`asyncData` 훅을 사용해, 데이터를 불러오도록 구현하였으므로, 여기서는 별도의 `mutations`를 호출하여 `state` 값을 변화시키지 않았습니다. </b>
 
 <br><br>
 
-1-2 추가하기 버튼 클릭
-- `store`의 `actioins` 함수 `createBook`를 호출합니다.
+<b>추가하기 버튼 클릭</b>
 
-- `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(<a href="#bus">이벤트 버스로 구현</a>)
+>`store`의 `actioins` 함수 `createBook`를 호출합니다.
+
+`추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(알림창 내용 바로가기)
 ```html
 <!-- ~/pages/books/search/index.vue -->
 <template>
