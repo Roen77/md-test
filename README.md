@@ -441,7 +441,7 @@ export default {
 
 <br>
 
-### <div id="register"><b>1. 회원가입/로그인 구현</b></div>
+### <div id="register"><b>회원가입/로그인 구현</b></div>
 
 |컴포넌트|라우터|
 |---|---|
@@ -450,15 +450,14 @@ export default {
 
 <br>
 
-### <div><b>1-1. 회원가입</b></div>
+### <div><b>1. 회원가입</b></div>
 
 |컴포넌트|라우터|
 |---|---|
 |components/form/Register.vue|auth/register|
 
-#### <b>구현 내용</b>
-***
-<b>1. 이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다</b>
+#### <b>1-1 .구현 내용</b>
+- <b>이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다</b>
 ```html
 <!-- ~/components/form/Register.vue -->
 <template>
@@ -544,9 +543,9 @@ export default{
 
 <br>
 
-<b>2. 유효성 검사</b>
+- <b>유효성 검사</b>
 
-- 별도의 유효성 검사 함수를 만들어 활용하였습니다.
+별도의 유효성 검사 함수를 만들어 활용하였습니다.
 
 ```js
 // ~/utils/validate.js
@@ -578,7 +577,7 @@ export { validLength, validEmail, inputLen }
 
 <br>
 
-- 유효성 검사 리스트
+ 유효성 검사 리스트
 
 1. 비밀번호 길이 검사
 2. 이메일 유효성 검사
@@ -623,7 +622,7 @@ export default {
 ```
 
 
-<p>computed</p>
+<b>computed</b>
 
 |computed|설명|
 |:---|:---|
@@ -639,7 +638,7 @@ export default {
 
 <br>
 
-<b>3. 필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
+- <b>필수 입력폼을 사용자가 확인할 수 있게 하기 위해, 별도의 표시를 보여주도록 구현하였습니다.</b>
 ```html
 <!-- ~/components/form/Register.vue -->
 <template>
@@ -666,7 +665,7 @@ export default {
 ```
 <br>
 
-<b>4. 편의성을 위해 해당 페이지에 진입시, 이메일 입력폼에 포커스 될 수 있도록 구현하였습니다.</b>
+- <b>편의성을 위해 해당 페이지에 진입시, 이메일 입력폼에 포커스 될 수 있도록 구현하였습니다.</b>
 ```html
 <template>
    ...
@@ -697,7 +696,7 @@ export default {
 
 <br>
 
-#### <b>회원가입 API</b>
+#### <b>1-2. 회원가입 API</b>
 
 <br>
 <b>store</b>
@@ -779,8 +778,6 @@ export default {
 
 <b>회원가입 버튼 클릭</b>
 
-***
-
 > `store`의 `actioins` 함수 `register`를 호출합니다.
 ```js
 // <!--components/form/Register.vue -->
@@ -817,15 +814,13 @@ export default {
 
   }
 ```
+<br>
 
-<br><br>
+### <div><b>2. 로그인</b></div>
+#### <b>2-1 .구현 내용</b>
 
-### <div><b>1-2. 로그인</b></div>
-#### <b>구현 내용</b>
 
-***
-
-<b>1. 로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.</b>
+- <b>로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.</b>
 
 > 서버에서 passport를 사용하여 구현하였는데 해당내용은 아래의 서버 구현 내용에서 정리하였습니다.<br>
  (<a href="https://www.passportjs.org/packages/passport-kakao/">`passport`카카오 로그인 참고 문서 바로 가기</a>)<br>
@@ -833,8 +828,8 @@ export default {
 
 <br>
 
-#### <b>로그인 API</b>
-***
+#### <b>2-2. 로그인 API</b>
+<br>
 <b>store</b>
 
 |actions|
@@ -951,7 +946,8 @@ export const actions = {
   }
 }
 ```
-<br><br>
+***
+<br>
 
 ### <div id="user_info"><b>2. 사용자 정보 수정</b></div>
 
@@ -1731,6 +1727,7 @@ methods:{
 
 <b>추가하기 버튼 클릭</b>
 ***
+<hr>
 >`store`의 `actioins` 함수 `createBook`를 호출합니다.
 
 `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(알림창 내용 바로가기)
