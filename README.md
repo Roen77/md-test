@@ -214,6 +214,7 @@ export default {
 
 ### 3-5. 구현 공통 컴포넌트
 #### 알림창
+***
  `eventbus` 를 이용하여 구현하였습니다.
 
 ```html
@@ -300,7 +301,7 @@ import bus from '~/utils/bus'
 <br>
 
 #### 삭제/수정 확인 알림창
-
+***
 ```html
 <!-- ~/components/form/Alert.vue -->
 <template>
@@ -348,7 +349,7 @@ import bus from '~/utils/bus'
 <br>
 
 #### 검색 폼
-
+***
 <b>props</b>
 
 ```js
@@ -456,7 +457,7 @@ export default {
 |components/form/Register.vue|auth/register|
 
 #### <b>구현 내용</b>
-
+***
 <b>1. 이메일,닉네임,비밀번호를 입력해야 가입될 수 있도록 구현하였습니다</b>
 ```html
 <!-- ~/components/form/Register.vue -->
@@ -621,7 +622,8 @@ export default {
 }
 ```
 
-<b>computed</b>
+
+<p>computed</p>
 
 |computed|설명|
 |:---|:---|
@@ -777,6 +779,8 @@ export default {
 
 <b>회원가입 버튼 클릭</b>
 
+***
+
 > `store`의 `actioins` 함수 `register`를 호출합니다.
 ```js
 // <!--components/form/Register.vue -->
@@ -818,15 +822,19 @@ export default {
 
 ### <div><b>1-2. 로그인</b></div>
 #### <b>구현 내용</b>
+
+***
+
 <b>1. 로그인 구현은 이메일로 로그인.카카오로 로그인.구글로 로그인 세가지 방법으로 구현하였습니다.</b>
 
 > 서버에서 passport를 사용하여 구현하였는데 해당내용은 아래의 서버 구현 내용에서 정리하였습니다.<br>
  (<a href="https://www.passportjs.org/packages/passport-kakao/">`passport`카카오 로그인 참고 문서 바로 가기</a>)<br>
  (<a href="https://www.passportjs.org/packages/passport-google-oauth20/">`passport`구글 로그인 참고 문서 바로 가기</a>)<br>
 
-#### <b>로그인 API</b>
-
 <br>
+
+#### <b>로그인 API</b>
+***
 <b>store</b>
 
 |actions|
@@ -897,8 +905,9 @@ export default {
 ```
 <br>
 
-<b>로그인 버틀 클릭</b>
+<b>로그인 버튼 클릭</b>
 
+***
 > `store`의 `actioins` 함수 `register`를 호출합니다.
 ```js
 // <!--components/form/Login.vue -->
@@ -952,8 +961,9 @@ export const actions = {
 
 ### <div>2-1. 프로필 정보 수정</div>
 #### <b>구현 내용</b>
+***
 <b>1. 닉네임(이름),프로필 이미지를 수정할 수 있도록 구현했습니다.</b>
-> 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
+ - 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
 ```html
 <!-- ~/page/user/info.vue -->
 <template>
@@ -1004,6 +1014,7 @@ export const actions = {
 <br>
 
 #### <b>이미지 업로드 API</b>
+***
 이미지를 `amazon s3 버킷`에 저장하여 해당 이미지를 보여줍니다.
 
 > 해당 API는  `amazon s3 버킷`에 이미지를 저장 후, 주소를 불러와서 이미지를 보여주므로, `프로필 정보 수정` 버튼을 누르지 않는 이상 사용자의 이미지를 수정하지 않습니다.
@@ -1086,7 +1097,7 @@ async uploadImg ({ commit }, payload) {
 
 
 <b>프로필 이미지 수정 버튼 클릭</b>
-
+***
 > `store`의 `actioins` 함수 `uploadImg`를 호출합니다.
 <br>
 ```html
@@ -1205,6 +1216,7 @@ async uploadImg ({ commit }, payload) {
 <br>
 
  <b>프로필 이미지 보여주기</b>
+ ***
  ```html
 <!-- ~/page/user/info.vue -->
 <template>
@@ -1251,7 +1263,7 @@ async uploadImg ({ commit }, payload) {
  <br><br>
 
 #### <b>프로필 정보 수정 API</b>
-
+***
 <br>
 <b>store</b>
 
@@ -1314,8 +1326,11 @@ async uploadImg ({ commit }, payload) {
 > 이미지 업로드 API를 호출하여 저장한 이미지와
 사용자 닉네임 데이터를 보내 프로필 정보를 수정합니다.
 
+<br>
+
 ### <div>2-2. 비밀번호 수정</div>
 #### <b>구현 내용</b>
+***
 <b>1. 비밀번호 수정 내용 보여주기</b>
 
 카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
@@ -1363,7 +1378,7 @@ async uploadImg ({ commit }, payload) {
 |components/book/CardDetail.vue|books/search|
 
 #### <b>구현 내용</b>
-
+***
 <b>1. 카카오 책검색 API를 이용하여 검색한 데이터를 가져옵니다.
 ([카카오 개발자 센터](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide) 참고)</b>
 
@@ -1419,7 +1434,8 @@ data(){
 ```
 <br>
 
-#### <b>카카오 책 검색 AP</b>
+#### <b>카카오 책 검색 API</b>
+***
 옵션에 따라 카카오 책 검색 API 호출합니다.
 
 <b>store</b>
@@ -1456,7 +1472,7 @@ data(){
       }
   }
 ```
-> `axios`를 이용해 책 검색 API를 호출합니다. <<br>
+> `axios`를 이용해 책 검색 API를 호출합니다. <br>
 > <b>통합검색/옵션에 따른 검색</b> 두가지 방법으로 구현하기 위해, 호출하는 API를 구분하였습니다.
 
 
@@ -1552,6 +1568,7 @@ data(){
 <br><br>
 
 <b>책 검색 버튼 클릭</b>
+***
 
 > `store`의 `actioins` 함수 `SearchBooks`를 호출합니다.
 ```js
@@ -1621,6 +1638,7 @@ methods:{
 <br>
 
 <b>책 검색 후, 더보기 버튼 클릭</b>
+***
 
 > API 호출시 한번에 `20`개씩 데이터를 불러오고, `더보기 버튼`을 누를 시, 다음 데이터 `20`개를 가져오도록 구현하였습니다.
 ```html
@@ -1689,10 +1707,10 @@ methods:{
 
 ### 3-2. 원하는 책 검색 후 추가
 
-> 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
+검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
 
 <b>검색한 책 추가 API 호출</b>
-
+***
 <b>store</b>
 |<div>actions</div>|
 |---|
@@ -1712,7 +1730,7 @@ methods:{
 <br><br>
 
 <b>추가하기 버튼 클릭</b>
-
+***
 >`store`의 `actioins` 함수 `createBook`를 호출합니다.
 
 `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(알림창 내용 바로가기)
