@@ -902,7 +902,6 @@ export default {
 
 <b>로그인 버튼 클릭</b>
 
-***
 > `store`의 `actioins` 함수 `register`를 호출합니다.
 ```js
 // <!--components/form/Login.vue -->
@@ -949,17 +948,17 @@ export const actions = {
 ***
 <br>
 
-### <div id="user_info"><b>2. 사용자 정보 수정</b></div>
+### <div id="user_info"><b>사용자 정보 수정</b></div>
 
 |라우터|
 |---|
 |user/info|
 
-### <div>2-1. 프로필 정보 수정</div>
-#### <b>구현 내용</b>
-***
-<b>1. 닉네임(이름),프로필 이미지를 수정할 수 있도록 구현했습니다.</b>
- - 기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
+### <div>1. 프로필 정보 수정</div>
+#### <b>1-1. 구현 내용</b>
+
+- <b> 닉네임(이름),프로필 이미지를 수정할 수 있도록 구현했습니다.</b><br>
+기존에 있는 정보를 수정하므로, 기존 정보를 보여줍니다.
 ```html
 <!-- ~/page/user/info.vue -->
 <template>
@@ -1009,8 +1008,8 @@ export const actions = {
 ```
 <br>
 
-#### <b>이미지 업로드 API</b>
-***
+#### <b>1-2. 이미지 업로드 API</b>
+
 이미지를 `amazon s3 버킷`에 저장하여 해당 이미지를 보여줍니다.
 
 > 해당 API는  `amazon s3 버킷`에 이미지를 저장 후, 주소를 불러와서 이미지를 보여주므로, `프로필 정보 수정` 버튼을 누르지 않는 이상 사용자의 이미지를 수정하지 않습니다.
@@ -1211,6 +1210,7 @@ async uploadImg ({ commit }, payload) {
  ```
 <br>
 
+
  <b>프로필 이미지 보여주기</b>
  ***
  ```html
@@ -1258,8 +1258,7 @@ async uploadImg ({ commit }, payload) {
 
  <br><br>
 
-#### <b>프로필 정보 수정 API</b>
-***
+#### <b>1-4. 프로필 정보 수정 API</b>
 <br>
 <b>store</b>
 
@@ -1324,9 +1323,8 @@ async uploadImg ({ commit }, payload) {
 
 <br>
 
-### <div>2-2. 비밀번호 수정</div>
-#### <b>구현 내용</b>
-***
+### <div>2. 비밀번호 수정</div>
+#### <b>2-1. 구현 내용</b>
 <b>1. 비밀번호 수정 내용 보여주기</b>
 
 카카오 로그인과 구글 로그인시에는 비밀번호 수정이 필요 없기 때문에 로그인 시 `state`의 `user` 객체에서 `provier` 속성을 이용해 값이 존재하지 않을 경우에만 비밀번호 변경할 수 있도록 구현하였습니다.
@@ -1362,20 +1360,23 @@ async uploadImg ({ commit }, payload) {
  ```
  > 유효성 검사는 위의 <a href="register">`회원가입/로그인 구현`</a> 시 구현했던 방법과 같습니다.
 
- <br><br>
+ <br>
 
-### <div id="book_search" >3. 원하는 책 검색 및 추가</div>
+***
+ <br>
 
-### 3-1. 원하는 책 검색
+### <div id="book_search" >원하는 책 검색 및 추가</div>
+
+### 1. 원하는 책 검색
 
 |컴포넌트|라우터|
 |---|---|
 |components/form/Search.vue|books/search|
 |components/book/CardDetail.vue|books/search|
 
-#### <b>구현 내용</b>
-***
-<b>1. 카카오 책검색 API를 이용하여 검색한 데이터를 가져옵니다.
+#### <b>1-1.구현 내용</b>
+
+- <b>카카오 책검색 API를 이용하여 검색한 데이터를 가져옵니다.
 ([카카오 개발자 센터](https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide) 참고)</b>
 
 > 해당 API는 `title(제목)`, `isbn(ISBN)`, `publisher(출판사)`, `person(인명)`로 검색 필드를 제공해주기 때문에 옵션에 따라, 검색 필드를 제한할 수 있도록 구현했습니다.
@@ -1400,7 +1401,7 @@ data(){
 
 <br>
 
-<b>2. `select` 태그는 브라우저마다 다르게 보이기 때문에 통일되게 보일 수 있도록 `select` 태그를 사용하지않고, `ul`태그를 이용해 커스텀하여 구현했습니다.</b>
+- <b>`select` 태그는 브라우저마다 다르게 보이기 때문에 통일되게 보일 수 있도록 `select` 태그를 사용하지않고, `ul`태그를 이용해 커스텀하여 구현했습니다.</b>
 
 ```html
 <!-- ~/components/form/search.vue -->
@@ -1430,8 +1431,9 @@ data(){
 ```
 <br>
 
-#### <b>카카오 책 검색 API</b>
-***
+
+#### <b>1-2. 카카오 책 검색 API</b>
+
 옵션에 따라 카카오 책 검색 API 호출합니다.
 
 <b>store</b>
@@ -1701,12 +1703,11 @@ methods:{
  ```
  <br>
 
-### 3-2. 원하는 책 검색 후 추가
+### 2. 원하는 책 검색 후 추가
 
 검색한 책 중 원하는 책을 골라 책을 추가할 수 있도록 구현하였습니다.
 
-<b>검색한 책 추가 API 호출</b>
-***
+#### <b>2-1. 검색한 책 추가 API</b>
 <b>store</b>
 |<div>actions</div>|
 |---|
@@ -1726,8 +1727,6 @@ methods:{
 <br><br>
 
 <b>추가하기 버튼 클릭</b>
-***
-<hr>
 >`store`의 `actioins` 함수 `createBook`를 호출합니다.
 
 `추가하기 버튼`을 클릭한 후, 사용자에게  알람메세지를 띄워 알려줍니다.(알림창 내용 바로가기)
@@ -1779,7 +1778,11 @@ export default {
   }
 }
 ```
-<br><br>
+<br>
+
+***
+
+<br>
 
 ### <div id="book_create"><b>4. 직접 책 추가 및 수정 및 삭제</b></div>
 
