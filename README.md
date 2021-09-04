@@ -2374,3 +2374,919 @@ export default {
 ***
 
 <br>
+
+### <div id="get_data"><b>5. 책 보여주기</b></div>
+
+#### <div>5-1. 공통 내용</div>
+
+|라우터|구현 내용|
+|---|---|
+|books/_page|<a href="#books">내가 추가한 책 보여주기</a>|
+|books/others/_page|<a href="#other_books">다른 사용자가 추가한 책 보여주기</a>|
+|books/hashtags/_page|<a href="#tags">태그별로  책 보여주기</a>|
+|books/search/_page|<a href="#other_search">다른 사용자의 책 검색하여 보여주기</a>|
+
+<br>
+
+<b>1. 페이지네이션 구현</b>
+> `bootstrap-vue`에서 제공하는 `BPagination` 을 사용하여 페이지네이션 구현(<a href="https://bootstrap-vue.org/docs/components/pagination#pagination">bootstrap-vue 페이지네이션 바로가기</a>)
+```html
+<template>
+  ...
+   <BookPagination :total-page="totalPag" @pagination="pagination" />
+</template>
+```
+<br>
+
+<b>Pagination 커포넌트</b>
+```html
+<!-- ~/components/book/Pagination.vue -->
+<template>
+  <div v-if="showPage" class="pagination_inner">
+    <BPagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      first-number
+      @change="pageClick"
+    />
+  </div>
+</template>
+```
+<br>
+
+<b>props</b>
+
+```js
+  props: {
+    // 전체 페이지
+    totalPage: {
+      type: Number,
+      required: true
+    }
+  }
+```
+|props|타입|설명|
+|:---|:---|:---|
+|totalPage|Number|책 데이터를 불러올 때, 전체 페이지 수인 `totalPage`를  `props`로 내려줍니다.|
+
+<br>
+
+
+<b>data</b>
+```js
+  data () {
+    return {
+      perPage: 1,
+      // 현재 페이지
+      currentPage: 1
+    }
+  }
+```
+
+|data|설명|
+|:---|:---|
+|perPage| 페이지당 행(전체 페이지) 수|
+|currentPage|현재 페이지|
+
+<br>
+
+<b>computed</b>
+
+```js
+  computed: {
+    ...mapGetters('books', ['getBooks', 'getCurrentPage']),
+    // 전체 페이지의 수가 1페이지면 페이지네이션을 보여주지 않고, 2페이지 이상일 경우에만 페이지네이션을 보여줍니다.
+    showPage () {
+      return this.getBooks && this.totalPage > 1
+    },
+    // 전체 페이지
+    rows () {
+      return this.totalPage
+    }
+  }
+ ```
+ |computed|설명|
+|:---|:---|
+|showPage|`props`로 받은 전체페이지의 수가 1페이지면 페이지네이션을 보여주지 않고, 2페이지 이상일 경우에만 페이지네이션을 보여줍니다.|
+|rows|전체 페이지 수|
+
+<br>
+
+<b>watch</b>
+
+ ```js
+  watch: {
+    $route: {
+      handler (to) {
+        const currentPage = parseInt(to.params.page, 10) - 1
+        // 현재 페이지 활성화
+        if (this.getCurrentPage === currentPage) {
+          this.currentPage = parseInt(to.params.page, 10)
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  }
+ ```
+ |watch|설명|
+|:---|:---|
+|$route|라우터를 관찰하여 페이지네이션의 번호를 클릭시, 책 데이터를 불러올 때 `state`의 `currentPage`에 저장한 현재페이지와 비교하여 현재 페이지를 활성화시켜줍니다. |
+
+<br>
+
+<b>methods</b>
+
+ ```js
+  methods: {
+    pageClick (page) {
+      this.$emit('pagination', page)
+    }
+  }
+}
+```
+|methods|설명|
+|:---|:---|
+|pageClick|페이지네이션의 페이지 클릭 시, 상위 컴포넌트에 클릭한 페이지의 번호와 함께 이벤트를 전달해줍니다.|
+
+<br>
+
+<b>2. 믹스인으로 공통 요소 구현</b>
+```js
+import PaginationFetchMixin from '~/mixins/PaginationFetchMixin'
+export default {
+  mixins: [PaginationFetchMixin]
+}
+```
+<br>
+
+<b>`PaginationFetchMixin`</b>
+
+> `nuxt`의 `asyncData`훅을 이용해 책 데이터를 가져옵니다.
+
+>  `1페이지당` 12개의 데이터를 호출하여 가져오도록 구현하였습니다.
+
+> `params`를 `page`로 설정하여 라우터를 변경할 수 있도록 구현하였습니다.
+예시) 1페이지: /books/1, 2페이지: /books/2 ...
+
+```js
+   async asyncData ({ store, params, route }) {
+    try {
+      let total
+      let totalPage
+      const page = params.page
+      let data = { page: page - 1, route: route.name }
+      // 검색한 책 데이터 보여주기
+      if (route.name === 'books-search-page') {
+        data = { ...data, search: encodeURIComponent(route.query.search), target: encodeURIComponent(route.query.target) }
+        // 해당 해시태그를 가지고 있는 책 데이터 보여주기
+      } else if (route.name === 'hashtags-page') {
+        data = { ...data, name: encodeURIComponent(route.query.name) }
+      }
+      await store.dispatch('books/fetchBooks', data)
+        .then((res) => {
+          // 전체 데이터 갯수
+          total = res.data.totalCount
+          // 전체 페이지 수
+          totalPage = res.data.totalPage
+        })
+      return { total, totalPage }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+ ```
+<br>
+
+<b>computed</b>
+
+ ```js
+  computed: {
+    ...mapGetters('books', ['getBooks']),
+    hasBook () {
+      return this.getBooks.length
+    }
+  }
+ ```
+|computed|설명|
+|:---|:---|
+|hasBook|책 데이터가 있는지 확인합니다.|
+
+<br>
+
+<b>methods</b>
+
+ ```js
+  methods: {
+    ...mapActions('books', ['fetchBooks']),
+   pagination (page) {
+      switch (this.$route.name) {
+        // 내 책 페이지
+        case 'books-page':
+          return this.$router.push(`/books/${page}`)
+        // 다른 사용자의 책 페이지
+        case 'books-others-page':
+          return this.$router.push(`/books/others/${page}`)
+        // 검색 페이지
+        case 'books-search-page':
+          return this.$router.push(`/books/search/${page}?search=${this.getSearch.selectedOption}&target=${encodeURIComponent(this.getSearch.data)}`)
+        // 해시태그로 검색한 페이지
+        case 'hashtags-page':
+          return this.$router.push(`/hashtags/${page}?name=${this.$route.query.name}`)
+        default:
+          break
+      }
+    }
+  }
+```
+|methods|설명|
+|:---|:---|
+|pagination|하위 컴포넌트인 `Pagination.vue`에서 페이지를 클릭 시, 이벤트를 발생시키면, 해당 함수를 호출합니다. <br> 라우터의 `name`속성을 이용해, 페이지 라우터를 이동시킵니다. |
+
+<br>
+
+<b>3. 책 조회 API</b>
+
+3-1. store
+|<div>actions</div>|
+|---|
+|fetchBooks|
+
+```js
+//store/book.js actions
+  // 책 데이터 가져오기
+  async fetchBooks ({ commit }, bookData) {
+    const { route, page, search, target, name } = bookData
+    let res
+    switch (route) {
+      // 나의 책 데이터
+      case 'books-page':
+        res = await this.$axios.get(`books?page=${page}`)
+        break
+      // 다른 사용자의 책 데이터
+      case 'books-others-page':
+        res = await this.$axios.get(`books/others/book?page=${page}`)
+        break
+     // 검색한 책 데이터
+      case 'books-search-page':
+        res = await this.$axios.get(`books/others/book?page=${page}&search=${search}&target=${target}`)
+        break
+      // 태그별 겸색한 데이터
+       case 'hashtags-page':
+        res = await this.$axios.get(`hashtags?page=${page}&name=${name}`)
+        break
+      default:
+        break
+    }
+    commit('loadBooks', { books: res.data.books, page })
+    return res
+  }
+```
+> `axios`를 이용해 책 조회 API를 호출합니다.
+
+`commit`를 이용해 `mutatonis`을 호출합니다.
+
+<br>
+
+|mutations|
+|---|
+|loadBooks|
+```js
+//store/book.js  mutations
+  loadBooks (state, { books, page }) {
+    // state의 books 배열에 책 데이터를 저장합니다.
+    state.books = [...books]
+    // 현재페이지는 `state`의 currentPage에 저장합니다.
+    state.currentPage = page
+  },
+```
+>  `state`의 `books` 배열에 데이터를 저장합니다.
+
+<br>
+
+|getters|
+|---|
+|getBook |
+```js
+//store/book.js  getters
+  getBooks (state) {
+    return state.books
+  }
+```
+> `state`의 `books` 배열을 가져옵니다.
+
+<br>
+
+
+|state|
+|---|
+|books|
+```js
+//store/book.js state
+ books: [],
+ currentPage: 0
+```
+ > <div id="state_user"> state의 books 배열에는 아래 정보를 저장합니다.</div>
+
+```js
+// books 배열에 저장되는 정보 예시
+  books: [{
+    // 코멘트
+    Comments: Array[0]
+    // 해시태그
+    Hashtags: Array[0],
+    // 좋아요 누른 닉네임
+    Likers:Array[0],
+    UserId: 7
+    authors: "dd"
+    // 북마크 여부
+    bookmark: false
+    contents: "dd"
+    createdAt: "2021-06-14T15:39:04.810Z"
+    datetime: "2021-06-14T15:38:52.000Z"
+    id: 144
+    isbn: ""
+    publisher: ""
+    thumbnail: null
+    title: "d"
+    updatedAt: "2021-06-14T15:39:04.810Z"
+    url: ""
+  }, ...]
+```
+
+<br>
+
+3-2. 책 데이터 가져오기
+> `nuxt`의 `asyncData`훅으로 데이터를 가져오고 해당 내용은 <a href="#">PaginationFetchMixin.js</a>에 공통적으로 구현하였습니다.
+
+
+
+<br>
+
+<b>4. 책 조회 API를 통해 가져온 책 보여주기</b>
+
+- 가져온 책 데이터가 존재한다면, 책 데이터를 보여줍니다.
+```html
+<!-- ~/components/books/_page.vue -->
+<template>
+  ...
+     <div v-if="hasBook">
+      <div class="books">
+        <div v-for="book in getBooks" :key="book.id" class="book">
+          <BookCard :book="book" />
+        </div>
+      </div>
+      <!-- books -->
+      <BookPagination :total-page="totalPage" @pagination="pagination" />
+    </div>
+    <div v-else>
+      <BookEmpty />
+    </div>
+  ...
+</template>
+```
+<br>
+
+<b>bookCard 컴포넌트</b>
+
+<b>props</b>
+
+```js
+  props: {
+    book: {
+      type: Object,
+      required: true
+    }
+  }
+```
+
+|props|타입|설명|
+|:---|:---|:---|
+|book|Object|책 조회 API를 호출하여 가져온 책 데이터|
+
+```js
+// props로 받은 book 객체 정보 예시
+book: {
+  // 코멘트
+  Comments: Array[0]
+  // 해시태그
+  Hashtags: Array[0]
+  UserId: 7
+  authors: "dd"
+  bookmark: false
+  contents: "dd"
+  createdAt: "2021-06-14T15:39:04.810Z"
+  datetime: "2021-06-14T15:38:52.000Z"
+  id: 144
+  isbn: ""
+  publisher: ""
+  thumbnail: null
+  title: "d"
+  updatedAt: "2021-06-14T15:39:04.810Z"
+  url: ""
+}
+```
+<br>
+
+- 가져온 책 데이터가 존재하지 않는다면,
+다른 컴포넌트를 보여줍니다.
+
+> `book-empty component`를 구현하여, 책 데이터가 없을 경우, 해당 컴포넌트를 보여주도록 구현하였습니다.
+
+<br>
+
+<b>book-empty 컴포넌트</b>
+
+```html
+<!-- ~/components/books/Empty.vue -->
+<template>
+  <div class="empty_book">
+    <h3>책이 없어요</h3>
+  </div>
+</template>
+```
+
+#### <div>5-2. 내가 추가한 책 보여주기</div>
+
+|컴포넌트|라우터|
+|---|---|
+|components/books/Card.vue|books/_page|
+|components/books/Empty.vue|books/_page|
+|components/books/Pagination.vue|books/_page|
+<br>
+
+> 책 보여주기 공통 내용에서 정리하였습니다.
+
+<br>
+
+#### <div>5-3. 다른 사용자가 추가한 책 보여주기</div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/Card.vue|books/others/_page|
+|components/books/Empty.vue|books/others/_page|
+|components/books/Pagination.vue|books/others/_page|
+<br>
+
+> 책 보여주기 공통 내용에서 정리하였습니다.
+
+<br>
+
+#### <div>5-4. 검색한 책 보여주기</div>
+
+|컴포넌트|라우터|쿼리|
+|---|---|---|
+|components/books/Card.vue|books/search/_page|search,target|
+|components/books/Empty.vue|books/search/_page|search,target|
+|components/books/Pagination.vue|books/search/_page|search,target|
+
+<b>1. 쿼리를 이용하여 책을 검색하도록 구현하였습니다.</b>
+
+|쿼리|설명|
+|:---:|:---|
+|search|검색 옵션 <br>ex)책제목,저자|
+|target|검색 내용|
+
+<br>
+
+<b>wartch</b>
+> `watch`로 `쿼리` 변화를 감지하여 `책제목` , `저자` 중 옵션과 검색 내용을 `state`의 `search` 객체에 저장합니다.
+
+```js
+// ~/pages/book/search/index.vue
+export default {
+ watch: {
+    '$route.query': {
+      handler (query) {
+        this.updateSearch({
+          data: encodeURIComponent(query.target),
+          selectedOption: query.search
+        })
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+  watchQuery: ['search', 'target']
+  methods: {
+   ...mapMutations('books', ['updateSearch'])
+  }
+}
+```
+
+|문제점|
+|---|
+|`nuxt`의 `asyncData`나 `fetch` 훅은 기본적으로 쿼리 문자열 변경에 대한 감지에 대해 비활성화 되어있어, 쿼리가 변경되도 인식하지 못합니다.|
+
+|해결|
+|---|
+|` watchQuery: ['search', 'target']` 속성으로 쿼리 변경 사항을 확인하고, 해당 쿼리 변경시 `astncData`훅이 호출될 수 있도록 구현하였습니다.<br>(<a href="https://nuxtjs.org/docs/2.x/components-glossary/pages-watchquery">`nuxt` `watchQuery`에 관한 문서</a>)|
+
+<br>
+
+<b>2. 다른 사용자의 책 검색하기</b>
+> `메뉴`에서 `다른 사용자 책 검색`을 클릭하면 입력폼이 보여지고, `책제목` , `저자` 두가지 옵션으로 검색할 수 있도록 구현하였습니다.
+
+> /books/search/페이지번호/?search="검색옵션"&target="검색 내용"
+```html
+<!-- ~/components/AppHeader.vue -->
+<template>
+    <header class="header">
+      ...
+        <!--  메뉴 -->
+        <div class="m_menu">
+            ...
+            <!-- 검색창은 로그인 되어 사용자 정보가 있을 경우에만 보이도록 구현하였습니다.(로그인을 하지 않았다면 검색창은 보이지 않습니다.) -->
+           <div v-if="getUser" class="action_menu">
+             ...
+              <ul>
+                ...
+                <li>
+                  <a href="#" @click.prevent="showSearchForm">
+                    <img src="/images/settings.png" />다른 사용자 책 검색</a>
+                </li>
+              </ul>
+            </div>
+        </div>
+      ...
+    <div v-if="getUser && search.showsearchState" class="search_area">
+      <div class="btn">
+        <a href="#" @click.prevent="search.showsearchState = false">검색창 끄기</a>
+      </div>
+      <!-- 검색폼 -->
+      <FormSearch
+        v-model="search.input"
+        :options="search.options"
+        @searchBook="onsearchBook"
+        @selectedOption="onselectedOption"
+      />
+    </div>
+  </header>
+</template>
+```
+<br>
+
+<b>methods</b>
+
+```js
+  methods: {
+    ...mapMutations('books', ['updateSearch']),
+    showSearchForm () {
+      this.search.showsearchState = !this.search.showsearchState
+       // 기존 검색 데이터 초기화
+      this.updateSearch({
+        data: '',
+        selectedOption: this.search.options[0]
+      })
+    },
+    onselectedOption (option) {
+      this.updateSearch({
+        selectedOption: option
+      })
+    },
+    onsearchBook () {
+      // 입력값이 없으면 리턴해준다.
+      if (this.search.input.length === 0) {
+        return
+      }
+      this.updateSearch({
+        data: this.search.input
+      })
+      this.$router.push(
+        `/books/search/1?search=${this.getSearch.selectedOption}&target=${encodeURIComponent(this.search.input)}`
+      )
+    }
+  }
+}
+```
+|methods|설명|
+|:---|:---|
+|showSearchForm|검색창을 보여주고 기존 검색 데이터는 초기화합니다.|
+| onselectedOption |검색 옵션(책 제목, 저자 등)을 `state`의 `search`객체에 저장합니다.|
+|onsearchBook|검색 내용을 `state`의 `search`객체에 저장하고 라우터를 이동시킵니다.|
+
+<br>
+
+
+|mutations|
+|---|
+|updateSearch|
+```js
+//store/book.js  mutations
+ updateSearch (state, payload) {
+    Object.keys(payload).forEach(key => state.search[key] = payload[key])
+  }
+```
+>  `state`의 `search` 객체에 데이터를 저장합니다.
+
+<br>
+
+
+|state|
+|---|
+|search|
+```js
+//store/book.js state
+search: {
+  // 검색 내용
+    data: '',
+  // 검색 옵션
+    selectedOption: '책제목'
+  }
+```
+
+<br>
+
+
+#### <div>5-5. 태그별로 책 보여주기</div>
+|컴포넌트|라우터|쿼리|
+|---|---|---|
+|components/books/Card.vue|hashtags/_page|name|
+|components/books/Empty.vue|hashtags/_page|name|
+|components/books/Pagination.vue|hashtags/_page|name|
+
+<b>1. 쿼리를 이용하여 해시태그별 책을 검색하도록 구현하였습니다.</b>
+
+|쿼리|설명|
+|:---:|:---|
+|name|태그 이름|
+> /hashtags/페이지번호?name="태그 이름"
+
+> `watch`로 `쿼리` 변화를 감지하도록 하였습니다.
+```js
+// ~/pagees/hashtags/_page.vue
+export default {
+  watchQuery: ['name']
+}
+```
+
+
+### <div id="get_data"><b>6. 책 상세 보기</b></div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/CardDetail.vue|books/_page|
+|components/books/CardDetail.vue|books/others/_page|
+
+#### <div>6-1. 공통 내용</div>
+> `nuxt`의 `asyncData`훅을 이용해
+책 데이터를 가져오도록 구현하였습니다.
+
+<br>
+
+<b>1. 성공적으로 책 데이터를 가져왔다면, 책 데이터를 보여줍니다.</b>
+```html
+<!-- ~/components/books/_page.vue -->
+<template>
+  ...
+  <div class="book-details">
+    <div>
+      <BookCardDetail :book="getBook" />
+    </div>
+  ...
+</template>
+```
+<br>
+
+<b>BookCardDetai 컴포넌트</b>
+
+<b>props</b>
+
+```js
+  props: {
+    book: {
+      type: Object,
+      required: true
+    }
+  }
+```
+|props|타입|설명|
+|:---|:---|:---|
+|book|Object|책 조회 API를 호출하여 가져온 책 데이터|
+
+<br>
+
+#### <div>6-2. 나의 책 상세보기</div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/CardDetail.vue|books/_page|
+
+<b>1. 단일 책 데이터 조회 API</b>
+
+1-1. store
+|<div>actions</div>|
+|---|
+|fetchBook|
+
+```js
+//store/book.js actions
+  async fetchBook ({ commit }, { id }) {
+    const res = await this.$axios.get(`/books/${id}`)
+    commit('loadbook', res.data.book)
+    return res
+  }
+```
+> `axios`를 이용해 단일 책 조회 API를 호출합니다.
+
+`commit`를 이용해 `mutations`을 호출합니다.
+<br>
+
+|mutations|
+|---|
+|loadbook|
+```js
+//store/book.js  mutations
+  loadbook (state, bookData) {
+    state.book = bookData
+  }
+```
+> `state`의 `book` 객체에 데이터를 저장합니다.
+<br>
+
+|getters|
+|---|
+|getBook|
+```js
+//store/book.js  getters
+  getBook (state) {
+    return state.book
+  }
+```
+> `state`의 `book` 객체를 가져옵니다.
+
+|state|
+|---|
+|book|
+```js
+//store/book.js state
+  book: {}
+```
+<br>
+
+ >  `state`의 `book` 객체에는 아래 정보를 저장합니다.
+```js
+book: {
+  // 코멘트
+  Comments: Array[0]
+  // 해시태그
+  Hashtags: Array[0]
+  // 사용자의 id
+  UserId: 7
+  // 책 저자
+  authors: "dd"
+  // 북마크 여부
+  bookmark: false
+  // 책 내용
+  contents: "dd"
+  // 생성 날짜
+  createdAt: "2021-06-14T15:39:04.810Z"
+  // 책 출간 날짜
+  datetime: "2021-06-14T15:38:52.000Z"
+  // 책 id
+  id: 144
+  // 책 isbn
+  isbn: ""
+  // 책 출판사
+  publisher: ""
+  // 책 이미지
+  thumbnail: null
+  // 책 제목
+  title: "d"
+  // 업데이트 날짜
+  updatedAt: "2021-06-14T15:39:04.810Z"
+  // 책 url
+  url: ""
+}
+```
+<br>
+
+1-2. `nuxt`의 `asyncData`훅으로 데이터를 가져옵니다.
+```js
+//  ~/pages/books/b/_id.vue
+  async asyncData ({ store, params }) {
+    try {
+      await store.dispatch('books/fetchBook', { id: params.id })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+```
+<br>
+
+#### <div>6-3. 다른 사용자의 책 상세보기</div>
+|컴포넌트|라우터|
+|---|---|
+|components/books/CardDetail.vue|books/others/_page|
+
+<b>1. 단일 책 데이터 조회 API</b>
+
+1-1. store
+|<div>actions</div>|
+|---|
+|otherFetchBook|
+
+```js
+//store/book.js actions
+  // 다른 사용자의 책(단일) 불러오기
+  async otherFetchBook ({ commit }, { id }) {
+    const res = await this.$axios.get(`/books/others/book/${id}`)
+    commit('loadbook', res.data.book)
+    return res
+  }
+```
+> `axios`를 이용해 책 조회 API를 호출합니다.
+
+`commit`를 이용해 `mutations`을 호출합니다.
+
+<br>
+
+|mutations|
+|---|
+|loadbook|
+```js
+//store/book.js  mutations
+  loadbook (state, bookData) {
+    state.book = bookData
+  }
+```
+>  `state`의 `book` 객체에 데이터를 저장합니다.
+<br>
+
+|getters|
+|---|
+|getBook|
+```js
+//store/book.js  getters
+  getBook (state) {
+    return state.book
+  }
+```
+> `state`의 `book` 객체를 가져옵니다.
+
+|state|
+|---|
+|book|
+```js
+//store/book.js state
+  book: {}
+```
+<br>
+
+ >  `state`의 `book` 객체에는 아래 정보를 저장합니다.
+```js
+book: {
+  // 해시태그
+  Hashtags: Array[0]
+  // 좋아요 누른 사람
+  Likers:Array[0]
+  // 책의 사용자 정보
+  User:Object
+  // 사용자의 id
+  UserId: 7
+  // 책 저자
+  authors: "dd"
+  // 북마크 여부
+  bookmark: false
+  // 책 내용
+  contents: "dd"
+  // 생성 날짜
+  createdAt: "2021-06-14T15:39:04.810Z"
+  // 책 출간 날짜
+  datetime: "2021-06-14T15:38:52.000Z"
+  // 책 id
+  id: 144
+  // 책 isbn
+  isbn: ""
+  // 책 출판사
+  publisher: ""
+  // 책 이미지
+  thumbnail: null
+  // 책 제목
+  title: "d"
+  // 업데이트 날짜
+  updatedAt: "2021-06-14T15:39:04.810Z"
+  // 책 url
+  url: ""
+}
+```
+<br>
+
+1-2. `nuxt`의 `asyncData`훅으로 데이터를 가져옵니다.
+```js
+//  ~/pages/books/others/b/_id.vue
+  async asyncData ({ store, params }) {
+    try {
+      let otherBookList
+      await store.dispatch('books/otherFetchBook', { id: params.id })
+        .then((res) => {
+          otherBookList = res.data.book
+        })
+      return { otherBookList }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+```
+<br>
+
+***
+<br>
