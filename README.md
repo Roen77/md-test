@@ -5088,11 +5088,11 @@ bookmarks: [{
 
 
 
-||<a href="https://github.com/aws/aws-sdk-js">aws-sdk</a>|<a href="https://github.com/expressjs/multer#readme">multer</a>|<a href="https://github.com/badunk/multer-s3#readme">multer-s3</a>|<a href="https://github.com/kelektiv/node.bcrypt.js#readme">bcrypt</a>|
-|---|---|:---|:---:|:---:|
+||<a href="https://github.com/aws/aws-sdk-js">aws-sdk</a>|<a href="https://github.com/expressjs/multer#readme">multer</a>|<a href="https://github.com/badunk/multer-s3#readme">multer-s3</a>|
+|---|---|:---|:---:|
 |버전|v2.888.0|v1.4.2|v2.9.0|v5.0.1|
 |_|Node.js의 JavaScript용 AWS SDK를 지원해주는 라이브러리|파일 업로드를 위해 사용되는 multipart/form-data 를 다루기 위한 node.js 의 미들웨어|AWS S3를 위한 multer 라이브러리| 내용|비밀번호 암호화하는데 도와주는 라이브러리|
-
+> amazon s3에 이미지를 저장할 수 있도록 도와줍니다.
 
 
 ||<a href="https://www.passportjs.org/">passport</a>|<a href="https://www.passportjs.org/packages/passport-google-oauth20/">passport-google-oauth20</a>|<a href="https://www.passportjs.org/packages/passport-kakao/">passport-kakao</a>|<a href="https://www.passportjs.org/packages/passport-local/">passport-local</a>|
@@ -5105,326 +5105,50 @@ bookmarks: [{
 |버전|v8.5.1|v6.6.2|v6.2.0|
 |-|Node.js 용 PostgreSQL|Postgres , MySQL , MariaDB , SQLite 및 Microsoft SQL Server를 위한  Node.js ORM|sequelize 용 cli|
 
+>  postgresql에 연결할 수 있도록 도와줍니다.
+>  sequdlize를 사용해 db 작성하였습니다.
 
-### 2. 사용한 DB
-
-
-## 배포
-
-## https 적용
-
-
-
-### 3. 구현 세부 내용
-
-#### 3-1 구현 내용 공통 요소
-
-- 사용한 DB : <a href="https://www.postgresql.org/">postgreSQL</a>
-- sequlize(Postgres , MySQL , MariaDB , SQLite 및 Microsoft SQL Server를 위한 Node.js ORM) 사용
-
-#### 3-2. 사용한 라이브러리
-
-
-|<a href="https://github.com/brianc/node-postgres">pg</a>|<a href="https://sequelize.org/master/">sequdlize</a>|<a href="https://github.com/sequelize/cli">sequelize-cli</a>|
-|:---:|:---:|:---:|
-|Node.js 용 PostgreSQL|Postgres , MySQL , MariaDB , SQLite 및 Microsoft SQL Server를 위한  Node.js ORM|sequelize 용 cli|
-#### 3-3. DB
-
-#### 테이블
-
-이미지 삽입
-
-
-#### 관계
-이미지 삽입
-
-### 4. 구현 세부 내용 정리
-<br>
-
-### <div id="s_login" style="color:blue;"><b>1. 로그인/로그아웃 구현</b></div>
-#### 1. 사용한 라이브러리
 |<a href="https://www.passportjs.org/">passport</a>|<a href="https://www.passportjs.org/packages/passport-google-oauth20/">passport-google-oauth20</a>|<a href="https://www.passportjs.org/packages/passport-kakao/">passport-kakao</a>|<a href="https://www.passportjs.org/packages/passport-local/">passport-local</a>|<a href="https://github.com/kelektiv/node.bcrypt.js#readme">bcrypt</a>|
 |:---:|:---:|:---:|:---:|:---:|
 |전략 개념을 사용하여 사용자 정보를 인증하는 것을   도와주는 Node.js를 위한 미들웨어|구글 인증을 위한 passport 미들웨어|카카오 인증을 위한 passport 미들웨어|이메일 사용 인증을 위한 passport 미들웨어|비밀번호 암호화하는데 도와주는 라이브러리|
 
-- 이메일 로그인 : `passort-local`
-- 카카오 로그인 : `passort-kakao`
-- 카카오 로그인 : `passport-google-oauth20`
-- 비밀번호 암호화
-```js
-// server/Controller/auth.js
-    async register(req,res,next){
-        try {
-            const {email,password,username}=req.body;
-            // 비밀번호 암호화
-            const hash=await bcrypt.hash(password,12);
-            const user =await db.User.findOne({where:{email}})
-            // 가입된 유저 있는지 확인
-            if(user){
-               return res.status(403).json({
-                    success:false,
-                    msg:'이미 회원가입된 유저입니다.'
-                });
-            };
-            // 회원가입
-            await db.User.create({email,password:hash,username});
-            loginConfirm(req,res,next);
-        } catch (error) {
-            console.error(error);
-            return next(error);
-        }
-    },
-```
+> passport는 로그인시 사용하였습니다.
 
-### <div id="s_userinfo" style="color:blue;"><b>2. 사용자 정보 수정</b></div>
-#### 2-1. 비밀번호 변경
-```js
-// server/Controller/auth.js
-  async changePassword(req,res,next){
-      try {
-        const {password} = req.body;
-        const hash=await bcrypt.hash(password,12);
-        await db.User.update({password:hash},{where:{id:req.user.id}})
-        return  res.json({
-          success:true,
-          msg:'비밀번호 수정 완료되었습니다.',
-        })
-      } catch (error) {
-        console.error(error);
-        return next(error);
-      }
 
-     }
-```
-#### 2-2. 사용자 프로필(썸네일) 수정
-```js
-// server/Controller/auth.js
- async changeUserinfo(req,res,next){
-      try {
-        // 사용자 이름(닉네임) 변경
-        if(req.body.username){
-          await db.User.update({
-            username:req.body.username,
-          },{
-            where:{id:req.user.id}
-          });
-        }
-        // 사용자 프로필(썸네일) 이미지 변경
-        if(req.body.thumbnail){
-          await db.User.update({
-            thumbnail:req.body.thumbnail
-          },{
-            where:{id:req.user.id}
-          });
-        }
-        const newUser=await db.User.findOne({where:{id:req.user.id},attributes:['id','email','username','thumbnail']})
+### 2. 사용한 DB
+- <a href="https://www.postgresql.org/">postgreSQL</a>
+-  <a href="https://sequelize.org/master/">sequlize</a> 사용하여 DB 작성
 
-      return  res.json({
-        success:true,
-        msg:'프로필 수정 완료되었습니다.',
-        user:newUser
-      })
-      } catch (error) {
-        console.error(error);
-       return next(error);
-      }
-     }
-```
+- 관계도
+![db 관계도](https://myimageslist.s3.us-west-1.amazonaws.com/1632321493780)
 
-### <div id="s_search" style="color:blue;"><b>3.책 검색</b></div>
-#### 1. 사용한 라이브러리
-|<a href="https://github.com/request/request#readme">request</a>|
-|:---:|
-|http 요청을 도와주는 라이브러리(2020 년 2 월 11일 이후 지원 중단)|
 
-- <a href="https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-book"></a>카카오 개발자 센터 바로가기 및 <a href="https://developers.naver.com/docs/serviceapi/datalab/search/search.md#node-js">네이버 개발자 센터 바로가기</a>
-```js
-// server/Controller/book.js
-  kakaosearch(req,res,next){
-        //통합 검색
-        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(req.query.query);
-        let  option={
-            size:req.query.size,
-            page:req.query.page
-        };
-        //타이틀 검색,isbn검색,저자 검색,출판사 검색
-        if(req.query.target){
-            option={...option,target:encodeURI(req.query.target)}
-        }
 
-        let options={
-            url:api_url,
-            qs:option,
-            headers: {"Authorization":` KakaoAK ${process.env.KAKAO_APIKEY}`}
-        };
 
-        request.get(options,function(error,response,body){
-            if(!error && response.statusCode == 200){
-                res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
-               res.end(body);
-            }else{
-                res.status(response.statusCode).end();
-                console.log('error = ' + response.statusCode);
-            }
-        })
-    },
-```
-#### <b style="color:red;">* 이슈</b>
-- `2020년 2월 11일 이후` `request`라이브러릴 지원 중단.
-<br>
+## 배포
+amazon EC2 에 배포
 
-### <div id="s_img" style="color:blue;"><b>11. 이미지 업로드</b></div>
-#### 1. 사용한 라이브러리
-|<a href="https://github.com/aws/aws-sdk-js">aws-sdk</a>|<a href="https://github.com/expressjs/multer#readme">multer</a>|<a href="https://github.com/badunk/multer-s3#readme">multer-s3</a>|
-|:---:|:---:|:---:|
-|Node.js의 JavaScript용 AWS SDK를 지원해주는 라이브러리|파일 업로드를 위해 사용되는 multipart/form-data 를 다루기 위한 node.js 의 미들웨어|AWS S3를 위한 multer 라이브러리|
+## https 적용
+nginx 와 <a href="https://letsencrypt.org/">Lets' Encrypt</a>로 무료 SSL 인증서 발급하여 https 적용
 
 ```js
-// server/Controller/Image.js
-const aws= require('aws-sdk');
-const multer=require('multer');
-const multer3=require('multer-s3');
-// 암호 같은 중요한 정보는  .env 에 저장하여 불러오도록 구현
-require("dotenv").config();
-// Amazon S3 버킷에 이미지 저장
-aws.config.update({
-    secretAccessKey:process.env.AWSSECRETKEY,
-    accessKeyId:process.env.AWSACCESSKEYID,
-    region:'ap-northeast-2'
-})
-let s3= new aws.S3();
-
-upload=multer({
-    storage:multer3({
-        s3:s3,
-        bucket:"am-clone",
-        acl:'public-read',
-        metadata:function(req,file,cb){
-            cb(null,{fieldName:file.fieldname})
-        },
-        key:function(req,file,cb){
-            cb(null,Date.now().toString())
-        }
-    })
-}),
-```
-### <div id="s_sum" style="color:blue;"><b>12. 통계 데이터</b></div>
-
-#### 1. 통계를 위해 해당 양식에 맞게 포맷시키도록 구현하였습니다.
-
-- 양식
-```js
-// 월별 북마크한 갯수
-bookmarks: [{
-    months: '5',
-    value: '2'
-  }, {
-    months: '6',
-    value: '2'
-  }],
-  // 월별 좋아요 받은 갯수
-  likes: [{
-    value: '7',
-    months: '6'
-  }],
-  // 월별 좋아요한 갯수
-  likers: [],
-  // 월별 댓글 작성한 갯수
-  comments: [{
-    months: '6',
-    value: '21'
-  }],
-  // 월별 내가 추가한 책의 갯수
-  books: [{
-    months: '5',
-    value: '2'
-  }, {
-    months: '6',
-    value: '12'
-  }]
-```
-
-
-```js
-// server/Controller/profile.js
-// 통계
-const db = require('../models');
-const sequelize=require('sequelize');
-const moment=require('moment');
-
-// 날짜 포맷 함수
-const Format=(data,obj)=>{
-    if(!obj){
-        return data.filter(value=>value.dataValues).map(value=>value.dataValues.months=moment(value.dataValues.months).format("M"))
-    }
-    return data.map(value=>value.months=moment(value.months).format("M"))
-
-}
-module.exports={
-    async Counts(req,res,next){
-        try {
-            //생성한 책의 수
-            const books=await db.Book.findAll({
-                attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'],
-                  [sequelize.fn('count', sequelize.col('id')), 'value']],
-                  where:{UserId:req.user.id},
-                  group: ['months']
-            })
-            // 북마크한 수
-           const bookmarks=await db.Book.findAll({
-                attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'],
-                  [sequelize.fn('count', sequelize.col('bookmark')), 'value']],
-                  where:{[sequelize.Op.and]:[
-                      {bookmark:true},
-                      {UserId:req.user.id}
-                  ]},
-                  group: ['months']
-            })
-            //좋아요한 수
-            //직접 작성하여 구현
-           const likeList=await db.sequelize.query(`SELECT
-           count(*) as value,date_trunc('month', "createdAt")::date as months
-       from "Like"
-       where   "Like"."UserId"=${req.user.id}
-       GROUP BY date_trunc('month',"createdAt");`)
-       //좋아요 받은 수
-        //직접 작성하여 구현
-       const likerList=await db.sequelize.query(`SELECT
-       count(*) as value,date_trunc('month', "Like"."createdAt")::date as months
-   from "Like","Books"
-   where   "Books"."UserId"=${req.user.id} and "Books".id ="Like"."BookId"
-   GROUP BY date_trunc('month',"Like"."createdAt")`)
-   //작성한 코멘트수
-   const comments=await db.Comment.findAll({
-    attributes: [[ sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'months'],
-      [sequelize.fn('count', sequelize.col('UserId')), 'value']],
-      where: {UserId:req.user.id},
-      group: ['months']
-})
-        const likes=likeList[0]
-        const likers=likerList[0]
-            Format(books)
-            Format(bookmarks)
-            Format(comments)
-            Format(likes,true)
-            Format(likers,true)
-            console.log()
-            res.json({
-                bookmarks,
-                likes,
-                likers,
-                comments,
-                books
-            })
-
-        } catch (error) {
-            console.error(error);
-            return next(error);
-        }
-    }
-
+// /etc/nginx/nginx.conf
+// 인증서 적용
+server {
+        listen 443 ssl;
+        server_name api.rone.pe.kr;
+        ssl_certificate /etc/letsencrypt/live/api.rone.pe.kr-0002/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/api.rone.pe.kr-0002/privkey.pem; # managed by Certbot
+        include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+        location / {
+                ....
+       }
 }
 ```
+
+
+
 - `date_trunc` 함수를 이용해 `월`을 추출하여,
 월별로 데이터를 가져올 수 있도록 하였습니다.
 (<a href="https://www.postgresqltutorial.com/postgresql-date_trunc/">postgreSQL `date_trunc` 관련 문서 바로가기</a>)
