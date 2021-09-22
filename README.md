@@ -5130,6 +5130,9 @@ bookmarks: [{
 <img src="~/image/library 관계도.png">
 이건?
 <img src="image/library 관계도.png">
+<img src="../image/library 관계도.png">
+<img src="..image/library 관계도.png">
+
 
 
 
