@@ -5122,7 +5122,7 @@ bookmarks: [{
 - 관계도
 ![db 관계도](https://myimageslist.s3.us-west-1.amazonaws.com/1632321493780)
 
-
+<image src="https://myimageslist.s3.us-west-1.amazonaws.com/1632321493780">
 
 
 ## 배포
