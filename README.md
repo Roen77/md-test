@@ -5121,6 +5121,7 @@ bookmarks: [{
 
 - 관계도
 ![db 관계도](https://myimageslist.s3.us-west-1.amazonaws.com/1632321493780)
+![db 관계도](https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20160103_262%2Fohji2484_14517930268083uXP0_JPEG%2Ffile.jpg&type=sc960_832)
 
 <img src="https://myimageslist.s3.us-west-1.amazonaws.com/1632321493780">
 <img src="https://myimageslist.s3.us-west-1.amazonaws.com/1632321493780.jpg">
