@@ -12,32 +12,19 @@
 
 <br>
 
-
-이 부분은 [Google] [1]을 참조하시면 됩니다.
-
-이 부분도 [Google] [1]을 참조하시고 저 부분은 [Facebook] [2]을 참조하세요.
-
-[1]: http://www.google.com
-[2]: http://www.facebook.com
-
-<br>
+[axios]: https://axios-http.com/docs/intro
+[vue-router]: https://router.vuejs.org/
+[vuetify]: https://dev.vuetifyjs.com/en/introduction/why-vuetify/#why-vuetify3fgetting-started/installation/
+[vuex]: https://vuex.vuejs.org/
+[axios]: https://axios-http.com/docs/intro
 
 
-
-이 부분은 [Google]를 참조하시면 됩니다.
-
-이 부분도 [Google]를 참조하시고 저 부분은 [Facebook]을 참조하세요.
-
-[Google]: http://www.google.com
-
-**testesttse!!**
 ## 사용한 라이브러리
-[axios](https://axios-http.com/docs/intro)
-블ㄹ랭크
-||<a href="https://github.com/axios/axios"  target="_blank">axios</a>|<a href="https://router.vuejs.org/">vue-router</a>|<a href="https://dev.vuetifyjs.com/en/getting-started/installation/">vuetify</a>|<a href="https://vuex.vuejs.org/">vuex</a>|
+
+|| [axios] |[vue-router]|[vuetify]|[vuex]|
 |---|---|:---|:---|:---|
 |버전|v0.21.4|v3.5.2|2.4.0|3.6.2|
-|이유|HTTP 클라이언트 라이브러리로 서버와의 통신을 위해 사용|vue 라우터|vue 전용 디자인 프레임워크|상태 관리를 위한 vuex store 사용|
+|이유|HTTP 클라이언트 라이브러리로 서버와의 통신을 위해 사용|vue 라우터|vue 전용 디자인 프레임워크|Vue.js를 위한 상태 관리 패턴 라이브러리 |
 
 ## 구현 목표
 1. <a>회원가입/로그인</a>
@@ -64,22 +51,21 @@
     |--projects
 ```
 ### 구현 공통 요소
-- **기본적으로 vuetify 디자인 프레임워크를 사용하여 구현하였습니다.**
+- **기본적으로 [vuetify] 디자인 프레임워크를 사용하여 구현하였습니다.**
 
-
-- <b>기본적으로 vuetify 디자인 프레임워크</b>
 
 <br>
 
-- 모든 라우터는 `로그인` 시, 이용 가능하도록 구현하였습니다.
+- **모든 라우터는 `로그인` 시, 이용 가능하도록 구현하였습니다.**
 
+`router`
 ```js
 //~/router/index.js
 // 인증 필요
 const isAuth=(to,from,next)=>{
     if(to.meta.auth && !store.getters.getUser){
         // 로그인이 필요하기 때문에 login할 수 있는 라우터로 리다이렉트 해준다.
-        const loginPath = `/login?rPath=${encodeURIComponent(to.path)}`
+         const loginPath = `/login?rPath=${to.path}`
         next(loginPath)
         return
       }
@@ -108,13 +94,13 @@ const router = new VueRouter({
   ]
 ```
 
-> <a href="https://router.vuejs.org/guide/advanced/navigation-guards.html">vue-router 가드</a>로 라우터 진입 전 로그인 인증 필요 여부 확인
+>[vue-router 가드](https://router.vuejs.org/guide/advanced/navigation-guards.html)로 라우터 진입 전 로그인 인증 필요 여부 확인
 
 <br>
 
-- API 호출은 `axios`를 사용하였습니다.
+- <div id="axios"><b>API 호출은 axios 를 사용하였습니다.</b></div>
 
-> 모든 API 호출은 인증이 필요하도록 구현하였으므로, `axios`제공하는 <a href="https://axios-http.com/docs/interceptors">`Interceptor`</a>를 이욯하여
+> 모든 API 호출은 인증이 필요하도록 구현하였으므로, [axios]에서 제공하는 [Interceptors](https://axios-http.com/docs/interceptors)를 이욯하여
 데이터 요청시, headers의 authorization에 토큰값 부여하도록 하였습니다.
 
 <br>
@@ -123,7 +109,7 @@ const router = new VueRouter({
 ```js
 // ~api/interceptors.js
 import store from '../../store'
-// axios interceptor를 이용해 headers의 authorization에 store에 저장한 토큰값을 부여
+// axios interceptors를 이용해 headers의 authorization에 store에 저장한 토큰값을 부여
 export const setInterceptors=(instance)=>{
 instance.interceptors.request.use(function (config) {
     config.headers.authorization = store.state.token;
@@ -155,12 +141,11 @@ export const request=setInterceptors(instance)
 
 |API 요청시 토큰값을 부여하는 이유|
 |---|
-|<a href="https://jwt.io/">jsonwebtoken</a>는  정보를 JSON 객체로 안전하게 전송하기위한 개방 표준으로, `headers`의 `Authorization`에 저장된 `token`으로 정보에 접근하도록 하기 위해 `axios Interceptors`를 이용해 요청을 보내기 전에 토큰값을 확인 및 저장해줍니다. |
+|<a href="https://jwt.io/">jsonwebtoken</a>는  정보를 JSON 객체로 안전하게 전송하기위한 공개된 표준으로, `headers`의 `Authorization`에 저장된 `token`으로 정보에 접근하도록 하기 위해, `axios Interceptors`를 이용해 요청을 보내기 전에 토큰값을 확인 및 저장해줍니다. |
 
 <br>
 
-- 이미지는 완전히 로드된 후, 보여질 수 있도록
-이미지 로드 여부를 확인합니다.
+- <div id="img_load"><b>이미지는 완전히 로드된 후, 보여질 수 있도록 이미지 로드 여부를 확인합니다.</b></div>
 
 `loadImage.js`
 ```js
@@ -179,7 +164,7 @@ export { loadImage }
 
 ```
 
-### 공통 컴포넌트
+### 주요 공통 컴포넌트
 
 #### PageNotFound 컴포넌트
 
@@ -219,7 +204,7 @@ const router = new VueRouter({
 
 <br>
 
-#### ErrorPage 컴포넌트
+#### <div id="err">ErrorPage 컴포넌트</div>
 
 > 오류 발생시,보여줄 컴포넌트를 구현하였습니다.
 ```html
@@ -240,15 +225,24 @@ const router = new VueRouter({
 </template>
 ```
 
-<br>
-
-`state`
-
 ```js
 export default {
     computed:{
         ...mapState(['hasError','errMsg'])
     }
+}
+```
+
+<br>
+
+`state`
+```js
+// ~/store/state.js
+export default {
+  // 에러 여부
+  hasError: false
+  // 에러 메세지
+  errMsg: ''
 }
 ```
 |state|타입|설명|
@@ -259,7 +253,7 @@ export default {
 
 #### Spinner 컴포넌트
 
-> 스피너를 구현하여 데이터를 가져오기전에 로딩화면이 보여지도록 구현하였습니다.
+> 스피너를 구현하여 데이터를 가져오기 전에 로딩화면이 보여지도록 구현하였습니다.
  <br>
  ```html
  <!-- ~/components/common/Spinner.vue -->
@@ -274,14 +268,21 @@ export default {
   </div>
 </template>
  ```
-<br>
-
-`state`
  ```js
 export default {
   computed:{
     ...mapState(['loading'])
   }
+}
+```
+<br>
+
+`state`
+```js
+// ~/store/state.js
+export default {
+  // 로딩
+  loading: false
 }
 ```
 |state|타입|설명|
@@ -291,8 +292,8 @@ export default {
 <br>
 
 
-#### AlerConFirm 컴포넌트
-> 데이터 삭제 시, 한번 더 사용자가 확인할 수 있도록 구현하였습니다.
+#### <div id="alert_c">AlertConFirm 컴포넌트</div>
+> 데이터 삭제 시, 한번 더 사용자가 확인할 수 있도록 알림창을 구현하였습니다.
 ```html
 <!-- ~/components/common/AlerConFirm.vue -->
 <template>
@@ -362,10 +363,6 @@ export default {
     </v-snackbar>
 </template>
 ```
-<br>
-
-`state`
-
 ```js
 export default {
     computed: {
@@ -373,30 +370,31 @@ export default {
     }
 }
 ```
-```js
-// ~/store/state.js
-
-    alert:{
-        success:false,
-        text:'',
-        timeout:3000
-    }
-```
-|state|타입|설명|
-|:---|:---|:---|
-|top|Boolean|.|
-|bottom|Boolean|.|
-|right|Boolean|.|
-|left|Boolean|.|
-|transition|String|.|
-|menus|Array|.|
-
-
-> `vuetify`에서 제공하는 <a href="https://vuetifyjs.com/en/components/snackbars/#props">v-snackbar</a>로 알림창을 구현하였습니다.
 
 <br>
 
-#### ActionMenu 컴포넌트
+`state`
+```js
+// ~/store/state.js
+export default {
+  // 알람상태
+  alert: {
+    success: false,
+    text: '',
+    timeout: 3000
+  },
+}
+```
+|state|타입|설명|
+|:---|:---|:---|
+|alert|Object|`success`:알림메세지 보여줄지 유무<br>`text`:알림 메세지 내용<br>`timeout`:알림 메세지 보여줄 시간|
+
+
+> `vuetify`에서 제공하는 [v-snackbar](https://vuetifyjs.com/en/components/snackbars/#props)로 알림창을 구현하였습니다.
+
+<br>
+
+#### <div id="flot_menu">ActionMenu 컴포넌트</div>
 > 플로팅 메뉴
 
 ```html
@@ -472,19 +470,19 @@ export default {
 |bottom|Boolean|css `position`속성의 `bottom`위치|
 |right|Boolean|css `position`속성의 `right`위치|
 |left|Boolean|css `position`속성의 `left`위치|
-|direction|String|메뉴가 보여줄 위치|
+|direction|String|화면에 메뉴를 보여줄 위치|
 |transition|String|메뉴를 보여줄 때 `transition` 애니메이션|
-|menus|String,Number|메뉴 내용|
+|menus|Array|메뉴 내용|
 
 <br>
 
 
-> `vuetify` 에서 제공하는<a href="https://vuetifyjs.com/en/components/floating-action-buttons/#speed-dial">v-speed-dial</a>를 이용해 버튼을 구현하였습니다.
+> `vuetify` 에서 제공하는 [v-speed-dial](https://vuetifyjs.com/en/components/floating-action-buttons/#speed-dial)를 이용해 메뉴 버튼을 구현하였습니다.
 
 <br>
 
 ### Store
-> `vuex`의 `store`를 통해 데이터 관리하도록 구현
+> [vuex]의 `store`를 통해 데이터 관리하도록 구현하였습니다.
 ```js
 // ~/store/index.js
 import Vue from 'vue';
@@ -506,7 +504,7 @@ const store = new Vuex.Store({
 export default store;
 ```
 
-> `store`를 모듈화하여 정리하였스니다.
+> `store`는 모듈화하여 정리하였습니다.
 
 <br>
 
@@ -517,7 +515,7 @@ export default store;
 
  유효성 검사 관련하여 공통된 요소들 정리하였습니다.
 
-> 로그인/회원가입 시 유효성 검사와 보드/카드 데이터 추가시 유효성 검사시 사용
+> 로그인/회원가입 시 유효성 검사와 보드/카드 데이터를 추가할 때 유효성 검사시 사용
 
 
 ```js
@@ -557,7 +555,7 @@ export default {
 ```
 <br>
 
-`vuetify`에서 제공하는 <a href="https://vuetifyjs.com/en/components/forms/#rules">v-form</a>의 유효성 검사를 사용하였습니다.
+`vuetify`에서 제공하는 [v-form](https://vuetifyjs.com/en/components/forms/#rules)의 유효성 검사를 사용하였습니다.
 
 > <a href="https://www.w3schools.com/howto/howto_js_password_validation.asp">유효성 검사 정규식 참고 문서</a>
 
@@ -568,7 +566,7 @@ export default {
 
 로그인/회원가입 시 사용되는 `email`,`password` 대해 유효성을 확인합니다.
 
-> 회원가입/로그인시, 공통된 요소를 정리하였습니다.
+> 회원가입/로그인시에 사용되는 공통된 요소를 정리하였습니다.
 ```js
 // ~/mixin/LoginMixin.js
 
@@ -599,7 +597,7 @@ export default {
 <br>
 
 
-> `vutify`에서 제공하는 `rules`를 사용해 `input`태그에 입력되는 데이터의 규칙을 정할 수 있습니다.(<a hreef="https://vuetifyjs.com/en/components/inputs/#rules">input rules</a> 참고)
+> `vutify`에서 제공하는 `rules`를 사용해 `input`태그에 입력되는 데이터의 규칙을 정할 수 있습니다.(<a href="https://vuetifyjs.com/en/components/inputs/">input rules</a> 참고)
 
 > DB에서 각각 `email`은 문자열 50자까지, `password`는 문자열 100자까지 가능하도록 제한해주었기 때문에 오류 방지를 위해 길이값을 확인합니다.
 
@@ -628,8 +626,8 @@ export default {
 
 ## 상세 구현 내용
 ## 1. 회원가입/로그인
-### 1-1. 회원가입/로그인 공통 요소
-<b>`vuetify`의  <a href="https://vuetifyjs.com/en/components/windows/#account-creation">v-window</a> 사용으로 로그인폼과
+### 1-1. 회원가입/로그인 공통 구현 요소
+<b>`vuetify` 에서 제공하는 [v-window](https://vuetifyjs.com/en/components/windows/)사용으로 로그인폼과
 회원가입폼을 보여주도록 구현하였습니다.</b>
 
 > `v-window`는 한 창에서 다른 창으로 콘텐츠를 전환하기위한 기본 기능을 제공합니다.
@@ -641,9 +639,11 @@ export default {
             <v-col cols="12" sm="8" md="8">
                 <v-card class="elevation-12">
                     <v-window v-model="step">
+                      <!-- 로그인 폼 -->
                         <v-window-item :value="1">
                             <login-form @increaseStep="onIncreseStep"></login-form>
                         </v-window-item>
+                        <!-- 회원가입 폼 -->
                         <v-window-item :value="2">
                             <register-form @decreaseStep="onDecreaseStep"></register-form>
                         </v-window-item>
@@ -700,7 +700,7 @@ export default {
 
 <br>
 
-<b>사용자 정보 저장</b>
+<b id="ck">사용자 정보 저장</b>
 > 로그인/회원가입 시, 브라우저의 쿠키에 사용자 정보를 저장합니다.
 
 ```js
@@ -713,7 +713,7 @@ function saveAuthToCookie(value) {
 function saveUserToCookie(value) {
   document.cookie = `memo_user=${value}`;
 }
-// 쿠키에 저장된 토근 정보 가져오기
+// 쿠키에 저장된 토큰 정보 가져오기
 function getAuthFromCookie() {
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)memo_auth\s*=\s*([^;]*).*$)|^.*$/,
@@ -742,10 +742,11 @@ export {
 ```
 <br>
 
+
 ### 1-2. 로그인
 |컴포넌트|라우터|
 |---|---|
-|LoginForm|/login|
+|LoginForm.vue|/login|
 
 <br>
 
@@ -785,7 +786,8 @@ export const auth={
     },
 }
 ```
-> <a href="#">`axios`에 관한 내용은 위의 공통 구현 요소에서 정리하였습니다.</a>
+
+> `axios`에 관한 내용은 위의 [구현 공통 요소](#axios)에서 정리하였습니다.</a>
 
 <br>
 
@@ -806,9 +808,11 @@ import {auth} from '../api/auth'
       return data
     }
 ```
+> `commit`으로 `mutations`의 `SET_USER`를 실행시킵니다.
+
 <br>
 
-|<div id="token">mutations</div>|
+|mutations|
 |---|
 |SET_USER|
 
@@ -832,9 +836,8 @@ import {saveAuthToCookie,saveUserToCookie,deleteCookie} from '../../utils/cookie
 |---|
 |새로고침시, `store`에 저장된 정보는 유지되지 않으므로, 브라우저의 쿠키에 필요한 데이터를 사용하기 위해 저장하도록 구현하였습니다.|
 |`nickname`정보는 사용자의 닉네임이 새로고침시에도 유지되도록 하기 위해서 저장합니다.|
-|`token`정보로 사용자의 로그인 유무를 구분하기 때문에,로그인 시 새로고침할 때 로그인 정보가 유지되도록 하기 위해서 저장합니다.|
+|`token`정보로 사용자의 로그인 유무를 구분하기 때문에, 로그인 시 새로고침할 때 로그인 정보가 유지되도록 하기 위해서 저장합니다.|
 
-> <a href="#">쿠키에 관련된 요소들은 함수로 따로 만들어 정리하였습니다.</a>
 
 <br>
 
@@ -868,14 +871,14 @@ export default {
 
 }
 ```
-> <a href="#">쿠키에 관련된 요소들은 함수로 따로 만들어 정리하였습니다.</a>
+> [쿠키에 관련된 요소들은 함수로 따로 만들어 정리하였습니다.](#ck)
 
 <br>
 
 ### 1-3. 회원가입
 |컴포넌트|라우터|
 |---|---|
-|RegisterForm|/login|
+|RegisterForm.vue|/login|
 
 
 <b>회원가입 버튼 클릭</b>
@@ -912,7 +915,8 @@ export const auth={
     },
 }
 ```
-> <a href="#">`axios`에 관한 내용은 위의 공통 구현 요소에서 정리하였습니다.</a>
+> `axios`에 관한 내용은 위의 [구현 공통 요소](#axios)에서 정리하였습니다.</a>
+
 
 <br>
 
@@ -933,6 +937,8 @@ import {auth} from '../api/auth'
       return data
     },
 ```
+> `commit`으로 `mutations`의 `SET_USER`를 실행시킵니다.
+
 <br>
 
 |mutations|
@@ -954,7 +960,6 @@ import {saveAuthToCookie,saveUserToCookie,deleteCookie} from '../../utils/cookie
 
 > 로그인 뿐아니라 회원가입 진행시에도 회원정보를 저장시킵니다.
 
-> <a href="#">쿠키에 관련된 요소들은 함수로 따로 만들어 정리하였습니다.</a>
 
 <br>
 
@@ -994,7 +999,7 @@ export default {
 
 }
 ```
-> <a href="#">쿠키에 관련된 요소들은 함수로 따로 만들어 정리하였습니다.</a>
+> [쿠키에 관련된 요소들은 함수로 따로 만들어 정리하였습니다.](#ck)
 
 <br>
 
@@ -1002,7 +1007,7 @@ export default {
 
 ### 2-1. 데이터 가져오기 공통 구현 요소
 
-<b> `믹스인`을 이용해 데이터를 가져오는 API를 호출합니다.</b>
+<b> 믹스인을 이용해 데이터를 가져오는 API를 호출합니다.</b>
 
 ```js
 // ~/view/Board.vue
@@ -1014,6 +1019,7 @@ export default {
 
 `FetchMixin`
 ```js
+// ~/mixin/FetchMixin.js
 import {mapActions} from 'vuex';
 export default {
     created() {
@@ -1062,7 +1068,7 @@ export const list={
 
 `id`가 있을 때|`id`가 없을 때|
 |---|---|
-|`/boards/_id`를 호출하여 해당 보드의 `id`를 가지고 있는 `카드 데이터`를 호출합니다.|`/boards`를 호출하여 해당 사용자의 `보드 데이터`를 호출합니다.|
+|`routeName`에 따라 해당 `id`를 가지고 있는 `카드 데이터`를 가져옵니다.|해당 사용자의 `보드 데이터`를 호출합니다.|
 
 <br>
 
@@ -1125,7 +1131,7 @@ import {list,category,search} from '../api/list'
         })
     }
 ```
-> `state`값을 저장시킵니다.
+> `state`에 데이터를 저장합니다.
 
 <br>
 
@@ -1134,7 +1140,7 @@ import {list,category,search} from '../api/list'
 |loading|로딩 여부|
 |hasError|에러 여부|
 | dataList|보드/카드 리스트|
-|unitCard|카드(달인 데이터)|
+|unitCard|카드(단일 데이터)|
 
 
 ```js
@@ -1146,7 +1152,7 @@ import {list,category,search} from '../api/list'
     // 보드,카드 리스트
     dataList:[],
   // 카드(단일 데이터)
-    unitCard:{},
+    unitCard:{}
 ```
 <br>
 
@@ -1259,11 +1265,13 @@ unitCard = {
   </div>
 </template
 ```
-> 제대로 데이터를 불러오지 못하고 오류가 발생한 경우에는 `ErrorPage` 컴포넌트를 보여줍니다. <br><a href="#">해당 내용은 위의 공통 요소에서 정리하였습니다.</a>
+> 제대로 데이터를 불러오지 못하고 오류가 발생한 경우에는 `ErrorPage` 컴포넌트를 보여줍니다. <br>> `ErrorPage`에 관한 내용은 위의 [주요 공통 컴포넌트](#err)에서 정리하였습니다.</a>
 
 
 ** ex) route의 params의 `id`값으로 해당 `id`값을 가지는 보드와 카드 데이터 정보를 호출할 때, 사용자가 잘못된 `id`값으로 호출했을 경우,에러 페이지를 보여줍니다.
 (예시) 사용자가 `/board/fd44`이나 `/board/ddsss` 같은 존재하지 않는 라우터에 진입하려고 할 경우)
+
+<br>
 
 ### 3-2. 보드 보여주기
 > 데이터를 가져오는 API를 통해 보드 데이터를 보여줍니다.
@@ -1292,7 +1300,7 @@ unitCard = {
         ...mapState({boards:'dataList'})
     }
 ```
-> 불러온 데이터인 `dataList`배열을 `BoardCard.vue` 컴포넌트에 `props`로 내려줍니다.
+> 데이터를 가져오는 API를 통해 저장한 `dataList` 배열을 `BoardCard.vue` 컴포넌트에 `props`로 내려줍니다.
 
 <br>
 
@@ -1344,7 +1352,7 @@ unitCard = {
     </div>
 </template>
 ```
-`vuetify`에서 제공하는<a href="https://vuetifyjs.com/en/components/menus/#activator-and-tooltip"> `v-tooltip`</a>를 이용해 `메모그림`에 마우스를 올렸을 때, 툴팁이 보이도록 구현하였습니다.
+`vuetify`에서 제공하는 [v-tooltip](https://vuetifyjs.com/en/components/tooltips/)를 이용해 `메모그림`에 마우스를 올렸을 때, 툴팁이 보이도록 구현하였습니다.
 
 <br>
 
@@ -1377,7 +1385,9 @@ unitCard = {
         ...mapState({cards:'dataList',hasError:'hasError'})
     },
 ```
-> 불러온 데이터인 `dataList`배열을 `CardList.vue` 컴포넌트에 `props`로 내려줍니다.
+
+> 데이터를 가져오는 API를 통해 저장한 `dataList` 배열을 `CardList.vue` 컴포넌트에 `props`로 내려줍니다.
+
 
 <br>
 
@@ -1392,7 +1402,7 @@ unitCard = {
 ```
 |props|타입|설명|
 |---|---|---|
-|board|객체|데이터를 가져오는 API를 통해 가져온 카드 데이터|
+|card|객체|데이터를 가져오는 API를 통해 가져온 카드 데이터|
 
 <br>
 
@@ -1423,7 +1433,7 @@ unitCard = {
 
 <br>
 
-> `card`의 `Category.imagetype`으로 이미지 여부를 확인하여 이미지가 맞다면 `img 태그`의 `src`속성에 바운딩하여 이미지 정보를 보여줍니다.
+> `card`의 Category 의 imagetype 속성으로 이미지 여부를 확인하여 이미지가 맞다면 `img 태그`의 `src`속성에 바운딩하여 이미지 정보를 보여줍니다.
 ```js
 // 카드 데이터에서 카테고리 속성 예시
 {
@@ -1445,7 +1455,7 @@ unitCard = {
   }
 }
 ```
-`vuetify`에서 제공하는 <a href="https://vuetifyjs.com/en/api/v-list-item-avatar/">v-avatar</a>를 통해 심볼을 보여줍니다.
+`vuetify`에서 제공하는 [v-avatar](https://vuetifyjs.com/en/components/avatars/#avatars)를 통해 심볼을 보여줍니다.
 
 <br>
 
@@ -1472,13 +1482,13 @@ unitCard = {
 </template>
 ```
 
-`vuetify`에서 제공하는 <a href="https://vuetifyjs.com/en/components/icons/#api">v-icon</a>를 통해  카드 진행 상황 여부 표시를 보여줍니다.
+`vuetify`에서 제공하는 [v-icon](https://vuetifyjs.com/en/components/icons/#api)를 통해  카드 진행 상황 여부 표시를 보여줍니다.
 
 <br>
 
 
 ### 3-4.  카드 보여주기(카드 세부 내용 보여주기)
-> `카드 보기`버튼 클릭시 라우터를 변경하여 카드 데이터를 보여줍니다.
+> `카드 보기` 버튼 클릭시 라우터를 변경하여 카드 데이터(단일 데이터)를 보여줍니다.
 <br>
 
 `CardList.vue`
@@ -1506,7 +1516,7 @@ unitCard = {
 
 <b>카드 상세보기는 `제목`,`내용`,`카드 카테고리`,`카드 상태(완료 여부)`을 보여줍니다.</b>
 
-> `카테고리`와 `카드 상태`는 카테고리 보여주기와 카드 상태 보여주기에서 따로 정리하였습니다.
+> `카테고리`와 `카드 상태`는 [카테고리](#cate_edit)와 [카드 상태](#card_state)에서 따로 정리하였습니다.
 
 <br>
 
@@ -1514,7 +1524,7 @@ unitCard = {
 `CardEditForm.vue`
 > `input`태그의 `valule` 속성에 바운딩하여 기존 카드의 정보를 보여줍니다.
 
-** input태그 대신 `vuetify` 에서 제공하는 <a href="https://vuetifyjs.com/en/components/text-fields/">`v-text-field`</a>를 사용하였습니다.
+** input태그 대신 `vuetify` 에서 제공하는 [v-text-field](https://vuetifyjs.com/en/components/text-fields/)를 사용하였습니다.
 
 ```html
 <!-- ~/components/form/CardEditForm.vue -->
@@ -1551,8 +1561,8 @@ unitCard = {
 <br>
 
 
-## 3. 데이터(보드,카드) 추가
-### 3-1. 공통 구현 요소
+## 4. 데이터(보드,카드) 추가
+### 4-1. 공통 구현 요소
 
 <b>`API`</b>
 
@@ -1616,7 +1626,7 @@ import {list,category,search} from '../api/list'
 
 <br>
 
-### 3-2. 보드 추가
+### 4-2. 보드 추가
 |컴포넌트|
 |---|
 |AddBoardPopup.vue|
@@ -1650,6 +1660,7 @@ import {list,category,search} from '../api/list'
 > `AddBoardPopup`컴포넌트는 보드 추가와 보드 수정시, 공통적으로 사용하였습니다.
 
 ```html
+<!-- ~/components/board/AddBoardPopup.vue -->
 <template>
         <!-- 팝업 -->
       <v-dialog v-model="dialog" max-width="800px">
@@ -1699,6 +1710,7 @@ import {list,category,search} from '../api/list'
 
 `BoardForm.vue`
 ```html
+<!-- ~/components/form/BoardForm.vue -->
 <template>
   <v-form class="px-3" ref="form" v-model="valid">
     <v-card-text>
@@ -1742,9 +1754,9 @@ import {list,category,search} from '../api/list'
     data() {
         //  props로 받은 데이터가 있다면 그 데이터를 보여주고, 없다면 빈문자열을 보여줍니다.
         return {
-            title: this.board.title || '',
-            description: this.board.description || '',
-            color: this.board.color || '',
+            title: (this.board && this.board.title) || '',
+      description: (this.board && this.board.description) || '',
+      color: (this.board && this.board.color) || '',
             showColorpicker: false
         }
     }
@@ -1763,7 +1775,7 @@ import {list,category,search} from '../api/list'
 <br>
 
 
-> 보드 색 변경은 `vuetify`에서 제공해주는 <a href="https://dev.vuetifyjs.com/en/components/color-pickers/">v-color-picker</a> 를 사용하여 구현하였습니다.
+> 보드 색 변경은 `vuetify`에서 제공해주는 [v-color-picker](https://dev.vuetifyjs.com/en/components/color-pickers/)  를 사용하여 구현하였습니다.
 ```html
 <!--  ~/componnets/form/BoardForm.vue -->
 <template>
@@ -1832,10 +1844,10 @@ import {list,category,search} from '../api/list'
 ```
 <br>
 
-### 3-3. 카드 추가
+### 4-3. 카드 추가
 |컴포넌트|
 |---|
-|CardForm.vue|
+|CardAddForm.vue|
 
 <b>팝업 형식으로 라우터를 보여주기 위해 중첩된 라우터를 사용하였습니다.</b>
 
@@ -1883,7 +1895,7 @@ const router = new VueRouter({
 
 `CardForm.vue`
 ```html
-<!-- ~/components/form/CardForm.vue -->
+<!-- ~/components/form/CardAddForm.vue -->
 <template>
     <v-form v-model="valid" class="px-3" ref="form">
       <!-- 카테고리 리스트 -->
@@ -1941,7 +1953,7 @@ const router = new VueRouter({
 
 `v-model`을 사용하여 `data`인 `title`,`description`,`color`를 바운딩해줍니다.
 
-> 카테고리는 <a href="#">카테고리 구현 내용</a>에 따로 정리하였습니다.
+> 카테고리는 [카테고리 보여주기](#cate_show)에 따로 정리하였습니다.
 
 <br>
 
@@ -1972,8 +1984,8 @@ const router = new VueRouter({
   }
 ```
 
-## 4. 데이터(보드,카드) 수정
-### 4-1. 공통 구현 요소
+## 5. 데이터(보드,카드) 수정
+### 5-1. 공통 구현 요소
 
 <b>`API`</b>
 
@@ -2082,7 +2094,7 @@ import {list,category,search} from '../api/list'
 <br>
 
 
-### 4-2. 보드 수정
+### 5-2. 보드 수정
 |컴포넌트|
 |---|
 |BoardForm.vue|
@@ -2187,7 +2199,8 @@ import {list,category,search} from '../api/list'
 <br>
 
 
-<b>보드를 수정하므로, 기존 데이터를 먼저 보여줍니다.</b>
+
+<b>보드를 수정하므로, `BoardForm` 컴포넌트에 `board`를 `props`로 내려주어 기존 데이터를 보여줍니다.</b>
 
 `props`
 ```js
@@ -2208,11 +2221,11 @@ import {list,category,search} from '../api/list'
 board: {
   UserId: 1
   bgcolor: "#FFF8E1"
-  createdAt: "2021-06-25T14:05:05.641Z"
+  createdAt: "2021-09-25T14:05:05.641Z"
   description: null
   id: 4
   title: "샘플보드.."
-  updatedAt: "2021-06-25T14:05:05.641Z"
+  updatedAt: "2021-09-25T14:05:05.641Z"
 }
 ```
 
@@ -2288,18 +2301,18 @@ board: {
 ```
 <br>
 
-### 4-3. 카드 내용 수정
+### 5-3. 카드 내용 수정
 |컴포넌트|
 |---|
 |CardEditForm.vue|
 |CardSteper.vue|
 |CartegoryForm.vue|
 
-** 카드 상태 수정과 카드 카테고리 수정은 <a href="#">카드 상태</a>와 <a href="#">카드 카테고리 수정</a>에 따로 정리하였습니다.
+** 카드 상태 수정과 카드 카테고리 수정은 [카드 상태](#card_state)와 [카테고리 편집](#cate_edit)에 따로 정리하였습니다.
 
 
 <b>카드 수정 모드시에만, 카드를 수정하도록 구현하였습니다.</b>
-> 플로팅 메뉴로 카드 수정 버튼을 구현하였습니다.(<a href="#">`ActionMenu`는 위의 공통 구현 요소에 정리</a>)
+> 플로팅 메뉴로 카드 수정 버튼을 구현하였습니다.<br>> `플로팅 메뉴`에 관한 내용은 위의 [주요 공통 컴포넌트](#flot_menu)에서 정리하였습니다.</a>
 
 ```html
 <!-- ~/view/BCard.vue -->
@@ -2308,12 +2321,14 @@ board: {
     <v-row v-if="showCard && !hasError" justify="center">
       <v-dialog v-model="unitCard" fullscreen hide-overlay transition="dialog-bottom-transition">
         <v-card class="unit_card">
+          ....
           <!-- 수정 /삭제 메뉴 -->
           <action-menu @onClickBtn="clickBtn" bottom right
              :direction="menu.direction"  :transition="menu.transition"
             :menus="menu.txts"></action-menu>
         </v-card>
       </v-dialog>
+      ...
     </v-row>
   </div>
 </template>
@@ -2399,7 +2414,7 @@ methods: {
 <br>
 
 <b>카드 수정 모드가 아니라면, 기존 데이터를 초기화 시켜줍니다.</b>
-> `state`의 `edit`속성을 초기화시켜주지 않으면, 수정 내역이 지워지지 않아, 라우터가 변경되더라도 해당 데이터는 남아있게 됩니다. 해당 내용을 방지하기 위해 수정 중 `수정모드 취소` 버튼을 클릭하거나, 다른 라우터로 이동했을 때,기존의 편집 상태를 초기화시켜줍니다.
+> `state`의 `edit`속성을 초기화시켜주지 않으면, 수정 내역이 지워지지 않아, 라우터가 변경되더라도 해당 데이터는 남아있게 됩니다. 그러한 사항을 방지하기 위해 수정 중 다른 라우터로 이동했을 때,기존의 편집 상태가 남아 있지 않도록 초기화시켜줍니다.
 
 ```js
 //~/view/BCard.vue
@@ -2426,7 +2441,7 @@ methods: {
 
 > `store`의 `actions`함수 `UPDATELIST` 호출
 ```js
-// ~/components/form/BardForm.vue
+// ~/components/form/CardEditForm.vue
   methods: {
       ...mapActions(['UPDATELIST']),
        onUpdateCard() {
@@ -2451,10 +2466,10 @@ methods: {
 
 <br>
 
-## 5. 데이터(보드,카드) 삭제
+## 6. 데이터(보드,카드) 삭제
 
-### 5-1. 공통 구현 요소
-`API`
+### 6-1. 공통 구현 요소
+**`API`**
 > `axios`를 이용해 데이터 삭제 API 호출
 ```js
 // ~/api/list.js
@@ -2530,10 +2545,13 @@ import {list,category,search} from '../api/list'
 ```
 <br>
 
-### 5-2. 보드 삭제
+### 6-2. 보드 삭제
 
 <b>보드 삭제 버튼 클릭 시 확인창을 띄워, 한번 더 확인하도록 구현하였습니다.</b>
-> <a href="#">알림창(AlertConFirm 컴포넌트)</a>은 공통 구현 요소에 정리하였습니다.
+
+> `알림창(AlertConFirm 컴포넌트)`에 관한 내용은 위의 [주요 공통 컴포넌트](#alert_c)에서 정리하였습니다.</a>
+
+
 
 ```html
 <!-- ~/components/board/BardCard.vue -->
@@ -2598,10 +2616,10 @@ import {list,category,search} from '../api/list'
 
 <br>
 
-### 5-3. 카드 삭제
+### 6-3. 카드 삭제
 
 <b>카드 삭제 버튼 클릭 시 확인창을 띄워, 한번 더 확인하도록 구현하였습니다.</b>
-> <a href="#">알림창(AlertConFirm 컴포넌트)</a>은 공통 구현 요소에 정리하였습니다.
+> `알림창(AlertConFirm 컴포넌트)`에 관한 내용은 위의 [주요 공통 컴포넌트](#alert_c)에서 정리하였습니다.</a>
 
 
 ```html
@@ -2681,15 +2699,15 @@ methods: {
 |clickBtn|버튼에 따라 카드수정/카드 삭제 구분|
 |onAgree|삭제 알림창에서 `삭제` 버튼 클릭하여 카드를 삭제하고 삭제 알림창 닫기|
 |ondisAgree|삭제 알림창에서 `취소` 버튼 클릭 후, 삭제 알림창 닫기|
-|onDeleteBoard|`store`의 `actions`함수를 호출하여 카드 삭제 API 호출|
+
 
 > 삭제 확인 알림창에서 `삭제` 버튼 클릭 시,`store`의 `actions`함수 `DELETELIST` 호출하여 카드를 삭제합니다.
 
 
 <br>
 
-## 5. 카드 상태
-### 5-1. 카드 상태 보여주기
+## 7. 카드 상태
+### 7-1. 카드 상태 보여주기
 <b>카드 상태는 `진행중`,`완료` 로 구분하였습니다.</b>
 
 `CardSteper.vue`
@@ -2746,8 +2764,9 @@ methods: {
 
 > `vuetify`에서 제공하는 <a href="https://vuetifyjs.com/en/components/steppers/#dynamic-steps">v-stepper</a>를 이용하여 카드 상태를 보여줍니다.
 
+<br>
 
-### 5-2. 카드 상태 변경
+### 7-2. 카드 상태 변경
 `CardSteper.vue`
 ```html
 <!-- ~/components/card/CardSteper.vue -->
@@ -2796,11 +2815,13 @@ methods: {
 |---|---|
 |changeStep|vuetify에서 제공해주는 `v-stepper-step`에서 바운딩 시켜준 `step`의 값으로 진행중/완료여부를 확인하여 카드 수정 API를 호출합니다.|
 
+
+
 > `vuetify`에서 제공하는 <a href="https://vuetifyjs.com/en/components/steppers/#dynamic-steps">dynamic-steps</a> 확인
 
+<br>
 
-
-## 6. 카테고리 보여주기
+## 8. 카테고리 보여주기
 <b>`API`</b>
 
 > `axios`를 이용해 카테고리 조회 API 호출
@@ -2877,28 +2898,28 @@ categoryList:[]
 ```js
 // 카테고리 리스트
 caategoryList = [{
-    createdAt: "2021-06-25T13:51:10.864Z"
+    createdAt: "2021-08-25T13:51:10.864Z"
     icon: "mdi-train-car"
     id: 2
     imagetype: false
     type: "여행"
-    updatedAt: "2021-06-25T13:51:10.864Z"
+    updatedAt: "2021-08-25T13:51:10.864Z"
   },
   {
-    createdAt: "2021-06-25T13:51:10.904Z"
+    createdAt: "2021-08-25T13:51:10.904Z"
     icon: "mdi-battery-heart"
     id: 3
     imagetype: false
     type: "힐링"
-    updatedAt: "2021-06-25T13:51:10.904Z"
+    updatedAt: "2021-08-25T13:51:10.904Z"
   },
   {
-   createdAt:"2021-06-25T13:51:10.914Z"
+   createdAt:"2021-08-25T13:51:10.914Z"
   icon:"mdi-domain"
   id:4
   imagetype:false
   type:"회사"
-  updatedAt:"2021-06-25T13:51:10.914Z"
+  updatedAt:"2021-08-25T13:51:10.914Z"
   }
 ]
 ```
@@ -2966,7 +2987,7 @@ caategoryList = [{
 ```
 |data|설명|
 |---|---|
-|selectList| 카테고리 리스트 중, 내가 선택한 데이터|
+|selectList|`v-model`로 바운딩시켜준 데이터로, 카테고리 리스트중 내가 선택한 데이터|
 
 <br>
 
@@ -2982,20 +3003,20 @@ caategoryList = [{
 ```
 |methods|설명|
 |---|---|
-|onupdateInput|하위 컴포넌트인 `CategoryList.vue`에서 선택 리스트가 변화했을 때, 상위 컴포넌트로 이벤트를 전달해줍니다.(카테고리 리스트 중 내가 선택한 데이터를 `selectList`에 저장합니다.)||
+|onupdateInput|카테고리 리스트를 보여주는 하위 컴포넌트인 `CategoryList.vue`에서 카테고리 리스트 중 선택했을 때, 상위 컴포넌트로 이벤트를 전달해줍니다.(카테고리 리스트 중 내가 선택한 데이터를 `selectList`에 저장합니다.)||
 
 <br>
 
 `CategoryList.vue`
-
- > vuetify에서 제공하는 <a href="https://vuetifyjs.com/en/components/selects/">v-select</a> 로 카테고리 리스트를 보여줍니다.
+ > vuetify에서 제공하는 <a href="https://vuetifyjs.com/en/components/selects/">v-select</a> 로 <span id="category_list">카테고리 리스트</span>를 보여줍니다.
 
 ```html
 <!-- ~/components/Categorys/CategoryList.vue -->
 <template>
     <div>
-        <v-select class="pt-4" :value="value" :rules="selectRules" :items="categoryList" item-text="type"
+        <v-select class="pt-4 category_select" :value="value" :rules="selectRules" :items="categoryList" item-text="type"
             item-value="type" return-object :label="label" :multiple="!isEdit" hide-selected outlined :clearable="!isEdit"
+        @click:clear="$emit('clearCategory')"
          @change="$emit('updateInput',$event)" :no-data-text=" noDataTxt"></v-select>
     </div>
 </template>
@@ -3039,7 +3060,7 @@ caategoryList = [{
 
 > 카테고리 조회 API로 가져온 카테고리 중, 내가 클릭하여 선택한 카테고리를 vuetify 에서 제공하는 <a href="https://vuetifyjs.com/en/components/chips/#slots">v-chip</a>를 이용하여 `chip`형태로 보여줍니다.
 
-> 내가 클릭하여 선택한 카테고리 중, 사용자가 선택한 대표 카테고리를 따로 보여줍니다.
+> 내가 클릭하여 선택한 카테고리 중, 사용자가 선택한 대표 카테고리는 따로 보여줍니다.
 
 ```html
 <!-- ~/components/form/CardAddForm.vue -->
@@ -3083,7 +3104,7 @@ caategoryList = [{
 ```
 |data|설명|
 |---|---|
-|selectList|카테고리 리스트 중, 내가 선택한 데이터(<a href="#">위의 CategoryList 컴포넌트 참고</a>)|
+|selectList|카테고리 리스트 중, 내가 선택한 데이터(<a href="#category_list">위의 CategoryList 컴포넌트 참고</a>)|
 |representCategory|내가 선택한 카테고리 중, 대표 카테고리 데이터|
 
 <br>
@@ -3129,7 +3150,7 @@ caategoryList = [{
  > vuetify에서 제공하는 <a href="https://vuetifyjs.com/en/components/chips/">v-chip</a>으로 카테고리 리스트를 보여줍니다.
 
 ```html
-<!-- ~/components/Categorys/CategoryList.vue -->
+<!-- ~/components/Categorys/CategoryChip.vue -->
 <template>
     <div>
         <v-chip v-for="(choice,index) in selectList" :key="index" @click="$emit('onRepresent',choice)"
@@ -3162,8 +3183,8 @@ caategoryList = [{
 
 <br>
 
-## 7. 카테고리 편집
-### 7-1. 카테고리 편집 공통 요소
+## 9. 카테고리 편집
+### 9-1. 카테고리 편집 공통 요소
 <b>카테고리 편집은 카드 수정 모드시에만 편집할 수 있도록 구현하였습니다.</b>
 
 `CategoryForm.vue`
@@ -3216,7 +3237,7 @@ caategoryList = [{
       }
 ```
 
-### 7-2. 카테고리 추가
+### 9-2. 카테고리 추가
 > 카테고리 추가는 `이미지`와 `카테고리 이름`으로 추가할 수 있도록 구현하였습니다.
 
 ```html
@@ -3275,6 +3296,11 @@ caategoryList = [{
       return {
         files: [],
         imageLoading: false,
+         //  이미지 유효성 검사
+        imgRules: [
+          value => !value || value.size < 2000000 || '2mb 이하여야 합니다.',
+          v => (v && /image/.test(v.type)) || '이미지 타입이 아닙니다.'
+        ],
         category: {
             isEdit:true,
             validcategory: true,
@@ -3293,9 +3319,10 @@ caategoryList = [{
 |---|---|
 |files|카테고리 추가시, 이미지 저장(`v-file-input`에 바운딩한 데이터로 내가 선택한 이미지를 저장)|
 |imageLoading|카테고리 추가시, 이미지가 완전히 로드된 후 보여지도록 하기 위해  변경할 로딩 스피너 |
+|imgRules|이미지 파일 유효성 검사|
 |category|`isEdit`:수정 상태인지 확인<br>`validcategory`:유효성 검사<br>`input`:카테고리 이름(`input`에 작성한 값)<br>`categoryRules`:카테고리 유효성 검사|
 
-> 이미지 선택은 vuetify에서 제공하는 <a href="https://vuetifyjs.com/en/components/file-inputs/#misc">v-file-input</a>을 사용하였습니다.
+> 이미지 선택은 vuetify에서 제공하는 <a href="https://vuetifyjs.com/en/components/file-inputs/#api">v-file-input</a>을 사용하였습니다.
 
 
 
@@ -3344,7 +3371,9 @@ caategoryList = [{
     },
  }
 ```
-> `loadImage` 함수는 위에서 정리하였습니다.
+
+> `loadImage`에 관한 내용은 위의 [구현 공통 요소](#img_load)에서 정리하였습니다.</a>
+
 
 > 카테고리 추가 API를 호출한 후, 카테고리 이미지를 가져오고, 해당 이미지가 완전히 로드된 후, 보여질 수 있도록 `imageLoading`으로 로딩 스피너를 보여줄지 구분합니다.
 <br>
@@ -3395,7 +3424,7 @@ import {category} from '../api/list'
   },
 ```
 
-> `state` `unitCard`의 카테고리리스트에 추가한 카테고리 정보를 추가합니다.
+> `state` `unitCard`의 카테고리 리스트에 추가한 카테고리 정보를 추가합니다.
 
 
 <br>
@@ -3444,7 +3473,7 @@ unitCard = {
 
 <br>
 
-## 7-3. 대표 카테고리 수정
+### 9-3. 대표 카테고리 수정
 <b>현재 대표 카테고리로 설정된 카테고리를 제외하고, 대표 카테고리로 추가할 수 있는 카테고리를 보여줍니다.</b>
 ```html
 <!-- ~/components/form/CategoryForm.cue -->
@@ -3482,7 +3511,7 @@ unitCard = {
 ```
 |computed|설명|
 |---|---|
-|Categorys|`state`에 저장한 카드의 대표 카테고리를 비교하여, 현재 가지고 있는 대표 카테고리를 제외한 카테고리 리스트를 보여줍니다.|
+|Categorys|`state`에 저장한 카드의 대표 카테고리의 `id`를 비교하여, 현재 가지고 있는 대표 카테고리를 제외한 카테고리 리스트를 보여줍니다.|
 
 <br>
 
@@ -3632,7 +3661,7 @@ unitCard = {
 <br>
 
 
-## 7-4. 카테고리 삭제
+## 9-4. 카테고리 삭제
 
 > 카드 수정 모드시에만 `엑스 버튼`을 보여줍니다.
 
@@ -3832,13 +3861,13 @@ unitCard = {
 
 > `unitCard`의 `CardTypes`을 수정하여 카테고리를 삭제합니다.
 
-> 알림창은 위의 공통 요소에서 정리하였습니다.
+> `알림창(AlertConFirm 컴포넌트)`에 관한 내용은 위의 [주요 공통 컴포넌트](#alert_c)에서 정리하였습니다.</a>
 
 <br>
 
-## 8. 데이터(보드,카드) 검색
+## 10. 데이터(보드,카드) 검색
 
-### 8-1. 공통 구현 요소
+### 10-1. 공통 구현 요소
 > 진행중인 카드/ 완료중인 카드로 카드를 가져올 수 있도록 구현하였습니다.
 
 > 불러온 카드 리스트는 라이브러리인 <a href="https://github.com/Akryum/vue-virtual-scroller#readme">vue-virtual-scroller</a> 를 사용하였습니다.
@@ -3896,7 +3925,7 @@ unitCard = {
 <br>
 
 
-#### 8-2. 진행중/완료된 카드 가져오기
+#### 10-2. 진행중/완료된 카드 가져오기
 <b>진행중인 카드 버튼 클릭</b>
 
 > `store`의 `actions`함수 `FETCHSEARCHCARD` 호출
@@ -4023,7 +4052,7 @@ import {search} from '../api/list'
 }
 ```
 
-`dataList`에 저장되는 카드 데이터의 예시
+`dataList`에 저장되는 검색한 데이터의 예시
 ```js
 dataList = [{
   // 카드의 카테고리
