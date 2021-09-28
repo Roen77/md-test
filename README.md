@@ -64,8 +64,7 @@
     |--projects
 ```
 ### 구현 공통 요소
-- **기본적으로 vuetify 디자인 프레임워크를 사용하여 구현하였습니다.
-> <a href="https://vuetifyjs.com/en/introduction/why-vuetify/">vuetify 바로가기</a>**
+- **기본적으로 vuetify 디자인 프레임워크를 사용하여 구현하였습니다.**
 
 
 - <b>기본적으로 vuetify 디자인 프레임워크</b>
