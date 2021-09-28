@@ -14,7 +14,8 @@
 
 ## 사용한 라이브러리
 [axios](https://axios-http.com/docs/intro)
-||<a href="https://github.com/axios/axios" target="_blank">axios</a>|<a href="https://router.vuejs.org/">vue-router</a>|<a href="https://dev.vuetifyjs.com/en/getting-started/installation/">vuetify</a>|<a href="https://vuex.vuejs.org/">vuex</a>|
+블ㄹ랭크
+||<a href="https://github.com/axios/axios"  target="_blank">axios</a>|<a href="https://router.vuejs.org/">vue-router</a>|<a href="https://dev.vuetifyjs.com/en/getting-started/installation/">vuetify</a>|<a href="https://vuex.vuejs.org/">vuex</a>|
 |---|---|:---|:---|:---|
 |버전|v0.21.4|v3.5.2|2.4.0|3.6.2|
 |이유|HTTP 클라이언트 라이브러리로 서버와의 통신을 위해 사용|vue 라우터|vue 전용 디자인 프레임워크|상태 관리를 위한 vuex store 사용|
