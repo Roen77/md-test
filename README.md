@@ -104,6 +104,9 @@
 
 <br>
 
+
+
+[test](https://nuxtjs.org/docs/directory-structure/components/)
 ### 3-4. 구현 공통 요소
 ####  component(컴포넌트)
 - `component`(컴포넌트)는 `import`해서 가져오지 않아도, `nuxt` 에서  `component`(컴포넌트)를 자동으로 가져올 수 있습니다.(`nuxt` v2.13 버전 이상)
